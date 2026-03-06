@@ -1,0 +1,13 @@
+[CFLAT] values_match | branches=0 calls=0 returns=1
+[CFLAT] warm_caches | branches=0 calls=1 returns=1
+[CFLAT] benchmark_body | branches=4 calls=1 returns=1
+[CFLAT] benchmark | branches=0 calls=1 returns=1
+[CFLAT] InitSeed | branches=0 calls=0 returns=1
+[CFLAT] Test | branches=0 calls=1 returns=1
+[CFLAT] Multiply | branches=12 calls=0 returns=1
+[CFLAT] RandomInteger | branches=0 calls=0 returns=1
+[CFLAT] initialise_benchmark | branches=16 calls=3 returns=1
+[CFLAT] verify_benchmark | branches=0 calls=0 returns=1
+[CFLAT] main | branches=0 calls=4 returns=1
+clang: warning: argument unused during compilation: '-I ./counter' [-Wunused-command-line-argument]
+clang: warning: argument unused during compilation: '-I ./embench-iot-benchmarks-backup-cflat' [-Wunused-command-line-argument]

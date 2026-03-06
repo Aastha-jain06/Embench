@@ -1,0 +1,12 @@
+[CFLAT] mulul64 | branches=0 calls=0 returns=1
+[CFLAT] modul64 | branches=6 calls=0 returns=1
+[CFLAT] montmul | branches=2 calls=2 returns=1
+[CFLAT] xbinGCD | branches=6 calls=0 returns=1
+[CFLAT] warm_caches | branches=0 calls=1 returns=1
+[CFLAT] benchmark_body | branches=8 calls=14 returns=1
+[CFLAT] benchmark | branches=0 calls=1 returns=1
+[CFLAT] initialise_benchmark | branches=0 calls=0 returns=1
+[CFLAT] verify_benchmark | branches=0 calls=0 returns=1
+[CFLAT] main | branches=0 calls=4 returns=1
+clang: warning: argument unused during compilation: '-I ./counter' [-Wunused-command-line-argument]
+clang: warning: argument unused during compilation: '-I ./embench-iot-benchmarks-backup' [-Wunused-command-line-argument]

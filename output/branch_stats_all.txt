@@ -1,0 +1,216 @@
+Branch Counter Results - Wed Mar  4 06:15:07 AM IST 2026
+CPU_MHZ=1000
+==============================================
+
+### aha-mont64 ###
+
+================================
+   Branch Statistics Report     
+================================
+# Conditional Branches:   384507001
+# Unconditional Branches: 456417001
+# Loop Headers:           189927000
+# Direct Calls:           8460002
+# Returns/Exits:          8460002
+================================
+
+1
+
+### crc32 ###
+
+================================
+   Branch Statistics Report     
+================================
+# Conditional Branches:   174420001
+# Unconditional Branches: 348670001
+# Loop Headers:           174250000
+# Direct Calls:           174420002
+# Returns/Exits:          174420002
+================================
+
+1
+
+### cubic ###
+
+================================
+   Branch Statistics Report     
+================================
+# Conditional Branches:   660001
+# Unconditional Branches: 970001
+# Loop Headers:           310000
+# Direct Calls:           1960002
+# Returns/Exits:          200002
+================================
+
+1
+
+### edn ###
+
+================================
+   Branch Statistics Report     
+================================
+# Conditional Branches:   371925001
+# Unconditional Branches: 732801001
+# Loop Headers:           360876000
+# Direct Calls:           696002
+# Returns/Exits:          696002
+================================
+
+1
+
+### huffbench ###
+
+================================
+   Branch Statistics Report     
+================================
+# Conditional Branches:   495825001
+# Unconditional Branches: 486255001
+# Loop Headers:           233266000
+# Direct Calls:           1067002
+# Returns/Exits:          1067002
+================================
+
+1
+
+### matmult-int ###
+
+================================
+   Branch Statistics Report     
+================================
+# Conditional Branches:   406732001
+# Unconditional Branches: 794098001
+# Loop Headers:           387366000
+# Direct Calls:           92002
+# Returns/Exits:          92002
+================================
+
+1
+
+### minver ###
+
+================================
+   Branch Statistics Report     
+================================
+# Conditional Branches:   109335001
+# Unconditional Branches: 155955001
+# Loop Headers:           56610000
+# Direct Calls:           6105002
+# Returns/Exits:          6105002
+================================
+
+1
+
+### nbody ###
+
+================================
+   Branch Statistics Report     
+================================
+# Conditional Branches:   6228001
+# Unconditional Branches: 10849001
+# Loop Headers:           4621000
+# Direct Calls:           1101002
+# Returns/Exits:          101002
+================================
+
+1
+
+### nettle-aes ###
+
+================================
+   Branch Statistics Report     
+================================
+# Conditional Branches:   78000001
+# Unconditional Branches: 147732001
+# Loop Headers:           51168000
+# Direct Calls:           858002
+# Returns/Exits:          858002
+================================
+
+1
+
+### nettle-sha256 ###
+
+================================
+   Branch Statistics Report     
+================================
+# Conditional Branches:   30400001
+# Unconditional Branches: 185250001
+# Loop Headers:           24225000
+# Direct Calls:           2375002
+# Returns/Exits:          3800002
+================================
+
+1
+
+### primecount ###
+
+================================
+   Branch Statistics Report     
+================================
+# Conditional Branches:   880205001
+# Unconditional Branches: 726973001
+# Loop Headers:           282281000
+# Direct Calls:           1002
+# Returns/Exits:          1002
+================================
+
+1
+
+### sglib-combined ###
+
+================================
+   Branch Statistics Report     
+================================
+# Conditional Branches:   680949001
+# Unconditional Branches: 627473001
+# Loop Headers:           147784000
+# Direct Calls:           76589002
+# Returns/Exits:          76589002
+================================
+
+1
+
+### st ###
+
+================================
+   Branch Statistics Report     
+================================
+# Conditional Branches:   9204001
+# Unconditional Branches: 18317001
+# Loop Headers:           9113000
+# Direct Calls:           7956002
+# Returns/Exits:          7904002
+================================
+
+1
+
+### tarfind ###
+
+================================
+   Branch Statistics Report     
+================================
+# Conditional Branches:   80905423
+# Unconditional Branches: 114040423
+# Loop Headers:           48400474
+# Direct Calls:           36284002
+# Returns/Exits:          36284002
+================================
+
+1
+
+### ud ###
+
+================================
+   Branch Statistics Report     
+================================
+# Conditional Branches:   412362001
+# Unconditional Branches: 616326001
+# Loop Headers:           255694000
+# Direct Calls:           1478002
+# Returns/Exits:          1478002
+================================
+
+1
+
+==============================================
+Passed: 15 / 15

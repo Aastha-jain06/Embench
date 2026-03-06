@@ -1,0 +1,39 @@
+[CFLAT] _aes_set_key | branches=15 calls=0 returns=1
+[CFLAT] aes_set_encrypt_key | branches=8 calls=1 returns=1
+[CFLAT] _nettle_aes_invert | branches=27 calls=0 returns=1
+[CFLAT] aes_invert_key | branches=0 calls=1 returns=1
+[CFLAT] aes_set_decrypt_key | branches=0 calls=2 returns=1
+[CFLAT] _nettle_aes_encrypt | branches=17 calls=0 returns=1
+[CFLAT] _nettle_aes_decrypt | branches=17 calls=0 returns=1
+[CFLAT] aes_encrypt | branches=1 calls=1 returns=1
+[CFLAT] aes_decrypt | branches=1 calls=1 returns=1
+[CFLAT] verify_benchmark | branches=8 calls=0 returns=1
+[CFLAT] initialise_benchmark | branches=0 calls=0 returns=1
+[CFLAT] warm_caches | branches=0 calls=1 returns=1
+[CFLAT] benchmark_body | branches=4 calls=4 returns=1
+[CFLAT] benchmark | branches=0 calls=1 returns=1
+[CFLAT] main | branches=0 calls=4 returns=1
+clang: warning: argument unused during compilation: '-I ./counter' [-Wunused-command-line-argument]
+clang: warning: argument unused during compilation: '-I ./embench-iot-benchmarks' [-Wunused-command-line-argument]
+/home/dell/Videos/Aastha/optee/toolchains/aarch64/bin/../lib/gcc/aarch64-none-linux-gnu/10.2.1/../../../../aarch64-none-linux-gnu/bin/ld: ./output_optee/obj/nettle-aes.o: in function `main':
+nettle-aes.c:(.text+0x2218): undefined reference to `init_branch_stats'
+/home/dell/Videos/Aastha/optee/toolchains/aarch64/bin/../lib/gcc/aarch64-none-linux-gnu/10.2.1/../../../../aarch64-none-linux-gnu/bin/ld: nettle-aes.c:(.text+0x2238): undefined reference to `print_branch_stats'
+/home/dell/Videos/Aastha/optee/toolchains/aarch64/bin/../lib/gcc/aarch64-none-linux-gnu/10.2.1/../../../../aarch64-none-linux-gnu/bin/ld: ./output_optee/libcflat.o: in function `__cflat_record_node':
+libcflat.c:(.text+0x6c): undefined reference to `TEEC_InvokeCommand'
+/home/dell/Videos/Aastha/optee/toolchains/aarch64/bin/../lib/gcc/aarch64-none-linux-gnu/10.2.1/../../../../aarch64-none-linux-gnu/bin/ld: ./output_optee/libcflat.o: in function `ensure_init':
+libcflat.c:(.text+0xcc): undefined reference to `TEEC_InitializeContext'
+/home/dell/Videos/Aastha/optee/toolchains/aarch64/bin/../lib/gcc/aarch64-none-linux-gnu/10.2.1/../../../../aarch64-none-linux-gnu/bin/ld: libcflat.c:(.text+0x118): undefined reference to `TEEC_OpenSession'
+/home/dell/Videos/Aastha/optee/toolchains/aarch64/bin/../lib/gcc/aarch64-none-linux-gnu/10.2.1/../../../../aarch64-none-linux-gnu/bin/ld: libcflat.c:(.text+0x170): undefined reference to `TEEC_InvokeCommand'
+/home/dell/Videos/Aastha/optee/toolchains/aarch64/bin/../lib/gcc/aarch64-none-linux-gnu/10.2.1/../../../../aarch64-none-linux-gnu/bin/ld: ./output_optee/libcflat.o: in function `maybe_reinit':
+libcflat.c:(.text+0x214): undefined reference to `TEEC_InvokeCommand'
+/home/dell/Videos/Aastha/optee/toolchains/aarch64/bin/../lib/gcc/aarch64-none-linux-gnu/10.2.1/../../../../aarch64-none-linux-gnu/bin/ld: ./output_optee/libcflat.o: in function `__cflat_loop_enter':
+libcflat.c:(.text+0x2b0): undefined reference to `TEEC_InvokeCommand'
+/home/dell/Videos/Aastha/optee/toolchains/aarch64/bin/../lib/gcc/aarch64-none-linux-gnu/10.2.1/../../../../aarch64-none-linux-gnu/bin/ld: ./output_optee/libcflat.o: in function `__cflat_loop_exit':
+libcflat.c:(.text+0x340): undefined reference to `TEEC_InvokeCommand'
+/home/dell/Videos/Aastha/optee/toolchains/aarch64/bin/../lib/gcc/aarch64-none-linux-gnu/10.2.1/../../../../aarch64-none-linux-gnu/bin/ld: ./output_optee/libcflat.o: in function `__cflat_loop_iteration':
+libcflat.c:(.text+0x3d0): undefined reference to `TEEC_InvokeCommand'
+/home/dell/Videos/Aastha/optee/toolchains/aarch64/bin/../lib/gcc/aarch64-none-linux-gnu/10.2.1/../../../../aarch64-none-linux-gnu/bin/ld: ./output_optee/libcflat.o:libcflat.c:(.text+0x47c): more undefined references to `TEEC_InvokeCommand' follow
+/home/dell/Videos/Aastha/optee/toolchains/aarch64/bin/../lib/gcc/aarch64-none-linux-gnu/10.2.1/../../../../aarch64-none-linux-gnu/bin/ld: ./output_optee/libcflat.o: in function `cflat_cleanup':
+libcflat.c:(.text+0x818): undefined reference to `TEEC_CloseSession'
+/home/dell/Videos/Aastha/optee/toolchains/aarch64/bin/../lib/gcc/aarch64-none-linux-gnu/10.2.1/../../../../aarch64-none-linux-gnu/bin/ld: libcflat.c:(.text+0x824): undefined reference to `TEEC_FinalizeContext'
+collect2: error: ld returned 1 exit status

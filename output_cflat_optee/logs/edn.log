@@ -1,0 +1,16 @@
+[CFLAT] vec_mpy1 | branches=4 calls=0 returns=1
+[CFLAT] mac | branches=4 calls=0 returns=1
+[CFLAT] fir | branches=8 calls=0 returns=1
+[CFLAT] fir_no_red_ld | branches=8 calls=0 returns=1
+[CFLAT] latsynth | branches=4 calls=0 returns=1
+[CFLAT] iir1 | branches=4 calls=0 returns=1
+[CFLAT] codebook | branches=4 calls=0 returns=1
+[CFLAT] jpegdct | branches=12 calls=0 returns=1
+[CFLAT] initialise_benchmark | branches=0 calls=0 returns=1
+[CFLAT] warm_caches | branches=0 calls=1 returns=1
+[CFLAT] benchmark_body | branches=8 calls=8 returns=1
+[CFLAT] benchmark | branches=0 calls=1 returns=1
+[CFLAT] verify_benchmark | branches=4 calls=0 returns=1
+[CFLAT] main | branches=0 calls=4 returns=1
+clang: warning: argument unused during compilation: '-I ./counter' [-Wunused-command-line-argument]
+clang: warning: argument unused during compilation: '-I ./embench-iot-benchmarks-backup' [-Wunused-command-line-argument]

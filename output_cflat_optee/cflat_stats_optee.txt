@@ -1,0 +1,68 @@
+CFLAT Results (OP-TEE/AArch64) - Thu Mar  5 03:53:02 PM IST 2026
+Target   : aarch64-linux-gnu
+CPU_MHZ  : 1000
+libteec  : /home/dell/Videos/Aastha/optee/out-br/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib
+==============================================
+
+### aha-mont64 ###
+Binary : ./output_cflat_optee/cflat/aha-mont64-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+
+### crc32 ###
+Binary : ./output_cflat_optee/cflat/crc32-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+
+### cubic ###
+Binary : ./output_cflat_optee/cflat/cubic-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+
+### edn ###
+Binary : ./output_cflat_optee/cflat/edn-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+
+### huffbench ###
+Binary : ./output_cflat_optee/cflat/huffbench-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+
+### matmult-int ###
+Binary : ./output_cflat_optee/cflat/matmult-int-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+
+### minver ###
+Binary : ./output_cflat_optee/cflat/minver-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+
+### nbody ###
+Binary : ./output_cflat_optee/cflat/nbody-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+
+### nettle-aes ###
+Binary : ./output_cflat_optee/cflat/nettle-aes-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+
+### nettle-sha256 ###
+Binary : ./output_cflat_optee/cflat/nettle-sha256-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+
+### primecount ###
+Binary : ./output_cflat_optee/cflat/primecount-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+
+### sglib-combined ###
+Binary : ./output_cflat_optee/cflat/sglib-combined-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+
+### st ###
+Binary : ./output_cflat_optee/cflat/st-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+
+### tarfind ###
+Binary : ./output_cflat_optee/cflat/tarfind-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+
+### ud ###
+Binary : ./output_cflat_optee/cflat/ud-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+
+==============================================
+Built: 15 / 15

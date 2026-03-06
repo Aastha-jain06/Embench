@@ -1,0 +1,9 @@
+Branch Counter Results (OP-TEE/AArch64) - Wed Mar  4 06:49:46 AM IST 2026
+Target   : aarch64-linux-gnu
+CPU_MHZ  : 1000
+Sysroot  : /home/dell/Videos/Aastha/optee/out-br/host/aarch64-buildroot-linux-gnu/sysroot
+==============================================
+
+==============================================
+Built: 0 / 15
+Failed: aha-mont64 crc32 cubic edn huffbench matmult-int minver nbody nettle-aes nettle-sha256 primecount sglib-combined st tarfind ud

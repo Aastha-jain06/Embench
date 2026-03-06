@@ -1,0 +1,84 @@
+CFLAT Count-Only Results (AArch64) - Thu Mar  5 04:09:21 PM IST 2026
+Target  : aarch64-linux-gnu
+CPU_MHZ : 1000
+Mode    : count-only (no TEE, no libteec)
+Runtime : ./counter/min_libcflat.c
+==============================================
+    Instrumentation call sites: 64
+
+### aha-mont64 ###
+Binary : ./output_cflat_countonly/cflat/aha-mont64-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+    Instrumentation call sites: 54
+
+### crc32 ###
+Binary : ./output_cflat_countonly/cflat/crc32-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+    Instrumentation call sites: 57
+
+### cubic ###
+Binary : ./output_cflat_countonly/cflat/cubic-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+    Instrumentation call sites: 99
+
+### edn ###
+Binary : ./output_cflat_countonly/cflat/edn-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+    Instrumentation call sites: 167
+
+### huffbench ###
+Binary : ./output_cflat_countonly/cflat/huffbench-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+    Instrumentation call sites: 63
+
+### matmult-int ###
+Binary : ./output_cflat_countonly/cflat/matmult-int-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+    Instrumentation call sites: 119
+
+### minver ###
+Binary : ./output_cflat_countonly/cflat/minver-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+    Instrumentation call sites: 66
+
+### nbody ###
+Binary : ./output_cflat_countonly/cflat/nbody-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+    Instrumentation call sites: 149
+
+### nettle-aes ###
+Binary : ./output_cflat_countonly/cflat/nettle-aes-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+    Instrumentation call sites: 149
+
+### nettle-sha256 ###
+Binary : ./output_cflat_countonly/cflat/nettle-sha256-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+    Instrumentation call sites: 41
+
+### primecount ###
+Binary : ./output_cflat_countonly/cflat/primecount-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+    Instrumentation call sites: 1046
+
+### sglib-combined ###
+Binary : ./output_cflat_countonly/cflat/sglib-combined-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+    Instrumentation call sites: 65
+
+### st ###
+Binary : ./output_cflat_countonly/cflat/st-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+    Instrumentation call sites: 78
+
+### tarfind ###
+Binary : ./output_cflat_countonly/cflat/tarfind-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+    Instrumentation call sites: 72
+
+### ud ###
+Binary : ./output_cflat_countonly/cflat/ud-cflat
+Status : BUILT OK — copy to RPi/OP-TEE to run
+
+==============================================
+Built: 15 / 15

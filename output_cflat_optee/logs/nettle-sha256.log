@@ -1,0 +1,14 @@
+[CFLAT] _nettle_write_be32 | branches=12 calls=0 returns=1
+[CFLAT] _nettle_sha256_compress | branches=60 calls=0 returns=1
+[CFLAT] sha256_init | branches=0 calls=0 returns=1
+[CFLAT] sha256_update | branches=11 calls=2 returns=1
+[CFLAT] sha256_digest | branches=0 calls=2 returns=1
+[CFLAT] sha256_write_digest | branches=8 calls=3 returns=1
+[CFLAT] verify_benchmark | branches=6 calls=0 returns=1
+[CFLAT] initialise_benchmark | branches=0 calls=0 returns=1
+[CFLAT] warm_caches | branches=0 calls=1 returns=1
+[CFLAT] benchmark_body | branches=4 calls=0 returns=1
+[CFLAT] benchmark | branches=0 calls=1 returns=1
+[CFLAT] main | branches=0 calls=4 returns=1
+clang: warning: argument unused during compilation: '-I ./counter' [-Wunused-command-line-argument]
+clang: warning: argument unused during compilation: '-I ./embench-iot-benchmarks-backup' [-Wunused-command-line-argument]
