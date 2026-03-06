@@ -37,18 +37,18 @@ define dso_local void @_nettle_write_be32(i64 noundef %0, ptr noundef %1, ptr no
   %16 = trunc i64 %15 to i32
   store i32 %16, ptr %9, align 4
   store i64 0, ptr %7, align 8
-  call void @__cflat_record_node(i64 99894305104752)
+  call void @increment_uncond_branch()
   br label %17
 
 17:                                               ; preds = %59, %3
   %18 = load i64, ptr %7, align 8
   %19 = load i64, ptr %8, align 8
   %20 = icmp ult i64 %18, %19
-  call void @__cflat_record_node(i64 99894305109424)
+  call void @increment_cond_branch()
   br i1 %20, label %21, label %64
 
 21:                                               ; preds = %17
-  call void @__cflat_record_node(i64 99894305110160)
+  call void @increment_uncond_branch()
   br label %22
 
 22:                                               ; preds = %21
@@ -91,11 +91,11 @@ define dso_local void @_nettle_write_be32(i64 noundef %0, ptr noundef %1, ptr no
   %56 = load ptr, ptr %5, align 8
   %57 = getelementptr inbounds i8, ptr %56, i64 3
   store i8 %55, ptr %57, align 1
-  call void @__cflat_record_node(i64 99894305110272)
+  call void @increment_uncond_branch()
   br label %58
 
 58:                                               ; preds = %22
-  call void @__cflat_record_node(i64 99894305117936)
+  call void @increment_uncond_branch()
   br label %59
 
 59:                                               ; preds = %58
@@ -105,13 +105,14 @@ define dso_local void @_nettle_write_be32(i64 noundef %0, ptr noundef %1, ptr no
   %62 = load ptr, ptr %5, align 8
   %63 = getelementptr inbounds i8, ptr %62, i64 4
   store ptr %63, ptr %5, align 8
-  call void @__cflat_record_node(i64 99894305118048)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %17, !llvm.loop !6
 
 64:                                               ; preds = %17
   %65 = load i32, ptr %9, align 4
   %66 = icmp ne i32 %65, 0
-  call void @__cflat_record_node(i64 99894305121872)
+  call void @increment_cond_branch()
   br i1 %66, label %67, label %106
 
 67:                                               ; preds = %64
@@ -123,7 +124,6 @@ define dso_local void @_nettle_write_be32(i64 noundef %0, ptr noundef %1, ptr no
   %72 = load i32, ptr %71, align 4
   store i32 %72, ptr %10, align 4
   %73 = load i32, ptr %9, align 4
-  call void @__cflat_record_node(i64 99894305122592)
   switch i32 %73, label %74 [
     i32 3, label %75
     i32 2, label %85
@@ -131,6 +131,7 @@ define dso_local void @_nettle_write_be32(i64 noundef %0, ptr noundef %1, ptr no
   ]
 
 74:                                               ; preds = %67
+  call void @increment_direct_call()
   call void @abort() #5
   unreachable
 
@@ -146,7 +147,7 @@ define dso_local void @_nettle_write_be32(i64 noundef %0, ptr noundef %1, ptr no
   %83 = zext i32 %82 to i64
   %84 = getelementptr inbounds i8, ptr %80, i64 %83
   store i8 %79, ptr %84, align 1
-  call void @__cflat_record_node(i64 99894305124928)
+  call void @increment_uncond_branch()
   br label %85
 
 85:                                               ; preds = %75, %67
@@ -161,7 +162,7 @@ define dso_local void @_nettle_write_be32(i64 noundef %0, ptr noundef %1, ptr no
   %93 = zext i32 %92 to i64
   %94 = getelementptr inbounds i8, ptr %90, i64 %93
   store i8 %89, ptr %94, align 1
-  call void @__cflat_record_node(i64 99894305126608)
+  call void @increment_uncond_branch()
   br label %95
 
 95:                                               ; preds = %85, %67
@@ -176,15 +177,15 @@ define dso_local void @_nettle_write_be32(i64 noundef %0, ptr noundef %1, ptr no
   %103 = zext i32 %102 to i64
   %104 = getelementptr inbounds i8, ptr %100, i64 %103
   store i8 %99, ptr %104, align 1
-  call void @__cflat_record_node(i64 99894305113808)
+  call void @increment_uncond_branch()
   br label %105
 
 105:                                              ; preds = %95
-  call void @__cflat_record_node(i64 99894305115520)
+  call void @increment_uncond_branch()
   br label %106
 
 106:                                              ; preds = %105, %64
-  call void @__cflat_call_return(i64 99894305104752)
+  call void @increment_return()
   ret void
 }
 
@@ -211,13 +212,13 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   store ptr %1, ptr %5, align 8
   store ptr %2, ptr %6, align 8
   store i32 0, ptr %16, align 4
-  call void @__cflat_record_node(i64 99894305128992)
+  call void @increment_uncond_branch()
   br label %18
 
 18:                                               ; preds = %47, %3
   %19 = load i32, ptr %16, align 4
   %20 = icmp ult i32 %19, 16
-  call void @__cflat_record_node(i64 99894305131616)
+  call void @increment_cond_branch()
   br i1 %20, label %21, label %52
 
 21:                                               ; preds = %18
@@ -247,7 +248,7 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %45 = zext i32 %44 to i64
   %46 = getelementptr inbounds [16 x i32], ptr %7, i64 0, i64 %45
   store i32 %43, ptr %46, align 4
-  call void @__cflat_record_node(i64 99894305132224)
+  call void @increment_uncond_branch()
   br label %47
 
 47:                                               ; preds = %21
@@ -257,7 +258,8 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %50 = load ptr, ptr %5, align 8
   %51 = getelementptr inbounds i8, ptr %50, i64 4
   store ptr %51, ptr %5, align 8
-  call void @__cflat_record_node(i64 99894305138048)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %18, !llvm.loop !8
 
 52:                                               ; preds = %18
@@ -296,17 +298,17 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   store i32 0, ptr %16, align 4
   %77 = getelementptr inbounds [16 x i32], ptr %7, i64 0, i64 0
   store ptr %77, ptr %17, align 8
-  call void @__cflat_record_node(i64 99894305139168)
+  call void @increment_uncond_branch()
   br label %78
 
 78:                                               ; preds = %634, %52
   %79 = load i32, ptr %16, align 4
   %80 = icmp ult i32 %79, 16
-  call void @__cflat_record_node(i64 99894305144528)
+  call void @increment_cond_branch()
   br i1 %80, label %81, label %641
 
 81:                                               ; preds = %78
-  call void @__cflat_record_node(i64 99894305145216)
+  call void @increment_uncond_branch()
   br label %82
 
 82:                                               ; preds = %81
@@ -380,11 +382,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %148 = load i32, ptr %15, align 4
   %149 = add i32 %148, %147
   store i32 %149, ptr %15, align 4
-  call void @__cflat_record_node(i64 99894305145328)
+  call void @increment_uncond_branch()
   br label %150
 
 150:                                              ; preds = %82
-  call void @__cflat_record_node(i64 99894305160976)
+  call void @increment_uncond_branch()
   br label %151
 
 151:                                              ; preds = %150
@@ -458,11 +460,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %217 = load i32, ptr %14, align 4
   %218 = add i32 %217, %216
   store i32 %218, ptr %14, align 4
-  call void @__cflat_record_node(i64 99894305161088)
+  call void @increment_uncond_branch()
   br label %219
 
 219:                                              ; preds = %151
-  call void @__cflat_record_node(i64 99894305175200)
+  call void @increment_uncond_branch()
   br label %220
 
 220:                                              ; preds = %219
@@ -536,11 +538,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %286 = load i32, ptr %13, align 4
   %287 = add i32 %286, %285
   store i32 %287, ptr %13, align 4
-  call void @__cflat_record_node(i64 99894305175312)
+  call void @increment_uncond_branch()
   br label %288
 
 288:                                              ; preds = %220
-  call void @__cflat_record_node(i64 99894305185280)
+  call void @increment_uncond_branch()
   br label %289
 
 289:                                              ; preds = %288
@@ -614,11 +616,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %355 = load i32, ptr %12, align 4
   %356 = add i32 %355, %354
   store i32 %356, ptr %12, align 4
-  call void @__cflat_record_node(i64 99894305185392)
+  call void @increment_uncond_branch()
   br label %357
 
 357:                                              ; preds = %289
-  call void @__cflat_record_node(i64 99894305195360)
+  call void @increment_uncond_branch()
   br label %358
 
 358:                                              ; preds = %357
@@ -692,11 +694,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %424 = load i32, ptr %11, align 4
   %425 = add i32 %424, %423
   store i32 %425, ptr %11, align 4
-  call void @__cflat_record_node(i64 99894305195472)
+  call void @increment_uncond_branch()
   br label %426
 
 426:                                              ; preds = %358
-  call void @__cflat_record_node(i64 99894305173440)
+  call void @increment_uncond_branch()
   br label %427
 
 427:                                              ; preds = %426
@@ -770,11 +772,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %493 = load i32, ptr %10, align 4
   %494 = add i32 %493, %492
   store i32 %494, ptr %10, align 4
-  call void @__cflat_record_node(i64 99894305173552)
+  call void @increment_uncond_branch()
   br label %495
 
 495:                                              ; preds = %427
-  call void @__cflat_record_node(i64 99894305223760)
+  call void @increment_uncond_branch()
   br label %496
 
 496:                                              ; preds = %495
@@ -848,11 +850,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %562 = load i32, ptr %9, align 4
   %563 = add i32 %562, %561
   store i32 %563, ptr %9, align 4
-  call void @__cflat_record_node(i64 99894305223872)
+  call void @increment_uncond_branch()
   br label %564
 
 564:                                              ; preds = %496
-  call void @__cflat_record_node(i64 99894305233840)
+  call void @increment_uncond_branch()
   br label %565
 
 565:                                              ; preds = %564
@@ -926,11 +928,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %631 = load i32, ptr %8, align 4
   %632 = add i32 %631, %630
   store i32 %632, ptr %8, align 4
-  call void @__cflat_record_node(i64 99894305233952)
+  call void @increment_uncond_branch()
   br label %633
 
 633:                                              ; preds = %565
-  call void @__cflat_record_node(i64 99894305243920)
+  call void @increment_uncond_branch()
   br label %634
 
 634:                                              ; preds = %633
@@ -943,21 +945,22 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %639 = load ptr, ptr %17, align 8
   %640 = getelementptr inbounds i32, ptr %639, i64 8
   store ptr %640, ptr %17, align 8
-  call void @__cflat_record_node(i64 99894305244032)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %78, !llvm.loop !9
 
 641:                                              ; preds = %78
-  call void @__cflat_record_node(i64 99894305245808)
+  call void @increment_uncond_branch()
   br label %642
 
 642:                                              ; preds = %2422, %641
   %643 = load i32, ptr %16, align 4
   %644 = icmp ult i32 %643, 64
-  call void @__cflat_record_node(i64 99894305245920)
+  call void @increment_cond_branch()
   br i1 %644, label %645, label %2427
 
 645:                                              ; preds = %642
-  call void @__cflat_record_node(i64 99894305246672)
+  call void @increment_uncond_branch()
   br label %646
 
 646:                                              ; preds = %645
@@ -1074,11 +1077,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %754 = load i32, ptr %15, align 4
   %755 = add i32 %754, %753
   store i32 %755, ptr %15, align 4
-  call void @__cflat_record_node(i64 99894305246784)
+  call void @increment_uncond_branch()
   br label %756
 
 756:                                              ; preds = %646
-  call void @__cflat_record_node(i64 99894305263600)
+  call void @increment_uncond_branch()
   br label %757
 
 757:                                              ; preds = %756
@@ -1195,11 +1198,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %865 = load i32, ptr %14, align 4
   %866 = add i32 %865, %864
   store i32 %866, ptr %14, align 4
-  call void @__cflat_record_node(i64 99894305263712)
+  call void @increment_uncond_branch()
   br label %867
 
 867:                                              ; preds = %757
-  call void @__cflat_record_node(i64 99894305214208)
+  call void @increment_uncond_branch()
   br label %868
 
 868:                                              ; preds = %867
@@ -1316,11 +1319,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %976 = load i32, ptr %13, align 4
   %977 = add i32 %976, %975
   store i32 %977, ptr %13, align 4
-  call void @__cflat_record_node(i64 99894305214320)
+  call void @increment_uncond_branch()
   br label %978
 
 978:                                              ; preds = %868
-  call void @__cflat_record_node(i64 99894305313536)
+  call void @increment_uncond_branch()
   br label %979
 
 979:                                              ; preds = %978
@@ -1437,11 +1440,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %1087 = load i32, ptr %12, align 4
   %1088 = add i32 %1087, %1086
   store i32 %1088, ptr %12, align 4
-  call void @__cflat_record_node(i64 99894305313648)
+  call void @increment_uncond_branch()
   br label %1089
 
 1089:                                             ; preds = %979
-  call void @__cflat_record_node(i64 99894305330272)
+  call void @increment_uncond_branch()
   br label %1090
 
 1090:                                             ; preds = %1089
@@ -1558,11 +1561,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %1198 = load i32, ptr %11, align 4
   %1199 = add i32 %1198, %1197
   store i32 %1199, ptr %11, align 4
-  call void @__cflat_record_node(i64 99894305330384)
+  call void @increment_uncond_branch()
   br label %1200
 
 1200:                                             ; preds = %1090
-  call void @__cflat_record_node(i64 99894305347008)
+  call void @increment_uncond_branch()
   br label %1201
 
 1201:                                             ; preds = %1200
@@ -1679,11 +1682,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %1309 = load i32, ptr %10, align 4
   %1310 = add i32 %1309, %1308
   store i32 %1310, ptr %10, align 4
-  call void @__cflat_record_node(i64 99894305347120)
+  call void @increment_uncond_branch()
   br label %1311
 
 1311:                                             ; preds = %1201
-  call void @__cflat_record_node(i64 99894305363696)
+  call void @increment_uncond_branch()
   br label %1312
 
 1312:                                             ; preds = %1311
@@ -1800,11 +1803,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %1420 = load i32, ptr %9, align 4
   %1421 = add i32 %1420, %1419
   store i32 %1421, ptr %9, align 4
-  call void @__cflat_record_node(i64 99894305363808)
+  call void @increment_uncond_branch()
   br label %1422
 
 1422:                                             ; preds = %1312
-  call void @__cflat_record_node(i64 99894305380384)
+  call void @increment_uncond_branch()
   br label %1423
 
 1423:                                             ; preds = %1422
@@ -1921,11 +1924,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %1531 = load i32, ptr %8, align 4
   %1532 = add i32 %1531, %1530
   store i32 %1532, ptr %8, align 4
-  call void @__cflat_record_node(i64 99894305380496)
+  call void @increment_uncond_branch()
   br label %1533
 
 1533:                                             ; preds = %1423
-  call void @__cflat_record_node(i64 99894305397072)
+  call void @increment_uncond_branch()
   br label %1534
 
 1534:                                             ; preds = %1533
@@ -2042,11 +2045,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %1642 = load i32, ptr %15, align 4
   %1643 = add i32 %1642, %1641
   store i32 %1643, ptr %15, align 4
-  call void @__cflat_record_node(i64 99894305397184)
+  call void @increment_uncond_branch()
   br label %1644
 
 1644:                                             ; preds = %1534
-  call void @__cflat_record_node(i64 99894305281536)
+  call void @increment_uncond_branch()
   br label %1645
 
 1645:                                             ; preds = %1644
@@ -2163,11 +2166,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %1753 = load i32, ptr %14, align 4
   %1754 = add i32 %1753, %1752
   store i32 %1754, ptr %14, align 4
-  call void @__cflat_record_node(i64 99894305281648)
+  call void @increment_uncond_branch()
   br label %1755
 
 1755:                                             ; preds = %1645
-  call void @__cflat_record_node(i64 99894305463216)
+  call void @increment_uncond_branch()
   br label %1756
 
 1756:                                             ; preds = %1755
@@ -2284,11 +2287,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %1864 = load i32, ptr %13, align 4
   %1865 = add i32 %1864, %1863
   store i32 %1865, ptr %13, align 4
-  call void @__cflat_record_node(i64 99894305463328)
+  call void @increment_uncond_branch()
   br label %1866
 
 1866:                                             ; preds = %1756
-  call void @__cflat_record_node(i64 99894305479904)
+  call void @increment_uncond_branch()
   br label %1867
 
 1867:                                             ; preds = %1866
@@ -2405,11 +2408,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %1975 = load i32, ptr %12, align 4
   %1976 = add i32 %1975, %1974
   store i32 %1976, ptr %12, align 4
-  call void @__cflat_record_node(i64 99894305480016)
+  call void @increment_uncond_branch()
   br label %1977
 
 1977:                                             ; preds = %1867
-  call void @__cflat_record_node(i64 99894305496592)
+  call void @increment_uncond_branch()
   br label %1978
 
 1978:                                             ; preds = %1977
@@ -2526,11 +2529,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %2086 = load i32, ptr %11, align 4
   %2087 = add i32 %2086, %2085
   store i32 %2087, ptr %11, align 4
-  call void @__cflat_record_node(i64 99894305496704)
+  call void @increment_uncond_branch()
   br label %2088
 
 2088:                                             ; preds = %1978
-  call void @__cflat_record_node(i64 99894305513280)
+  call void @increment_uncond_branch()
   br label %2089
 
 2089:                                             ; preds = %2088
@@ -2647,11 +2650,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %2197 = load i32, ptr %10, align 4
   %2198 = add i32 %2197, %2196
   store i32 %2198, ptr %10, align 4
-  call void @__cflat_record_node(i64 99894305513392)
+  call void @increment_uncond_branch()
   br label %2199
 
 2199:                                             ; preds = %2089
-  call void @__cflat_record_node(i64 99894305529968)
+  call void @increment_uncond_branch()
   br label %2200
 
 2200:                                             ; preds = %2199
@@ -2768,11 +2771,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %2308 = load i32, ptr %9, align 4
   %2309 = add i32 %2308, %2307
   store i32 %2309, ptr %9, align 4
-  call void @__cflat_record_node(i64 99894305530080)
+  call void @increment_uncond_branch()
   br label %2310
 
 2310:                                             ; preds = %2200
-  call void @__cflat_record_node(i64 99894305546656)
+  call void @increment_uncond_branch()
   br label %2311
 
 2311:                                             ; preds = %2310
@@ -2889,11 +2892,11 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %2419 = load i32, ptr %8, align 4
   %2420 = add i32 %2419, %2418
   store i32 %2420, ptr %8, align 4
-  call void @__cflat_record_node(i64 99894305546768)
+  call void @increment_uncond_branch()
   br label %2421
 
 2421:                                             ; preds = %2311
-  call void @__cflat_record_node(i64 99894305563344)
+  call void @increment_uncond_branch()
   br label %2422
 
 2422:                                             ; preds = %2421
@@ -2903,7 +2906,8 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %2425 = load ptr, ptr %6, align 8
   %2426 = getelementptr inbounds i32, ptr %2425, i64 16
   store ptr %2426, ptr %6, align 8
-  call void @__cflat_record_node(i64 99894305563456)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %642, !llvm.loop !10
 
 2427:                                             ; preds = %642
@@ -2955,7 +2959,7 @@ define dso_local void @_nettle_sha256_compress(ptr noundef %0, ptr noundef %1, p
   %2466 = load i32, ptr %2465, align 4
   %2467 = add i32 %2466, %2463
   store i32 %2467, ptr %2465, align 4
-  call void @__cflat_call_return(i64 99894305128992)
+  call void @increment_return()
   ret void
 }
 
@@ -2973,7 +2977,7 @@ define dso_local void @sha256_init(ptr noundef %0) #0 {
   %8 = load ptr, ptr %2, align 8
   %9 = getelementptr inbounds %struct.sha256_ctx, ptr %8, i32 0, i32 3
   store i32 0, ptr %9, align 8
-  call void @__cflat_call_return(i64 99894305095904)
+  call void @increment_return()
   ret void
 }
 
@@ -2989,7 +2993,7 @@ define dso_local void @sha256_update(ptr noundef %0, i64 noundef %1, ptr noundef
   store ptr %0, ptr %4, align 8
   store i64 %1, ptr %5, align 8
   store ptr %2, ptr %6, align 8
-  call void @__cflat_record_node(i64 99894305096128)
+  call void @increment_uncond_branch()
   br label %8
 
 8:                                                ; preds = %3
@@ -2997,7 +3001,7 @@ define dso_local void @sha256_update(ptr noundef %0, i64 noundef %1, ptr noundef
   %10 = getelementptr inbounds %struct.sha256_ctx, ptr %9, i32 0, i32 3
   %11 = load i32, ptr %10, align 8
   %12 = icmp ne i32 %11, 0
-  call void @__cflat_record_node(i64 99894305402832)
+  call void @increment_cond_branch()
   br i1 %12, label %13, label %73
 
 13:                                               ; preds = %8
@@ -3012,7 +3016,7 @@ define dso_local void @sha256_update(ptr noundef %0, i64 noundef %1, ptr noundef
   %21 = load i32, ptr %7, align 4
   %22 = zext i32 %21 to i64
   %23 = icmp ult i64 %20, %22
-  call void @__cflat_record_node(i64 99894305403824)
+  call void @increment_cond_branch()
   br i1 %23, label %24, label %42
 
 24:                                               ; preds = %13
@@ -3035,7 +3039,7 @@ define dso_local void @sha256_update(ptr noundef %0, i64 noundef %1, ptr noundef
   %40 = add i64 %39, %35
   %41 = trunc i64 %40 to i32
   store i32 %41, ptr %37, align 8
-  call void @__cflat_record_node(i64 99894305405712)
+  call void @increment_uncond_branch()
   br label %100
 
 42:                                               ; preds = %13
@@ -3057,7 +3061,7 @@ define dso_local void @sha256_update(ptr noundef %0, i64 noundef %1, ptr noundef
   %57 = load ptr, ptr %4, align 8
   %58 = getelementptr inbounds %struct.sha256_ctx, ptr %57, i32 0, i32 2
   %59 = getelementptr inbounds [64 x i8], ptr %58, i64 0, i64 0
-  call void @__cflat_call_enter(i64 99894305128992, i64 99894305408992)
+  call void @increment_direct_call()
   call void @_nettle_sha256_compress(ptr noundef %56, ptr noundef %59, ptr noundef @K)
   %60 = load ptr, ptr %4, align 8
   %61 = getelementptr inbounds %struct.sha256_ctx, ptr %60, i32 0, i32 1
@@ -3074,21 +3078,21 @@ define dso_local void @sha256_update(ptr noundef %0, i64 noundef %1, ptr noundef
   %70 = load i64, ptr %5, align 8
   %71 = sub i64 %70, %69
   store i64 %71, ptr %5, align 8
-  call void @__cflat_record_node(i64 99894305408992)
+  call void @increment_uncond_branch()
   br label %72
 
 72:                                               ; preds = %42
-  call void @__cflat_record_node(i64 99894305416400)
+  call void @increment_uncond_branch()
   br label %73
 
 73:                                               ; preds = %72, %8
-  call void @__cflat_record_node(i64 99894305416592)
+  call void @increment_uncond_branch()
   br label %74
 
 74:                                               ; preds = %77, %73
   %75 = load i64, ptr %5, align 8
   %76 = icmp uge i64 %75, 64
-  call void @__cflat_record_node(i64 99894305416704)
+  call void @increment_cond_branch()
   br i1 %76, label %77, label %90
 
 77:                                               ; preds = %74
@@ -3096,7 +3100,7 @@ define dso_local void @sha256_update(ptr noundef %0, i64 noundef %1, ptr noundef
   %79 = getelementptr inbounds %struct.sha256_ctx, ptr %78, i32 0, i32 0
   %80 = getelementptr inbounds [8 x i32], ptr %79, i64 0, i64 0
   %81 = load ptr, ptr %6, align 8
-  call void @__cflat_call_enter(i64 99894305128992, i64 99894305417312)
+  call void @increment_direct_call()
   call void @_nettle_sha256_compress(ptr noundef %80, ptr noundef %81, ptr noundef @K)
   %82 = load ptr, ptr %4, align 8
   %83 = getelementptr inbounds %struct.sha256_ctx, ptr %82, i32 0, i32 1
@@ -3109,7 +3113,8 @@ define dso_local void @sha256_update(ptr noundef %0, i64 noundef %1, ptr noundef
   %88 = load i64, ptr %5, align 8
   %89 = sub i64 %88, 64
   store i64 %89, ptr %5, align 8
-  call void @__cflat_record_node(i64 99894305417312)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %74, !llvm.loop !11
 
 90:                                               ; preds = %74
@@ -3124,15 +3129,15 @@ define dso_local void @sha256_update(ptr noundef %0, i64 noundef %1, ptr noundef
   %98 = load ptr, ptr %4, align 8
   %99 = getelementptr inbounds %struct.sha256_ctx, ptr %98, i32 0, i32 3
   store i32 %97, ptr %99, align 8
-  call void @__cflat_record_node(i64 99894305420032)
+  call void @increment_uncond_branch()
   br label %100
 
 100:                                              ; preds = %90, %24
-  call void @__cflat_record_node(i64 99894305411072)
+  call void @increment_uncond_branch()
   br label %101
 
 101:                                              ; preds = %100
-  call void @__cflat_call_return(i64 99894305096128)
+  call void @increment_return()
   ret void
 }
 
@@ -3147,12 +3152,12 @@ define dso_local void @sha256_digest(ptr noundef %0, i64 noundef %1, ptr noundef
   %7 = load ptr, ptr %4, align 8
   %8 = load i64, ptr %5, align 8
   %9 = load ptr, ptr %6, align 8
-  call void @__cflat_call_enter(i64 99894305421968, i64 99894305096352)
+  call void @increment_direct_call()
   call void @sha256_write_digest(ptr noundef %7, i64 noundef %8, ptr noundef %9)
   %10 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 99894305095904, i64 99894305096352)
+  call void @increment_direct_call()
   call void @sha256_init(ptr noundef %10)
-  call void @__cflat_call_return(i64 99894305096352)
+  call void @increment_return()
   ret void
 }
 
@@ -3168,15 +3173,16 @@ define internal void @sha256_write_digest(ptr noundef %0, i64 noundef %1, ptr no
   store ptr %2, ptr %6, align 8
   %9 = load i64, ptr %5, align 8
   %10 = icmp ule i64 %9, 32
-  call void @__cflat_record_node(i64 99894305421968)
+  call void @increment_cond_branch()
   br i1 %10, label %12, label %11
 
 11:                                               ; preds = %3
+  call void @increment_direct_call()
   call void @exit(i32 noundef 1) #5
   unreachable
 
 12:                                               ; preds = %3
-  call void @__cflat_record_node(i64 99894305411776)
+  call void @increment_uncond_branch()
   br label %13
 
 13:                                               ; preds = %12
@@ -3187,10 +3193,11 @@ define internal void @sha256_write_digest(ptr noundef %0, i64 noundef %1, ptr no
   %17 = load i32, ptr %8, align 4
   %18 = zext i32 %17 to i64
   %19 = icmp ult i64 %18, 64
-  call void @__cflat_record_node(i64 99894305425344)
+  call void @increment_cond_branch()
   br i1 %19, label %21, label %20
 
 20:                                               ; preds = %13
+  call void @increment_direct_call()
   call void @exit(i32 noundef 1) #5
   unreachable
 
@@ -3206,7 +3213,7 @@ define internal void @sha256_write_digest(ptr noundef %0, i64 noundef %1, ptr no
   %28 = load i32, ptr %8, align 4
   %29 = zext i32 %28 to i64
   %30 = icmp ugt i64 %29, 56
-  call void @__cflat_record_node(i64 99894305426992)
+  call void @increment_cond_branch()
   br i1 %30, label %31, label %47
 
 31:                                               ; preds = %21
@@ -3226,10 +3233,10 @@ define internal void @sha256_write_digest(ptr noundef %0, i64 noundef %1, ptr no
   %44 = load ptr, ptr %4, align 8
   %45 = getelementptr inbounds %struct.sha256_ctx, ptr %44, i32 0, i32 2
   %46 = getelementptr inbounds [64 x i8], ptr %45, i64 0, i64 0
-  call void @__cflat_call_enter(i64 99894305128992, i64 99894305428928)
+  call void @increment_direct_call()
   call void @_nettle_sha256_compress(ptr noundef %43, ptr noundef %46, ptr noundef @K)
   store i32 0, ptr %8, align 4
-  call void @__cflat_record_node(i64 99894305428928)
+  call void @increment_uncond_branch()
   br label %47
 
 47:                                               ; preds = %31, %21
@@ -3243,7 +3250,7 @@ define internal void @sha256_write_digest(ptr noundef %0, i64 noundef %1, ptr no
   %55 = zext i32 %54 to i64
   %56 = sub i64 56, %55
   call void @llvm.memset.p0.i64(ptr align 1 %53, i8 0, i64 %56, i1 false)
-  call void @__cflat_record_node(i64 99894305434560)
+  call void @increment_uncond_branch()
   br label %57
 
 57:                                               ; preds = %47
@@ -3258,7 +3265,7 @@ define internal void @sha256_write_digest(ptr noundef %0, i64 noundef %1, ptr no
   %66 = zext i32 %65 to i64
   %67 = or i64 %61, %66
   store i64 %67, ptr %7, align 8
-  call void @__cflat_record_node(i64 99894305436384)
+  call void @increment_uncond_branch()
   br label %68
 
 68:                                               ; preds = %57
@@ -3341,7 +3348,7 @@ define internal void @sha256_write_digest(ptr noundef %0, i64 noundef %1, ptr no
   %138 = getelementptr inbounds i8, ptr %137, i64 56
   %139 = getelementptr inbounds i8, ptr %138, i64 7
   store i8 %134, ptr %139, align 1
-  call void @__cflat_record_node(i64 99894305438176)
+  call void @increment_uncond_branch()
   br label %140
 
 140:                                              ; preds = %68
@@ -3351,16 +3358,16 @@ define internal void @sha256_write_digest(ptr noundef %0, i64 noundef %1, ptr no
   %144 = load ptr, ptr %4, align 8
   %145 = getelementptr inbounds %struct.sha256_ctx, ptr %144, i32 0, i32 2
   %146 = getelementptr inbounds [64 x i8], ptr %145, i64 0, i64 0
-  call void @__cflat_call_enter(i64 99894305128992, i64 99894305452592)
+  call void @increment_direct_call()
   call void @_nettle_sha256_compress(ptr noundef %143, ptr noundef %146, ptr noundef @K)
   %147 = load i64, ptr %5, align 8
   %148 = load ptr, ptr %6, align 8
   %149 = load ptr, ptr %4, align 8
   %150 = getelementptr inbounds %struct.sha256_ctx, ptr %149, i32 0, i32 0
   %151 = getelementptr inbounds [8 x i32], ptr %150, i64 0, i64 0
-  call void @__cflat_call_enter(i64 99894305104752, i64 99894305452592)
+  call void @increment_direct_call()
   call void @_nettle_write_be32(i64 noundef %147, ptr noundef %148, ptr noundef %151)
-  call void @__cflat_call_return(i64 99894305421968)
+  call void @increment_return()
   ret void
 }
 
@@ -3372,13 +3379,13 @@ define dso_local i32 @verify_benchmark(i32 noundef %0) #0 {
   store i32 %0, ptr %2, align 4
   store i8 1, ptr %3, align 1
   store i64 0, ptr %4, align 8
-  call void @__cflat_record_node(i64 99894305443056)
+  call void @increment_uncond_branch()
   br label %5
 
 5:                                                ; preds = %20, %1
   %6 = load i64, ptr %4, align 8
   %7 = icmp ult i64 %6, 8
-  call void @__cflat_record_node(i64 99894305444112)
+  call void @increment_cond_branch()
   br i1 %7, label %8, label %23
 
 8:                                                ; preds = %5
@@ -3391,36 +3398,37 @@ define dso_local i32 @verify_benchmark(i32 noundef %0) #0 {
   %15 = load i8, ptr %14, align 1
   %16 = zext i8 %15 to i32
   %17 = icmp ne i32 %12, %16
-  call void @__cflat_record_node(i64 99894305444720)
+  call void @increment_cond_branch()
   br i1 %17, label %18, label %19
 
 18:                                               ; preds = %8
   store i8 0, ptr %3, align 1
-  call void @__cflat_record_node(i64 99894305446352)
+  call void @increment_uncond_branch()
   br label %19
 
 19:                                               ; preds = %18, %8
-  call void @__cflat_record_node(i64 99894305455168)
+  call void @increment_uncond_branch()
   br label %20
 
 20:                                               ; preds = %19
   %21 = load i64, ptr %4, align 8
   %22 = add i64 %21, 1
   store i64 %22, ptr %4, align 8
-  call void @__cflat_record_node(i64 99894305455280)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %5, !llvm.loop !12
 
 23:                                               ; preds = %5
   %24 = load i8, ptr %3, align 1
   %25 = trunc i8 %24 to i1
   %26 = zext i1 %25 to i32
-  call void @__cflat_call_return(i64 99894305443056)
+  call void @increment_return()
   ret i32 %26
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local void @initialise_benchmark() #0 {
-  call void @__cflat_call_return(i64 99894305456832)
+  call void @increment_return()
   ret void
 }
 
@@ -3430,10 +3438,10 @@ define dso_local void @warm_caches(i32 noundef %0) #0 {
   %3 = alloca i32, align 4
   store i32 %0, ptr %2, align 4
   %4 = load i32, ptr %2, align 4
-  call void @__cflat_call_enter(i64 99894305457952, i64 99894305457408)
+  call void @increment_direct_call()
   %5 = call i32 @benchmark_body(i32 noundef %4)
   store i32 %5, ptr %3, align 4
-  call void @__cflat_call_return(i64 99894305457408)
+  call void @increment_return()
   ret void
 }
 
@@ -3444,14 +3452,14 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %4 = alloca %struct.sha256_ctx, align 8
   store i32 %0, ptr %2, align 4
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 99894305457952)
+  call void @increment_uncond_branch()
   br label %5
 
 5:                                                ; preds = %13, %1
   %6 = load i32, ptr %3, align 4
   %7 = load i32, ptr %2, align 4
   %8 = icmp slt i32 %6, %7
-  call void @__cflat_record_node(i64 99894305459808)
+  call void @increment_cond_branch()
   br i1 %8, label %9, label %16
 
 9:                                                ; preds = %5
@@ -3462,26 +3470,27 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   call void %11(ptr noundef %4, i64 noundef 56, ptr noundef @msg)
   %12 = load ptr, ptr getelementptr inbounds (%struct.nettle_hash, ptr @nettle_sha256, i32 0, i32 6), align 8
   call void %12(ptr noundef %4, i64 noundef 32, ptr noundef @buffer)
-  call void @__cflat_record_node(i64 99894305460832)
+  call void @increment_uncond_branch()
   br label %13
 
 13:                                               ; preds = %9
   %14 = load i32, ptr %3, align 4
   %15 = add nsw i32 %14, 1
   store i32 %15, ptr %3, align 4
-  call void @__cflat_record_node(i64 99894305572240)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %5, !llvm.loop !13
 
 16:                                               ; preds = %5
-  call void @__cflat_call_return(i64 99894305457952)
+  call void @increment_return()
   ret i32 0
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @benchmark() #0 {
-  call void @__cflat_call_enter(i64 99894305457952, i64 99894305573584)
+  call void @increment_direct_call()
   %1 = call i32 @benchmark_body(i32 noundef 475000)
-  call void @__cflat_call_return(i64 99894305573584)
+  call void @increment_return()
   ret i32 %1
 }
 
@@ -3494,22 +3503,23 @@ define dso_local i32 @main(i32 noundef %0, ptr noundef %1) #0 {
   %7 = alloca i32, align 4
   store i32 %0, ptr %3, align 4
   store ptr %1, ptr %4, align 8
-  call void @__cflat_call_enter(i64 99894305647504, i64 99894305099088)
+  call void @increment_direct_call()
   call void @initialise_benchmark()
-  call void @__cflat_call_enter(i64 99894305457408, i64 99894305099088)
+  call void @increment_direct_call()
   call void @warm_caches(i32 noundef 0)
   call void @init_branch_stats()
-  call void @__cflat_call_enter(i64 99894305649440, i64 99894305099088)
+  call void @increment_direct_call()
   %8 = call i32 @benchmark()
   store volatile i32 %8, ptr %6, align 4
   call void @print_branch_stats()
   %9 = load volatile i32, ptr %6, align 4
-  call void @__cflat_call_enter(i64 99894305443056, i64 99894305099088)
+  call void @increment_direct_call()
   %10 = call i32 @verify_benchmark(i32 noundef %9)
   store i32 %10, ptr %7, align 4
   %11 = load i32, ptr %7, align 4
+  call void @increment_direct_call()
   %12 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %11)
-  call void @__cflat_call_return(i64 99894305099088)
+  call void @increment_return()
   ret i32 0
 }
 
@@ -3525,11 +3535,15 @@ declare void @exit(i32 noundef) #1
 ; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
 declare void @llvm.memset.p0.i64(ptr nocapture writeonly, i8, i64, i1 immarg) #4
 
-declare void @__cflat_record_node(i64)
+declare void @increment_uncond_branch()
 
-declare void @__cflat_call_return(i64)
+declare void @increment_cond_branch()
 
-declare void @__cflat_call_enter(i64, i64)
+declare void @increment_loop_header()
+
+declare void @increment_direct_call()
+
+declare void @increment_return()
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="non-leaf" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "target-features"="+fp-armv8,+neon,+v8a,-fmv" }
 attributes #1 = { noreturn nounwind "frame-pointer"="non-leaf" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "target-features"="+fp-armv8,+neon,+v8a,-fmv" }

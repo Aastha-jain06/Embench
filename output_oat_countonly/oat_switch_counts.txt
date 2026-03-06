@@ -1,0 +1,81 @@
+OAT Count-Only Results (Paper Smin, AArch64) - Thu Mar  5 10:02:56 PM IST 2026
+Instrumented: cond.branches + indirect calls/jumps + returns
+NOT instrumented: direct calls, function entries
+Paper formula: Total = branches + indirect + returns + 2
+Reference (paper Table II OAT column):
+  aha-mont64   : 392,967,008
+  crc32        : 348,840,008
+  cubic        :     860,013
+  edn          : 372,621,011
+  huffbench    : 496,903,008
+  matmult-int  : 406,825,691
+  minver       : 115,440,042
+  nbody        :   6,329,070
+  nettle-aes   :  78,858,777
+  nettle-sha256:  34,200,025
+  primecount   : 880,206,008
+  sglib-comb.  : 757,568,416
+  st           :  17,108,010
+  tarfind      : 117,236,430
+  ud           : 413,840,009
+==============================================
+
+### aha-mont64 ###
+Binary : ./output_oat_countonly/oat/aha-mont64-oat
+Status : BUILT
+
+### crc32 ###
+Binary : ./output_oat_countonly/oat/crc32-oat
+Status : BUILT
+
+### cubic ###
+Binary : ./output_oat_countonly/oat/cubic-oat
+Status : BUILT
+
+### edn ###
+Binary : ./output_oat_countonly/oat/edn-oat
+Status : BUILT
+
+### huffbench ###
+Binary : ./output_oat_countonly/oat/huffbench-oat
+Status : BUILT
+
+### matmult-int ###
+Binary : ./output_oat_countonly/oat/matmult-int-oat
+Status : BUILT
+
+### minver ###
+Binary : ./output_oat_countonly/oat/minver-oat
+Status : BUILT
+
+### nbody ###
+Binary : ./output_oat_countonly/oat/nbody-oat
+Status : BUILT
+
+### nettle-aes ###
+Binary : ./output_oat_countonly/oat/nettle-aes-oat
+Status : BUILT
+
+### nettle-sha256 ###
+Binary : ./output_oat_countonly/oat/nettle-sha256-oat
+Status : BUILT
+
+### primecount ###
+Binary : ./output_oat_countonly/oat/primecount-oat
+Status : BUILT
+
+### sglib-combined ###
+Binary : ./output_oat_countonly/oat/sglib-combined-oat
+Status : BUILT
+
+### st ###
+Binary : ./output_oat_countonly/oat/st-oat
+Status : BUILT
+
+### tarfind ###
+Binary : ./output_oat_countonly/oat/tarfind-oat
+Status : BUILT
+
+### ud ###
+Binary : ./output_oat_countonly/oat/ud-oat
+Status : BUILT

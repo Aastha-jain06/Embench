@@ -1,0 +1,13 @@
+./embench-iot-benchmarks-backup-cflat-next/libminver.c:307:10: warning: absolute value function 'fabsf' given an argument of type 'double' but has parameter of type 'float' which may cause truncation of value [-Wabsolute-value]
+  307 |   return float_eq_beebs(det, -16.6666718);
+      |          ^
+./embench-iot-benchmarks-backup-cflat-next/libminver.c:104:38: note: expanded from macro 'float_eq_beebs'
+  104 | #define float_eq_beebs(exp, actual) (fabsf(exp - actual) < VERIFY_FLOAT_EPS)
+      |                                      ^
+./embench-iot-benchmarks-backup-cflat-next/libminver.c:307:10: note: use function 'fabs' instead
+./embench-iot-benchmarks-backup-cflat-next/libminver.c:104:38: note: expanded from macro 'float_eq_beebs'
+  104 | #define float_eq_beebs(exp, actual) (fabsf(exp - actual) < VERIFY_FLOAT_EPS)
+      |                                      ^
+1 warning generated.
+clang: warning: argument unused during compilation: '-I ./counter' [-Wunused-command-line-argument]
+clang: warning: argument unused during compilation: '-I ./embench-iot-benchmarks-backup-cflat-next' [-Wunused-command-line-argument]

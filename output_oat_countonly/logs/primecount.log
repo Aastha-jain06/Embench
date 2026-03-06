@@ -1,0 +1,2 @@
+clang: warning: argument unused during compilation: '-I ./counter' [-Wunused-command-line-argument]
+clang: warning: argument unused during compilation: '-I ./embench-iot-benchmarks-backup-cflat-next' [-Wunused-command-line-argument]

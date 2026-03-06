@@ -83,7 +83,7 @@ define dso_local void @SolveCubic(double noundef %0, double noundef %1, double n
   store double %62, ptr %18, align 8
   %63 = load double, ptr %18, align 8
   %64 = fcmp ole double %63, 0.000000e+00
-  call void @__cflat_record_node(i64 97106945026368)
+  call void @increment_cond_branch()
   br i1 %64, label %65, label %129
 
 65:                                               ; preds = %6
@@ -97,16 +97,20 @@ define dso_local void @SolveCubic(double noundef %0, double noundef %1, double n
   %72 = load fp128, ptr %16, align 16
   %73 = fmul fp128 %71, %72
   %74 = fptrunc fp128 %73 to double
+  call void @increment_direct_call()
   %75 = call double @sqrt(double noundef %74) #6
   %76 = fdiv double %68, %75
+  call void @increment_direct_call()
   %77 = call double @acos(double noundef %76) #6
   store double %77, ptr %19, align 8
   %78 = load fp128, ptr %16, align 16
   %79 = fptrunc fp128 %78 to double
+  call void @increment_direct_call()
   %80 = call double @sqrt(double noundef %79) #6
   %81 = fmul double -2.000000e+00, %80
   %82 = load double, ptr %19, align 8
   %83 = fdiv double %82, 3.000000e+00
+  call void @increment_direct_call()
   %84 = call double @cos(double noundef %83) #6
   %85 = fmul double %81, %84
   %86 = fpext double %85 to fp128
@@ -119,13 +123,16 @@ define dso_local void @SolveCubic(double noundef %0, double noundef %1, double n
   store double %90, ptr %92, align 8
   %93 = load fp128, ptr %16, align 16
   %94 = fptrunc fp128 %93 to double
+  call void @increment_direct_call()
   %95 = call double @sqrt(double noundef %94) #6
   %96 = fmul double -2.000000e+00, %95
   %97 = load double, ptr %19, align 8
+  call void @increment_direct_call()
   %98 = call double @atan(double noundef 1.000000e+00) #6
   %99 = fmul double 4.000000e+00, %98
   %100 = call double @llvm.fmuladd.f64(double 2.000000e+00, double %99, double %97)
   %101 = fdiv double %100, 3.000000e+00
+  call void @increment_direct_call()
   %102 = call double @cos(double noundef %101) #6
   %103 = fmul double %96, %102
   %104 = fpext double %103 to fp128
@@ -138,13 +145,16 @@ define dso_local void @SolveCubic(double noundef %0, double noundef %1, double n
   store double %108, ptr %110, align 8
   %111 = load fp128, ptr %16, align 16
   %112 = fptrunc fp128 %111 to double
+  call void @increment_direct_call()
   %113 = call double @sqrt(double noundef %112) #6
   %114 = fmul double -2.000000e+00, %113
   %115 = load double, ptr %19, align 8
+  call void @increment_direct_call()
   %116 = call double @atan(double noundef 1.000000e+00) #6
   %117 = fmul double 4.000000e+00, %116
   %118 = call double @llvm.fmuladd.f64(double 4.000000e+00, double %117, double %115)
   %119 = fdiv double %118, 3.000000e+00
+  call void @increment_direct_call()
   %120 = call double @cos(double noundef %119) #6
   %121 = fmul double %114, %120
   %122 = fpext double %121 to fp128
@@ -155,18 +165,20 @@ define dso_local void @SolveCubic(double noundef %0, double noundef %1, double n
   %127 = load ptr, ptr %12, align 8
   %128 = getelementptr inbounds double, ptr %127, i64 2
   store double %126, ptr %128, align 8
-  call void @__cflat_record_node(i64 97106945039776)
+  call void @increment_uncond_branch()
   br label %166
 
 129:                                              ; preds = %6
   %130 = load ptr, ptr %11, align 8
   store i32 1, ptr %130, align 4
   %131 = load double, ptr %18, align 8
+  call void @increment_direct_call()
   %132 = call double @sqrt(double noundef %131) #6
   %133 = load fp128, ptr %17, align 16
   %134 = fptrunc fp128 %133 to double
   %135 = call double @llvm.fabs.f64(double %134)
   %136 = fadd double %132, %135
+  call void @increment_direct_call()
   %137 = call double @pow(double noundef %136, double noundef 0x3FD5555555555555) #6
   %138 = load ptr, ptr %12, align 8
   %139 = getelementptr inbounds double, ptr %138, i64 0
@@ -200,11 +212,11 @@ define dso_local void @SolveCubic(double noundef %0, double noundef %1, double n
   %164 = load double, ptr %163, align 8
   %165 = fsub double %164, %161
   store double %165, ptr %163, align 8
-  call void @__cflat_record_node(i64 97106945056016)
+  call void @increment_uncond_branch()
   br label %166
 
 166:                                              ; preds = %129, %65
-  call void @__cflat_call_return(i64 97106945026368)
+  call void @increment_return()
   ret void
 }
 
@@ -240,7 +252,7 @@ define dso_local i32 @verify_benchmark(i32 noundef %0) #0 {
   store double 2.500000e+00, ptr %3, align 8
   %4 = load i32, ptr @soln_cnt0, align 4
   %5 = icmp eq i32 3, %4
-  call void @__cflat_record_node(i64 97106945056912)
+  call void @increment_cond_branch()
   br i1 %5, label %6, label %32
 
 6:                                                ; preds = %1
@@ -249,7 +261,7 @@ define dso_local i32 @verify_benchmark(i32 noundef %0) #0 {
   %9 = fsub double %7, %8
   %10 = call double @llvm.fabs.f64(double %9)
   %11 = fcmp olt double %10, 1.000000e-13
-  call void @__cflat_record_node(i64 97106945044896)
+  call void @increment_cond_branch()
   br i1 %11, label %12, label %32
 
 12:                                               ; preds = %6
@@ -258,7 +270,7 @@ define dso_local i32 @verify_benchmark(i32 noundef %0) #0 {
   %15 = fsub double %13, %14
   %16 = call double @llvm.fabs.f64(double %15)
   %17 = fcmp olt double %16, 1.000000e-13
-  call void @__cflat_record_node(i64 97106945043248)
+  call void @increment_cond_branch()
   br i1 %17, label %18, label %32
 
 18:                                               ; preds = %12
@@ -267,13 +279,13 @@ define dso_local i32 @verify_benchmark(i32 noundef %0) #0 {
   %21 = fsub double %19, %20
   %22 = call double @llvm.fabs.f64(double %21)
   %23 = fcmp olt double %22, 1.000000e-13
-  call void @__cflat_record_node(i64 97106945066368)
+  call void @increment_cond_branch()
   br i1 %23, label %24, label %32
 
 24:                                               ; preds = %18
   %25 = load i32, ptr @soln_cnt1, align 4
   %26 = icmp eq i32 1, %25
-  call void @__cflat_record_node(i64 97106945067552)
+  call void @increment_cond_branch()
   br i1 %26, label %27, label %32
 
 27:                                               ; preds = %24
@@ -281,19 +293,19 @@ define dso_local i32 @verify_benchmark(i32 noundef %0) #0 {
   %29 = fsub double 2.500000e+00, %28
   %30 = call double @llvm.fabs.f64(double %29)
   %31 = fcmp olt double %30, 1.000000e-13
-  call void @__cflat_record_node(i64 97106945068080)
+  call void @increment_uncond_branch()
   br label %32
 
 32:                                               ; preds = %27, %24, %18, %12, %6, %1
   %33 = phi i1 [ false, %24 ], [ false, %18 ], [ false, %12 ], [ false, %6 ], [ false, %1 ], [ %31, %27 ]
   %34 = zext i1 %33 to i32
-  call void @__cflat_call_return(i64 97106945056912)
+  call void @increment_return()
   ret i32 %34
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local void @initialise_benchmark() #0 {
-  call void @__cflat_call_return(i64 97106945069696)
+  call void @increment_return()
   ret void
 }
 
@@ -303,10 +315,10 @@ define dso_local void @warm_caches(i32 noundef %0) #0 {
   %3 = alloca i32, align 4
   store i32 %0, ptr %2, align 4
   %4 = load i32, ptr %2, align 4
-  call void @__cflat_call_enter(i64 97106945070784, i64 97106945070240)
+  call void @increment_direct_call()
   %5 = call i32 @benchmark_body(i32 noundef %4)
   store i32 %5, ptr %3, align 4
-  call void @__cflat_call_return(i64 97106945070240)
+  call void @increment_return()
   ret void
 }
 
@@ -335,14 +347,14 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %22 = alloca ptr, align 8
   store i32 %0, ptr %2, align 4
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 97106945070784)
+  call void @increment_uncond_branch()
   br label %23
 
 23:                                               ; preds = %91, %1
   %24 = load i32, ptr %3, align 4
   %25 = load i32, ptr %2, align 4
   %26 = icmp slt i32 %24, %25
-  call void @__cflat_record_node(i64 97106945074944)
+  call void @increment_cond_branch()
   br i1 %26, label %27, label %94
 
 27:                                               ; preds = %23
@@ -370,7 +382,7 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %31 = load double, ptr %6, align 8
   %32 = load double, ptr %7, align 8
   %33 = getelementptr inbounds [48 x double], ptr %21, i64 0, i64 0
-  call void @__cflat_call_enter(i64 97106945026368, i64 97106945075712)
+  call void @increment_direct_call()
   call void @SolveCubic(double noundef %29, double noundef %30, double noundef %31, double noundef %32, ptr noundef %20, ptr noundef %33)
   %34 = load i32, ptr %20, align 4
   store i32 %34, ptr @soln_cnt0, align 4
@@ -381,7 +393,7 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %38 = load double, ptr %10, align 8
   %39 = load double, ptr %11, align 8
   %40 = getelementptr inbounds [48 x double], ptr %21, i64 0, i64 0
-  call void @__cflat_call_enter(i64 97106945026368, i64 97106945075712)
+  call void @increment_direct_call()
   call void @SolveCubic(double noundef %36, double noundef %37, double noundef %38, double noundef %39, ptr noundef %20, ptr noundef %40)
   %41 = load i32, ptr %20, align 4
   store i32 %41, ptr @soln_cnt1, align 4
@@ -393,56 +405,56 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %46 = load double, ptr %14, align 8
   %47 = load double, ptr %15, align 8
   %48 = getelementptr inbounds [48 x double], ptr %21, i64 0, i64 0
-  call void @__cflat_call_enter(i64 97106945026368, i64 97106945075712)
+  call void @increment_direct_call()
   call void @SolveCubic(double noundef %44, double noundef %45, double noundef %46, double noundef %47, ptr noundef %20, ptr noundef %48)
   %49 = load double, ptr %16, align 8
   %50 = load double, ptr %17, align 8
   %51 = load double, ptr %18, align 8
   %52 = load double, ptr %19, align 8
   %53 = getelementptr inbounds [48 x double], ptr %21, i64 0, i64 0
-  call void @__cflat_call_enter(i64 97106945026368, i64 97106945075712)
+  call void @increment_direct_call()
   call void @SolveCubic(double noundef %49, double noundef %50, double noundef %51, double noundef %52, ptr noundef %20, ptr noundef %53)
   store double 1.000000e+00, ptr %4, align 8
-  call void @__cflat_record_node(i64 97106945075712)
+  call void @increment_uncond_branch()
   br label %54
 
 54:                                               ; preds = %87, %27
   %55 = load double, ptr %4, align 8
   %56 = fcmp olt double %55, 3.000000e+00
-  call void @__cflat_record_node(i64 97106945088608)
+  call void @increment_cond_branch()
   br i1 %56, label %57, label %90
 
 57:                                               ; preds = %54
   store double 1.000000e+01, ptr %5, align 8
-  call void @__cflat_record_node(i64 97106945089312)
+  call void @increment_uncond_branch()
   br label %58
 
 58:                                               ; preds = %83, %57
   %59 = load double, ptr %5, align 8
   %60 = fcmp ogt double %59, 8.000000e+00
-  call void @__cflat_record_node(i64 97106945089696)
+  call void @increment_cond_branch()
   br i1 %60, label %61, label %86
 
 61:                                               ; preds = %58
   store double 5.000000e+00, ptr %6, align 8
-  call void @__cflat_record_node(i64 97106945090464)
+  call void @increment_uncond_branch()
   br label %62
 
 62:                                               ; preds = %79, %61
   %63 = load double, ptr %6, align 8
   %64 = fcmp olt double %63, 6.000000e+00
-  call void @__cflat_record_node(i64 97106945090848)
+  call void @increment_cond_branch()
   br i1 %64, label %65, label %82
 
 65:                                               ; preds = %62
   store double -1.000000e+00, ptr %7, align 8
-  call void @__cflat_record_node(i64 97106945091552)
+  call void @increment_uncond_branch()
   br label %66
 
 66:                                               ; preds = %75, %65
   %67 = load double, ptr %7, align 8
   %68 = fcmp ogt double %67, -3.000000e+00
-  call void @__cflat_record_node(i64 97106945091936)
+  call void @increment_cond_branch()
   br i1 %68, label %69, label %78
 
 69:                                               ; preds = %66
@@ -451,72 +463,77 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %72 = load double, ptr %6, align 8
   %73 = load double, ptr %7, align 8
   %74 = load ptr, ptr %22, align 8
-  call void @__cflat_call_enter(i64 97106945026368, i64 97106945092672)
+  call void @increment_direct_call()
   call void @SolveCubic(double noundef %70, double noundef %71, double noundef %72, double noundef %73, ptr noundef %20, ptr noundef %74)
-  call void @__cflat_record_node(i64 97106945092672)
+  call void @increment_uncond_branch()
   br label %75
 
 75:                                               ; preds = %69
   %76 = load double, ptr %7, align 8
   %77 = fadd double %76, -1.000000e+00
   store double %77, ptr %7, align 8
-  call void @__cflat_record_node(i64 97106945093904)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %66, !llvm.loop !6
 
 78:                                               ; preds = %66
-  call void @__cflat_record_node(i64 97106945097360)
+  call void @increment_uncond_branch()
   br label %79
 
 79:                                               ; preds = %78
   %80 = load double, ptr %6, align 8
   %81 = fadd double %80, 5.000000e-01
   store double %81, ptr %6, align 8
-  call void @__cflat_record_node(i64 97106945097472)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %62, !llvm.loop !8
 
 82:                                               ; preds = %62
-  call void @__cflat_record_node(i64 97106945098416)
+  call void @increment_uncond_branch()
   br label %83
 
 83:                                               ; preds = %82
   %84 = load double, ptr %5, align 8
   %85 = fadd double %84, -1.000000e+00
   store double %85, ptr %5, align 8
-  call void @__cflat_record_node(i64 97106945098528)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %58, !llvm.loop !9
 
 86:                                               ; preds = %58
-  call void @__cflat_record_node(i64 97106945099408)
+  call void @increment_uncond_branch()
   br label %87
 
 87:                                               ; preds = %86
   %88 = load double, ptr %4, align 8
   %89 = fadd double %88, 1.000000e+00
   store double %89, ptr %4, align 8
-  call void @__cflat_record_node(i64 97106945099520)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %54, !llvm.loop !10
 
 90:                                               ; preds = %54
-  call void @__cflat_record_node(i64 97106945100400)
+  call void @increment_uncond_branch()
   br label %91
 
 91:                                               ; preds = %90
   %92 = load i32, ptr %3, align 4
   %93 = add nsw i32 %92, 1
   store i32 %93, ptr %3, align 4
-  call void @__cflat_record_node(i64 97106945100512)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %23, !llvm.loop !11
 
 94:                                               ; preds = %23
-  call void @__cflat_call_return(i64 97106945070784)
+  call void @increment_return()
   ret i32 0
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @benchmark() #0 {
-  call void @__cflat_call_enter(i64 97106945070784, i64 97106945084816)
+  call void @increment_direct_call()
   %1 = call i32 @benchmark_body(i32 noundef 10000)
-  call void @__cflat_call_return(i64 97106945084816)
+  call void @increment_return()
   ret i32 %1
 }
 
@@ -529,22 +546,23 @@ define dso_local i32 @main(i32 noundef %0, ptr noundef %1) #0 {
   %7 = alloca i32, align 4
   store i32 %0, ptr %3, align 4
   store ptr %1, ptr %4, align 8
-  call void @__cflat_call_enter(i64 97106945148480, i64 97106945021200)
+  call void @increment_direct_call()
   call void @initialise_benchmark()
-  call void @__cflat_call_enter(i64 97106945070240, i64 97106945021200)
+  call void @increment_direct_call()
   call void @warm_caches(i32 noundef 0)
   call void @init_branch_stats()
-  call void @__cflat_call_enter(i64 97106945153312, i64 97106945021200)
+  call void @increment_direct_call()
   %8 = call i32 @benchmark()
   store volatile i32 %8, ptr %6, align 4
   call void @print_branch_stats()
   %9 = load volatile i32, ptr %6, align 4
-  call void @__cflat_call_enter(i64 97106945056912, i64 97106945021200)
+  call void @increment_direct_call()
   %10 = call i32 @verify_benchmark(i32 noundef %9)
   store i32 %10, ptr %7, align 4
   %11 = load i32, ptr %7, align 4
+  call void @increment_direct_call()
   %12 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %11)
-  call void @__cflat_call_return(i64 97106945021200)
+  call void @increment_return()
   ret i32 0
 }
 
@@ -560,11 +578,15 @@ declare void @llvm.memset.p0.i64(ptr nocapture writeonly, i8, i64, i1 immarg) #4
 ; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
 declare void @llvm.memcpy.p0.p0.i64(ptr noalias nocapture writeonly, ptr noalias nocapture readonly, i64, i1 immarg) #5
 
-declare void @__cflat_record_node(i64)
+declare void @increment_cond_branch()
 
-declare void @__cflat_call_return(i64)
+declare void @increment_direct_call()
 
-declare void @__cflat_call_enter(i64, i64)
+declare void @increment_uncond_branch()
+
+declare void @increment_return()
+
+declare void @increment_loop_header()
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="non-leaf" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "target-features"="+fp-armv8,+neon,+v8a,-fmv" }
 attributes #1 = { nocallback nofree nosync nounwind speculatable willreturn memory(none) }

@@ -14,7 +14,7 @@ target triple = "aarch64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local void @initialise_benchmark() #0 {
-  call void @__cflat_call_return(i64 96364548100432)
+  call void @increment_return()
   ret void
 }
 
@@ -24,10 +24,10 @@ define dso_local void @warm_caches(i32 noundef %0) #0 {
   %3 = alloca i32, align 4
   store i32 %0, ptr %2, align 4
   %4 = load i32, ptr %2, align 4
-  call void @__cflat_call_enter(i64 96364548102560, i64 96364548100928)
+  call void @increment_direct_call()
   %5 = call i32 @benchmark_body(i32 noundef %4)
   store i32 %5, ptr %3, align 4
-  call void @__cflat_call_return(i64 96364548100928)
+  call void @increment_return()
   ret void
 }
 
@@ -43,64 +43,65 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %9 = alloca double, align 8
   store i32 %0, ptr %2, align 4
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 96364548102560)
+  call void @increment_uncond_branch()
   br label %10
 
 10:                                               ; preds = %19, %1
   %11 = load i32, ptr %3, align 4
   %12 = load i32, ptr %2, align 4
   %13 = icmp slt i32 %11, %12
-  call void @__cflat_record_node(i64 96364548105008)
+  call void @increment_cond_branch()
   br i1 %13, label %14, label %22
 
 14:                                               ; preds = %10
-  call void @__cflat_call_enter(i64 96364548115568, i64 96364548105792)
+  call void @increment_direct_call()
   call void @InitSeed()
-  call void @__cflat_call_enter(i64 96364548106000, i64 96364548105792)
+  call void @increment_direct_call()
   call void @Initialize(ptr noundef @ArrayA)
-  call void @__cflat_call_enter(i64 96364548106512, i64 96364548105792)
+  call void @increment_direct_call()
   call void @Calc_Sum_Mean(ptr noundef @ArrayA, ptr noundef @SumA, ptr noundef %4)
   %15 = load double, ptr %4, align 8
-  call void @__cflat_call_enter(i64 96364548106944, i64 96364548105792)
+  call void @increment_direct_call()
   call void @Calc_Var_Stddev(ptr noundef @ArrayA, double noundef %15, ptr noundef %6, ptr noundef %8)
-  call void @__cflat_call_enter(i64 96364548106000, i64 96364548105792)
+  call void @increment_direct_call()
   call void @Initialize(ptr noundef @ArrayB)
-  call void @__cflat_call_enter(i64 96364548106512, i64 96364548105792)
+  call void @increment_direct_call()
   call void @Calc_Sum_Mean(ptr noundef @ArrayB, ptr noundef @SumB, ptr noundef %5)
   %16 = load double, ptr %5, align 8
-  call void @__cflat_call_enter(i64 96364548106944, i64 96364548105792)
+  call void @increment_direct_call()
   call void @Calc_Var_Stddev(ptr noundef @ArrayB, double noundef %16, ptr noundef %7, ptr noundef %9)
   %17 = load double, ptr %4, align 8
   %18 = load double, ptr %5, align 8
-  call void @__cflat_call_enter(i64 96364548108592, i64 96364548105792)
+  call void @increment_direct_call()
   call void @Calc_LinCorrCoef(ptr noundef @ArrayA, ptr noundef @ArrayB, double noundef %17, double noundef %18)
-  call void @__cflat_record_node(i64 96364548105792)
+  call void @increment_uncond_branch()
   br label %19
 
 19:                                               ; preds = %14
   %20 = load i32, ptr %3, align 4
   %21 = add nsw i32 %20, 1
   store i32 %21, ptr %3, align 4
-  call void @__cflat_record_node(i64 96364548109344)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %10, !llvm.loop !6
 
 22:                                               ; preds = %10
-  call void @__cflat_call_return(i64 96364548102560)
+  call void @increment_return()
   ret i32 0
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @benchmark() #0 {
-  call void @__cflat_call_enter(i64 96364548102560, i64 96364548114512)
+  call void @increment_direct_call()
   %1 = call i32 @benchmark_body(i32 noundef 13000)
-  call void @__cflat_call_return(i64 96364548114512)
+  call void @increment_return()
   ret i32 %1
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local void @InitSeed() #0 {
   store i32 0, ptr @Seed, align 4
-  call void @__cflat_call_return(i64 96364548115568)
+  call void @increment_return()
   ret void
 }
 
@@ -116,13 +117,13 @@ define dso_local void @Calc_Sum_Mean(ptr noundef %0, ptr noundef %1, ptr noundef
   %8 = load ptr, ptr %5, align 8
   store double 0.000000e+00, ptr %8, align 8
   store i32 0, ptr %7, align 4
-  call void @__cflat_record_node(i64 96364548106512)
+  call void @increment_uncond_branch()
   br label %9
 
 9:                                                ; preds = %21, %3
   %10 = load i32, ptr %7, align 4
   %11 = icmp slt i32 %10, 100
-  call void @__cflat_record_node(i64 96364548117792)
+  call void @increment_cond_branch()
   br i1 %11, label %12, label %24
 
 12:                                               ; preds = %9
@@ -135,14 +136,15 @@ define dso_local void @Calc_Sum_Mean(ptr noundef %0, ptr noundef %1, ptr noundef
   %19 = load double, ptr %18, align 8
   %20 = fadd double %19, %17
   store double %20, ptr %18, align 8
-  call void @__cflat_record_node(i64 96364548118464)
+  call void @increment_uncond_branch()
   br label %21
 
 21:                                               ; preds = %12
   %22 = load i32, ptr %7, align 4
   %23 = add nsw i32 %22, 1
   store i32 %23, ptr %7, align 4
-  call void @__cflat_record_node(i64 96364548119872)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %9, !llvm.loop !8
 
 24:                                               ; preds = %9
@@ -151,7 +153,7 @@ define dso_local void @Calc_Sum_Mean(ptr noundef %0, ptr noundef %1, ptr noundef
   %27 = fdiv double %26, 1.000000e+02
   %28 = load ptr, ptr %6, align 8
   store double %27, ptr %28, align 8
-  call void @__cflat_call_return(i64 96364548106512)
+  call void @increment_return()
   ret void
 }
 
@@ -162,7 +164,7 @@ define dso_local double @Square(double noundef %0) #0 {
   %3 = load double, ptr %2, align 8
   %4 = load double, ptr %2, align 8
   %5 = fmul double %3, %4
-  call void @__cflat_call_return(i64 96364548121968)
+  call void @increment_return()
   ret double %5
 }
 
@@ -180,13 +182,13 @@ define dso_local void @Calc_Var_Stddev(ptr noundef %0, double noundef %1, ptr no
   store ptr %3, ptr %8, align 8
   store double 0.000000e+00, ptr %10, align 8
   store i32 0, ptr %9, align 4
-  call void @__cflat_record_node(i64 96364548106944)
+  call void @increment_uncond_branch()
   br label %11
 
 11:                                               ; preds = %25, %4
   %12 = load i32, ptr %9, align 4
   %13 = icmp slt i32 %12, 100
-  call void @__cflat_record_node(i64 96364548125216)
+  call void @increment_cond_branch()
   br i1 %13, label %14, label %28
 
 14:                                               ; preds = %11
@@ -197,19 +199,20 @@ define dso_local void @Calc_Var_Stddev(ptr noundef %0, double noundef %1, ptr no
   %19 = load double, ptr %18, align 8
   %20 = load double, ptr %6, align 8
   %21 = fsub double %19, %20
-  call void @__cflat_call_enter(i64 96364548121968, i64 96364548125888)
+  call void @increment_direct_call()
   %22 = call double @Square(double noundef %21)
   %23 = load double, ptr %10, align 8
   %24 = fadd double %23, %22
   store double %24, ptr %10, align 8
-  call void @__cflat_record_node(i64 96364548125888)
+  call void @increment_uncond_branch()
   br label %25
 
 25:                                               ; preds = %14
   %26 = load i32, ptr %9, align 4
   %27 = add nsw i32 %26, 1
   store i32 %27, ptr %9, align 4
-  call void @__cflat_record_node(i64 96364548127680)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %11, !llvm.loop !9
 
 28:                                               ; preds = %11
@@ -219,10 +222,11 @@ define dso_local void @Calc_Var_Stddev(ptr noundef %0, double noundef %1, ptr no
   store double %30, ptr %31, align 8
   %32 = load ptr, ptr %7, align 8
   %33 = load double, ptr %32, align 8
+  call void @increment_direct_call()
   %34 = call double @sqrt(double noundef %33) #4
   %35 = load ptr, ptr %8, align 8
   store double %34, ptr %35, align 8
-  call void @__cflat_call_return(i64 96364548106944)
+  call void @increment_return()
   ret void
 }
 
@@ -247,13 +251,13 @@ define dso_local void @Calc_LinCorrCoef(ptr noundef %0, ptr noundef %1, double n
   store double 0.000000e+00, ptr %12, align 8
   store double 0.000000e+00, ptr %11, align 8
   store i32 0, ptr %9, align 4
-  call void @__cflat_record_node(i64 96364548108592)
+  call void @increment_uncond_branch()
   br label %13
 
 13:                                               ; preds = %53, %4
   %14 = load i32, ptr %9, align 4
   %15 = icmp slt i32 %14, 100
-  call void @__cflat_record_node(i64 96364548133344)
+  call void @increment_cond_branch()
   br i1 %15, label %16, label %56
 
 16:                                               ; preds = %13
@@ -281,7 +285,7 @@ define dso_local void @Calc_LinCorrCoef(ptr noundef %0, ptr noundef %1, double n
   %37 = load double, ptr %36, align 8
   %38 = load double, ptr %7, align 8
   %39 = fsub double %37, %38
-  call void @__cflat_call_enter(i64 96364548121968, i64 96364548134016)
+  call void @increment_direct_call()
   %40 = call double @Square(double noundef %39)
   %41 = load double, ptr %11, align 8
   %42 = fadd double %41, %40
@@ -293,31 +297,34 @@ define dso_local void @Calc_LinCorrCoef(ptr noundef %0, ptr noundef %1, double n
   %47 = load double, ptr %46, align 8
   %48 = load double, ptr %8, align 8
   %49 = fsub double %47, %48
-  call void @__cflat_call_enter(i64 96364548121968, i64 96364548134016)
+  call void @increment_direct_call()
   %50 = call double @Square(double noundef %49)
   %51 = load double, ptr %12, align 8
   %52 = fadd double %51, %50
   store double %52, ptr %12, align 8
-  call void @__cflat_record_node(i64 96364548134016)
+  call void @increment_uncond_branch()
   br label %53
 
 53:                                               ; preds = %16
   %54 = load i32, ptr %9, align 4
   %55 = add nsw i32 %54, 1
   store i32 %55, ptr %9, align 4
-  call void @__cflat_record_node(i64 96364548141824)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %13, !llvm.loop !10
 
 56:                                               ; preds = %13
   %57 = load double, ptr %10, align 8
   %58 = load double, ptr %11, align 8
+  call void @increment_direct_call()
   %59 = call double @sqrt(double noundef %58) #4
   %60 = load double, ptr %12, align 8
+  call void @increment_direct_call()
   %61 = call double @sqrt(double noundef %60) #4
   %62 = fmul double %59, %61
   %63 = fdiv double %57, %62
   store double %63, ptr @Coef, align 8
-  call void @__cflat_call_return(i64 96364548108592)
+  call void @increment_return()
   ret void
 }
 
@@ -330,19 +337,19 @@ define dso_local void @Initialize(ptr noundef %0) #0 {
   %3 = alloca i32, align 4
   store ptr %0, ptr %2, align 8
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 96364548106000)
+  call void @increment_uncond_branch()
   br label %4
 
 4:                                                ; preds = %18, %1
   %5 = load i32, ptr %3, align 4
   %6 = icmp slt i32 %5, 100
-  call void @__cflat_record_node(i64 96364548140112)
+  call void @increment_cond_branch()
   br i1 %6, label %7, label %21
 
 7:                                                ; preds = %4
   %8 = load i32, ptr %3, align 4
   %9 = sitofp i32 %8 to double
-  call void @__cflat_call_enter(i64 96364548144464, i64 96364548144224)
+  call void @increment_direct_call()
   %10 = call i32 @RandomInteger()
   %11 = sitofp i32 %10 to double
   %12 = fdiv double %11, 8.095000e+03
@@ -352,18 +359,19 @@ define dso_local void @Initialize(ptr noundef %0) #0 {
   %16 = sext i32 %15 to i64
   %17 = getelementptr inbounds double, ptr %14, i64 %16
   store double %13, ptr %17, align 8
-  call void @__cflat_record_node(i64 96364548144224)
+  call void @increment_uncond_branch()
   br label %18
 
 18:                                               ; preds = %7
   %19 = load i32, ptr %3, align 4
   %20 = add nsw i32 %19, 1
   store i32 %20, ptr %3, align 4
-  call void @__cflat_record_node(i64 96364548146064)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %4, !llvm.loop !11
 
 21:                                               ; preds = %4
-  call void @__cflat_call_return(i64 96364548106000)
+  call void @increment_return()
   ret void
 }
 
@@ -375,7 +383,7 @@ define dso_local i32 @RandomInteger() #0 {
   %4 = srem i32 %3, 8095
   store i32 %4, ptr @Seed, align 4
   %5 = load i32, ptr @Seed, align 4
-  call void @__cflat_call_return(i64 96364548144464)
+  call void @increment_return()
   ret i32 %5
 }
 
@@ -394,7 +402,7 @@ define dso_local i32 @verify_benchmark(i32 noundef %0) #0 {
   %8 = fsub double %6, %7
   %9 = call double @llvm.fabs.f64(double %8)
   %10 = fcmp olt double %9, 1.000000e-13
-  call void @__cflat_record_node(i64 96364548148880)
+  call void @increment_cond_branch()
   br i1 %10, label %11, label %23
 
 11:                                               ; preds = %1
@@ -403,7 +411,7 @@ define dso_local i32 @verify_benchmark(i32 noundef %0) #0 {
   %14 = fsub double %12, %13
   %15 = call double @llvm.fabs.f64(double %14)
   %16 = fcmp olt double %15, 1.000000e-13
-  call void @__cflat_record_node(i64 96364548151600)
+  call void @increment_cond_branch()
   br i1 %16, label %17, label %23
 
 17:                                               ; preds = %11
@@ -412,13 +420,13 @@ define dso_local i32 @verify_benchmark(i32 noundef %0) #0 {
   %20 = fsub double %18, %19
   %21 = call double @llvm.fabs.f64(double %20)
   %22 = fcmp olt double %21, 1.000000e-13
-  call void @__cflat_record_node(i64 96364548152640)
+  call void @increment_uncond_branch()
   br label %23
 
 23:                                               ; preds = %17, %11, %1
   %24 = phi i1 [ false, %11 ], [ false, %1 ], [ %22, %17 ]
   %25 = zext i1 %24 to i32
-  call void @__cflat_call_return(i64 96364548148880)
+  call void @increment_return()
   ret i32 %25
 }
 
@@ -434,22 +442,23 @@ define dso_local i32 @main(i32 noundef %0, ptr noundef %1) #0 {
   %7 = alloca i32, align 4
   store i32 %0, ptr %3, align 4
   store ptr %1, ptr %4, align 8
-  call void @__cflat_call_enter(i64 96364548183216, i64 96364548095664)
+  call void @increment_direct_call()
   call void @initialise_benchmark()
-  call void @__cflat_call_enter(i64 96364548100928, i64 96364548095664)
+  call void @increment_direct_call()
   call void @warm_caches(i32 noundef 0)
   call void @init_branch_stats()
-  call void @__cflat_call_enter(i64 96364548186256, i64 96364548095664)
+  call void @increment_direct_call()
   %8 = call i32 @benchmark()
   store volatile i32 %8, ptr %6, align 4
   call void @print_branch_stats()
   %9 = load volatile i32, ptr %6, align 4
-  call void @__cflat_call_enter(i64 96364548148880, i64 96364548095664)
+  call void @increment_direct_call()
   %10 = call i32 @verify_benchmark(i32 noundef %9)
   store i32 %10, ptr %7, align 4
   %11 = load i32, ptr %7, align 4
+  call void @increment_direct_call()
   %12 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %11)
-  call void @__cflat_call_return(i64 96364548095664)
+  call void @increment_return()
   ret i32 0
 }
 
@@ -459,11 +468,15 @@ declare void @print_branch_stats() #3
 
 declare i32 @printf(ptr noundef, ...) #3
 
-declare void @__cflat_call_return(i64)
+declare void @increment_return()
 
-declare void @__cflat_call_enter(i64, i64)
+declare void @increment_direct_call()
 
-declare void @__cflat_record_node(i64)
+declare void @increment_uncond_branch()
+
+declare void @increment_cond_branch()
+
+declare void @increment_loop_header()
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="non-leaf" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "target-features"="+fp-armv8,+neon,+v8a,-fmv" }
 attributes #1 = { nounwind "frame-pointer"="non-leaf" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "target-features"="+fp-armv8,+neon,+v8a,-fmv" }

@@ -35,7 +35,7 @@ define dso_local i32 @rand_beebs() #0 {
   %5 = load i64, ptr @seed, align 8
   %6 = ashr i64 %5, 16
   %7 = trunc i64 %6 to i32
-  call void @__cflat_call_return(i64 106883543570304)
+  call void @increment_return()
   ret i32 %7
 }
 
@@ -46,7 +46,7 @@ define dso_local void @srand_beebs(i32 noundef %0) #0 {
   %3 = load i32, ptr %2, align 4
   %4 = zext i32 %3 to i64
   store i64 %4, ptr @seed, align 8
-  call void @__cflat_call_return(i64 106883543571568)
+  call void @increment_return()
   ret void
 }
 
@@ -63,7 +63,6 @@ define dso_local void @init_heap_beebs(ptr noundef %0, i64 noundef %1) #0 {
   %8 = getelementptr inbounds i8, ptr %6, i64 %7
   store ptr %8, ptr @heap_end, align 8
   store i64 0, ptr @heap_requested, align 8
-  call void @__cflat_call_return(i64 106883543572720)
   ret void
 }
 
@@ -77,7 +76,7 @@ define dso_local i32 @check_heap_beebs(ptr noundef %0) #0 {
   %6 = load ptr, ptr @heap_end, align 8
   %7 = icmp ule ptr %5, %6
   %8 = zext i1 %7 to i32
-  call void @__cflat_call_return(i64 106883543574928)
+  call void @increment_return()
   ret i32 %8
 }
 
@@ -98,18 +97,18 @@ define dso_local ptr @malloc_beebs(i64 noundef %0) #0 {
   %11 = getelementptr inbounds i8, ptr %9, i64 %10
   %12 = load ptr, ptr @heap_end, align 8
   %13 = icmp ugt ptr %11, %12
-  call void @__cflat_record_node(i64 106883543576560)
+  call void @increment_cond_branch()
   br i1 %13, label %17, label %14
 
 14:                                               ; preds = %1
   %15 = load i64, ptr %3, align 8
   %16 = icmp eq i64 0, %15
-  call void @__cflat_record_node(i64 106883543579040)
+  call void @increment_cond_branch()
   br i1 %16, label %17, label %18
 
 17:                                               ; preds = %14, %1
   store ptr null, ptr %2, align 8
-  call void @__cflat_record_node(i64 106883543579600)
+  call void @increment_uncond_branch()
   br label %23
 
 18:                                               ; preds = %14
@@ -119,12 +118,12 @@ define dso_local ptr @malloc_beebs(i64 noundef %0) #0 {
   store ptr %21, ptr @heap_ptr, align 8
   %22 = load ptr, ptr %4, align 8
   store ptr %22, ptr %2, align 8
-  call void @__cflat_record_node(i64 106883543579920)
+  call void @increment_uncond_branch()
   br label %23
 
 23:                                               ; preds = %18, %17
   %24 = load ptr, ptr %2, align 8
-  call void @__cflat_call_return(i64 106883543576560)
+  call void @increment_return()
   ret ptr %24
 }
 
@@ -138,12 +137,12 @@ define dso_local ptr @calloc_beebs(i64 noundef %0, i64 noundef %1) #0 {
   %6 = load i64, ptr %3, align 8
   %7 = load i64, ptr %4, align 8
   %8 = mul i64 %6, %7
-  call void @__cflat_call_enter(i64 106883543576560, i64 106883543581664)
+  call void @increment_direct_call()
   %9 = call ptr @malloc_beebs(i64 noundef %8)
   store ptr %9, ptr %5, align 8
   %10 = load ptr, ptr %5, align 8
   %11 = icmp ne ptr null, %10
-  call void @__cflat_record_node(i64 106883543581664)
+  call void @increment_cond_branch()
   br i1 %11, label %12, label %17
 
 12:                                               ; preds = %2
@@ -152,12 +151,12 @@ define dso_local ptr @calloc_beebs(i64 noundef %0, i64 noundef %1) #0 {
   %15 = load i64, ptr %4, align 8
   %16 = mul i64 %14, %15
   call void @llvm.memset.p0.i64(ptr align 1 %13, i8 0, i64 %16, i1 false)
-  call void @__cflat_record_node(i64 106883543583776)
+  call void @increment_uncond_branch()
   br label %17
 
 17:                                               ; preds = %12, %2
   %18 = load ptr, ptr %5, align 8
-  call void @__cflat_call_return(i64 106883543581664)
+  call void @increment_return()
   ret ptr %18
 }
 
@@ -184,18 +183,18 @@ define dso_local ptr @realloc_beebs(ptr noundef %0, i64 noundef %1) #0 {
   %14 = getelementptr inbounds i8, ptr %12, i64 %13
   %15 = load ptr, ptr @heap_end, align 8
   %16 = icmp ugt ptr %14, %15
-  call void @__cflat_record_node(i64 106883543584496)
+  call void @increment_cond_branch()
   br i1 %16, label %20, label %17
 
 17:                                               ; preds = %2
   %18 = load i64, ptr %5, align 8
   %19 = icmp eq i64 0, %18
-  call void @__cflat_record_node(i64 106883543589328)
+  call void @increment_cond_branch()
   br i1 %19, label %20, label %21
 
 20:                                               ; preds = %17, %2
   store ptr null, ptr %3, align 8
-  call void @__cflat_record_node(i64 106883543589888)
+  call void @increment_uncond_branch()
   br label %46
 
 21:                                               ; preds = %17
@@ -205,19 +204,19 @@ define dso_local ptr @realloc_beebs(ptr noundef %0, i64 noundef %1) #0 {
   store ptr %24, ptr @heap_ptr, align 8
   %25 = load ptr, ptr %4, align 8
   %26 = icmp ne ptr null, %25
-  call void @__cflat_record_node(i64 106883543590208)
+  call void @increment_cond_branch()
   br i1 %26, label %27, label %44
 
 27:                                               ; preds = %21
   store i64 0, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543591488)
+  call void @increment_uncond_branch()
   br label %28
 
 28:                                               ; preds = %40, %27
   %29 = load i64, ptr %7, align 8
   %30 = load i64, ptr %5, align 8
   %31 = icmp ult i64 %29, %30
-  call void @__cflat_record_node(i64 106883543591808)
+  call void @increment_cond_branch()
   br i1 %31, label %32, label %43
 
 32:                                               ; preds = %28
@@ -229,29 +228,30 @@ define dso_local ptr @realloc_beebs(ptr noundef %0, i64 noundef %1) #0 {
   %38 = load i64, ptr %7, align 8
   %39 = getelementptr inbounds i8, ptr %37, i64 %38
   store i8 %36, ptr %39, align 1
-  call void @__cflat_record_node(i64 106883543592608)
+  call void @increment_uncond_branch()
   br label %40
 
 40:                                               ; preds = %32
   %41 = load i64, ptr %7, align 8
   %42 = add i64 %41, 1
   store i64 %42, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543593920)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %28, !llvm.loop !6
 
 43:                                               ; preds = %28
-  call void @__cflat_record_node(i64 106883543597296)
+  call void @increment_uncond_branch()
   br label %44
 
 44:                                               ; preds = %43, %21
   %45 = load ptr, ptr %6, align 8
   store ptr %45, ptr %3, align 8
-  call void @__cflat_record_node(i64 106883543597408)
+  call void @increment_uncond_branch()
   br label %46
 
 46:                                               ; preds = %44, %20
   %47 = load ptr, ptr %3, align 8
-  call void @__cflat_call_return(i64 106883543584496)
+  call void @increment_return()
   ret ptr %47
 }
 
@@ -259,7 +259,7 @@ define dso_local ptr @realloc_beebs(ptr noundef %0, i64 noundef %1) #0 {
 define dso_local void @free_beebs(ptr noundef %0) #0 {
   %2 = alloca ptr, align 8
   store ptr %0, ptr %2, align 8
-  call void @__cflat_call_return(i64 106883543598416)
+  call void @increment_return()
   ret void
 }
 
@@ -272,7 +272,7 @@ define dso_local void @sglib_dllist_add(ptr noundef %0, ptr noundef %1) #0 {
   %5 = load ptr, ptr %3, align 8
   %6 = load ptr, ptr %5, align 8
   %7 = icmp eq ptr %6, null
-  call void @__cflat_record_node(i64 106883543599360)
+  call void @increment_cond_branch()
   br i1 %7, label %8, label %17
 
 8:                                                ; preds = %2
@@ -287,7 +287,7 @@ define dso_local void @sglib_dllist_add(ptr noundef %0, ptr noundef %1) #0 {
   %15 = load ptr, ptr %14, align 8
   %16 = getelementptr inbounds %struct.dllist, ptr %15, i32 0, i32 1
   store ptr null, ptr %16, align 8
-  call void @__cflat_record_node(i64 106883543600848)
+  call void @increment_uncond_branch()
   br label %43
 
 17:                                               ; preds = %2
@@ -312,7 +312,7 @@ define dso_local void @sglib_dllist_add(ptr noundef %0, ptr noundef %1) #0 {
   %33 = getelementptr inbounds %struct.dllist, ptr %32, i32 0, i32 2
   %34 = load ptr, ptr %33, align 8
   %35 = icmp ne ptr %34, null
-  call void @__cflat_record_node(i64 106883543602672)
+  call void @increment_cond_branch()
   br i1 %35, label %36, label %42
 
 36:                                               ; preds = %17
@@ -322,15 +322,15 @@ define dso_local void @sglib_dllist_add(ptr noundef %0, ptr noundef %1) #0 {
   %40 = load ptr, ptr %39, align 8
   %41 = getelementptr inbounds %struct.dllist, ptr %40, i32 0, i32 1
   store ptr %37, ptr %41, align 8
-  call void @__cflat_record_node(i64 106883543606128)
+  call void @increment_uncond_branch()
   br label %42
 
 42:                                               ; preds = %36, %17
-  call void @__cflat_record_node(i64 106883543607168)
+  call void @increment_uncond_branch()
   br label %43
 
 43:                                               ; preds = %42, %8
-  call void @__cflat_call_return(i64 106883543599360)
+  call void @increment_return()
   ret void
 }
 
@@ -343,7 +343,7 @@ define dso_local void @sglib_dllist_add_after(ptr noundef %0, ptr noundef %1) #0
   %5 = load ptr, ptr %3, align 8
   %6 = load ptr, ptr %5, align 8
   %7 = icmp eq ptr %6, null
-  call void @__cflat_record_node(i64 106883543607856)
+  call void @increment_cond_branch()
   br i1 %7, label %8, label %17
 
 8:                                                ; preds = %2
@@ -358,7 +358,7 @@ define dso_local void @sglib_dllist_add_after(ptr noundef %0, ptr noundef %1) #0
   %15 = load ptr, ptr %14, align 8
   %16 = getelementptr inbounds %struct.dllist, ptr %15, i32 0, i32 1
   store ptr null, ptr %16, align 8
-  call void @__cflat_record_node(i64 106883543609168)
+  call void @increment_uncond_branch()
   br label %43
 
 17:                                               ; preds = %2
@@ -383,7 +383,7 @@ define dso_local void @sglib_dllist_add_after(ptr noundef %0, ptr noundef %1) #0
   %33 = getelementptr inbounds %struct.dllist, ptr %32, i32 0, i32 1
   %34 = load ptr, ptr %33, align 8
   %35 = icmp ne ptr %34, null
-  call void @__cflat_record_node(i64 106883543610992)
+  call void @increment_cond_branch()
   br i1 %35, label %36, label %42
 
 36:                                               ; preds = %17
@@ -393,15 +393,15 @@ define dso_local void @sglib_dllist_add_after(ptr noundef %0, ptr noundef %1) #0
   %40 = load ptr, ptr %39, align 8
   %41 = getelementptr inbounds %struct.dllist, ptr %40, i32 0, i32 2
   store ptr %37, ptr %41, align 8
-  call void @__cflat_record_node(i64 106883543614448)
+  call void @increment_uncond_branch()
   br label %42
 
 42:                                               ; preds = %36, %17
-  call void @__cflat_record_node(i64 106883543615488)
+  call void @increment_uncond_branch()
   br label %43
 
 43:                                               ; preds = %42, %8
-  call void @__cflat_call_return(i64 106883543607856)
+  call void @increment_return()
   ret void
 }
 
@@ -414,7 +414,7 @@ define dso_local void @sglib_dllist_add_before(ptr noundef %0, ptr noundef %1) #
   %5 = load ptr, ptr %3, align 8
   %6 = load ptr, ptr %5, align 8
   %7 = icmp eq ptr %6, null
-  call void @__cflat_record_node(i64 106883543616176)
+  call void @increment_cond_branch()
   br i1 %7, label %8, label %17
 
 8:                                                ; preds = %2
@@ -429,7 +429,7 @@ define dso_local void @sglib_dllist_add_before(ptr noundef %0, ptr noundef %1) #
   %15 = load ptr, ptr %14, align 8
   %16 = getelementptr inbounds %struct.dllist, ptr %15, i32 0, i32 1
   store ptr null, ptr %16, align 8
-  call void @__cflat_record_node(i64 106883543617488)
+  call void @increment_uncond_branch()
   br label %43
 
 17:                                               ; preds = %2
@@ -454,7 +454,7 @@ define dso_local void @sglib_dllist_add_before(ptr noundef %0, ptr noundef %1) #
   %33 = getelementptr inbounds %struct.dllist, ptr %32, i32 0, i32 2
   %34 = load ptr, ptr %33, align 8
   %35 = icmp ne ptr %34, null
-  call void @__cflat_record_node(i64 106883543619312)
+  call void @increment_cond_branch()
   br i1 %35, label %36, label %42
 
 36:                                               ; preds = %17
@@ -464,15 +464,15 @@ define dso_local void @sglib_dllist_add_before(ptr noundef %0, ptr noundef %1) #
   %40 = load ptr, ptr %39, align 8
   %41 = getelementptr inbounds %struct.dllist, ptr %40, i32 0, i32 1
   store ptr %37, ptr %41, align 8
-  call void @__cflat_record_node(i64 106883543622768)
+  call void @increment_uncond_branch()
   br label %42
 
 42:                                               ; preds = %36, %17
-  call void @__cflat_record_node(i64 106883543623808)
+  call void @increment_uncond_branch()
   br label %43
 
 43:                                               ; preds = %42, %8
-  call void @__cflat_call_return(i64 106883543616176)
+  call void @increment_return()
   ret void
 }
 
@@ -488,13 +488,13 @@ define dso_local i32 @sglib_dllist_add_if_not_member(ptr noundef %0, ptr noundef
   %8 = load ptr, ptr %4, align 8
   %9 = load ptr, ptr %8, align 8
   store ptr %9, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543625360)
+  call void @increment_uncond_branch()
   br label %10
 
 10:                                               ; preds = %25, %3
   %11 = load ptr, ptr %7, align 8
   %12 = icmp ne ptr %11, null
-  call void @__cflat_record_node(i64 106883543626960)
+  call void @increment_cond_branch()
   br i1 %12, label %13, label %22
 
 13:                                               ; preds = %10
@@ -506,16 +506,16 @@ define dso_local i32 @sglib_dllist_add_if_not_member(ptr noundef %0, ptr noundef
   %19 = load i32, ptr %18, align 8
   %20 = sub nsw i32 %16, %19
   %21 = icmp ne i32 %20, 0
-  call void @__cflat_record_node(i64 106883543627568)
+  call void @increment_uncond_branch()
   br label %22
 
 22:                                               ; preds = %13, %10
   %23 = phi i1 [ false, %10 ], [ %21, %13 ]
-  call void @__cflat_record_node(i64 106883543628840)
+  call void @increment_cond_branch()
   br i1 %23, label %24, label %29
 
 24:                                               ; preds = %22
-  call void @__cflat_record_node(i64 106883543629472)
+  call void @increment_uncond_branch()
   br label %25
 
 25:                                               ; preds = %24
@@ -523,20 +523,21 @@ define dso_local i32 @sglib_dllist_add_if_not_member(ptr noundef %0, ptr noundef
   %27 = getelementptr inbounds %struct.dllist, ptr %26, i32 0, i32 2
   %28 = load ptr, ptr %27, align 8
   store ptr %28, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543629584)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %10, !llvm.loop !8
 
 29:                                               ; preds = %22
   %30 = load ptr, ptr %7, align 8
   %31 = icmp eq ptr %30, null
-  call void @__cflat_record_node(i64 106883543630560)
+  call void @increment_cond_branch()
   br i1 %31, label %32, label %61
 
 32:                                               ; preds = %29
   %33 = load ptr, ptr %4, align 8
   %34 = load ptr, ptr %33, align 8
   %35 = icmp ne ptr %34, null
-  call void @__cflat_record_node(i64 106883543631232)
+  call void @increment_cond_branch()
   br i1 %35, label %36, label %61
 
 36:                                               ; preds = %32
@@ -545,13 +546,13 @@ define dso_local i32 @sglib_dllist_add_if_not_member(ptr noundef %0, ptr noundef
   %39 = getelementptr inbounds %struct.dllist, ptr %38, i32 0, i32 1
   %40 = load ptr, ptr %39, align 8
   store ptr %40, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543631888)
+  call void @increment_uncond_branch()
   br label %41
 
 41:                                               ; preds = %56, %36
   %42 = load ptr, ptr %7, align 8
   %43 = icmp ne ptr %42, null
-  call void @__cflat_record_node(i64 106883543632816)
+  call void @increment_cond_branch()
   br i1 %43, label %44, label %53
 
 44:                                               ; preds = %41
@@ -563,16 +564,16 @@ define dso_local i32 @sglib_dllist_add_if_not_member(ptr noundef %0, ptr noundef
   %50 = load i32, ptr %49, align 8
   %51 = sub nsw i32 %47, %50
   %52 = icmp ne i32 %51, 0
-  call void @__cflat_record_node(i64 106883543633488)
+  call void @increment_uncond_branch()
   br label %53
 
 53:                                               ; preds = %44, %41
   %54 = phi i1 [ false, %41 ], [ %52, %44 ]
-  call void @__cflat_record_node(i64 106883543636824)
+  call void @increment_cond_branch()
   br i1 %54, label %55, label %60
 
 55:                                               ; preds = %53
-  call void @__cflat_record_node(i64 106883543637456)
+  call void @increment_uncond_branch()
   br label %56
 
 56:                                               ; preds = %55
@@ -580,11 +581,12 @@ define dso_local i32 @sglib_dllist_add_if_not_member(ptr noundef %0, ptr noundef
   %58 = getelementptr inbounds %struct.dllist, ptr %57, i32 0, i32 1
   %59 = load ptr, ptr %58, align 8
   store ptr %59, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543637568)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %41, !llvm.loop !9
 
 60:                                               ; preds = %53
-  call void @__cflat_record_node(i64 106883543638544)
+  call void @increment_uncond_branch()
   br label %61
 
 61:                                               ; preds = %60, %32, %29
@@ -593,14 +595,14 @@ define dso_local i32 @sglib_dllist_add_if_not_member(ptr noundef %0, ptr noundef
   store ptr %62, ptr %63, align 8
   %64 = load ptr, ptr %7, align 8
   %65 = icmp eq ptr %64, null
-  call void @__cflat_record_node(i64 106883543638656)
+  call void @increment_cond_branch()
   br i1 %65, label %66, label %106
 
 66:                                               ; preds = %61
   %67 = load ptr, ptr %4, align 8
   %68 = load ptr, ptr %67, align 8
   %69 = icmp eq ptr %68, null
-  call void @__cflat_record_node(i64 106883543639680)
+  call void @increment_cond_branch()
   br i1 %69, label %70, label %79
 
 70:                                               ; preds = %66
@@ -615,7 +617,7 @@ define dso_local i32 @sglib_dllist_add_if_not_member(ptr noundef %0, ptr noundef
   %77 = load ptr, ptr %76, align 8
   %78 = getelementptr inbounds %struct.dllist, ptr %77, i32 0, i32 1
   store ptr null, ptr %78, align 8
-  call void @__cflat_record_node(i64 106883543640480)
+  call void @increment_uncond_branch()
   br label %105
 
 79:                                               ; preds = %66
@@ -640,7 +642,7 @@ define dso_local i32 @sglib_dllist_add_if_not_member(ptr noundef %0, ptr noundef
   %95 = getelementptr inbounds %struct.dllist, ptr %94, i32 0, i32 2
   %96 = load ptr, ptr %95, align 8
   %97 = icmp ne ptr %96, null
-  call void @__cflat_record_node(i64 106883543642304)
+  call void @increment_cond_branch()
   br i1 %97, label %98, label %104
 
 98:                                               ; preds = %79
@@ -650,15 +652,15 @@ define dso_local i32 @sglib_dllist_add_if_not_member(ptr noundef %0, ptr noundef
   %102 = load ptr, ptr %101, align 8
   %103 = getelementptr inbounds %struct.dllist, ptr %102, i32 0, i32 1
   store ptr %99, ptr %103, align 8
-  call void @__cflat_record_node(i64 106883543634608)
+  call void @increment_uncond_branch()
   br label %104
 
 104:                                              ; preds = %98, %79
-  call void @__cflat_record_node(i64 106883543635648)
+  call void @increment_uncond_branch()
   br label %105
 
 105:                                              ; preds = %104, %70
-  call void @__cflat_record_node(i64 106883543635760)
+  call void @increment_uncond_branch()
   br label %106
 
 106:                                              ; preds = %105, %61
@@ -666,7 +668,7 @@ define dso_local i32 @sglib_dllist_add_if_not_member(ptr noundef %0, ptr noundef
   %108 = load ptr, ptr %107, align 8
   %109 = icmp eq ptr %108, null
   %110 = zext i1 %109 to i32
-  call void @__cflat_call_return(i64 106883543625360)
+  call void @increment_return()
   ret i32 %110
 }
 
@@ -682,13 +684,13 @@ define dso_local i32 @sglib_dllist_add_after_if_not_member(ptr noundef %0, ptr n
   %8 = load ptr, ptr %4, align 8
   %9 = load ptr, ptr %8, align 8
   store ptr %9, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543645664)
+  call void @increment_uncond_branch()
   br label %10
 
 10:                                               ; preds = %25, %3
   %11 = load ptr, ptr %7, align 8
   %12 = icmp ne ptr %11, null
-  call void @__cflat_record_node(i64 106883543647264)
+  call void @increment_cond_branch()
   br i1 %12, label %13, label %22
 
 13:                                               ; preds = %10
@@ -700,16 +702,16 @@ define dso_local i32 @sglib_dllist_add_after_if_not_member(ptr noundef %0, ptr n
   %19 = load i32, ptr %18, align 8
   %20 = sub nsw i32 %16, %19
   %21 = icmp ne i32 %20, 0
-  call void @__cflat_record_node(i64 106883543647872)
+  call void @increment_uncond_branch()
   br label %22
 
 22:                                               ; preds = %13, %10
   %23 = phi i1 [ false, %10 ], [ %21, %13 ]
-  call void @__cflat_record_node(i64 106883543649144)
+  call void @increment_cond_branch()
   br i1 %23, label %24, label %29
 
 24:                                               ; preds = %22
-  call void @__cflat_record_node(i64 106883543650272)
+  call void @increment_uncond_branch()
   br label %25
 
 25:                                               ; preds = %24
@@ -717,20 +719,21 @@ define dso_local i32 @sglib_dllist_add_after_if_not_member(ptr noundef %0, ptr n
   %27 = getelementptr inbounds %struct.dllist, ptr %26, i32 0, i32 2
   %28 = load ptr, ptr %27, align 8
   store ptr %28, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543650384)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %10, !llvm.loop !10
 
 29:                                               ; preds = %22
   %30 = load ptr, ptr %7, align 8
   %31 = icmp eq ptr %30, null
-  call void @__cflat_record_node(i64 106883543651296)
+  call void @increment_cond_branch()
   br i1 %31, label %32, label %61
 
 32:                                               ; preds = %29
   %33 = load ptr, ptr %4, align 8
   %34 = load ptr, ptr %33, align 8
   %35 = icmp ne ptr %34, null
-  call void @__cflat_record_node(i64 106883543651968)
+  call void @increment_cond_branch()
   br i1 %35, label %36, label %61
 
 36:                                               ; preds = %32
@@ -739,13 +742,13 @@ define dso_local i32 @sglib_dllist_add_after_if_not_member(ptr noundef %0, ptr n
   %39 = getelementptr inbounds %struct.dllist, ptr %38, i32 0, i32 1
   %40 = load ptr, ptr %39, align 8
   store ptr %40, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543652624)
+  call void @increment_uncond_branch()
   br label %41
 
 41:                                               ; preds = %56, %36
   %42 = load ptr, ptr %7, align 8
   %43 = icmp ne ptr %42, null
-  call void @__cflat_record_node(i64 106883543653552)
+  call void @increment_cond_branch()
   br i1 %43, label %44, label %53
 
 44:                                               ; preds = %41
@@ -757,16 +760,16 @@ define dso_local i32 @sglib_dllist_add_after_if_not_member(ptr noundef %0, ptr n
   %50 = load i32, ptr %49, align 8
   %51 = sub nsw i32 %47, %50
   %52 = icmp ne i32 %51, 0
-  call void @__cflat_record_node(i64 106883543654224)
+  call void @increment_uncond_branch()
   br label %53
 
 53:                                               ; preds = %44, %41
   %54 = phi i1 [ false, %41 ], [ %52, %44 ]
-  call void @__cflat_record_node(i64 106883543657560)
+  call void @increment_cond_branch()
   br i1 %54, label %55, label %60
 
 55:                                               ; preds = %53
-  call void @__cflat_record_node(i64 106883543658192)
+  call void @increment_uncond_branch()
   br label %56
 
 56:                                               ; preds = %55
@@ -774,11 +777,12 @@ define dso_local i32 @sglib_dllist_add_after_if_not_member(ptr noundef %0, ptr n
   %58 = getelementptr inbounds %struct.dllist, ptr %57, i32 0, i32 1
   %59 = load ptr, ptr %58, align 8
   store ptr %59, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543658304)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %41, !llvm.loop !11
 
 60:                                               ; preds = %53
-  call void @__cflat_record_node(i64 106883543659280)
+  call void @increment_uncond_branch()
   br label %61
 
 61:                                               ; preds = %60, %32, %29
@@ -787,14 +791,14 @@ define dso_local i32 @sglib_dllist_add_after_if_not_member(ptr noundef %0, ptr n
   store ptr %62, ptr %63, align 8
   %64 = load ptr, ptr %7, align 8
   %65 = icmp eq ptr %64, null
-  call void @__cflat_record_node(i64 106883543659392)
+  call void @increment_cond_branch()
   br i1 %65, label %66, label %106
 
 66:                                               ; preds = %61
   %67 = load ptr, ptr %4, align 8
   %68 = load ptr, ptr %67, align 8
   %69 = icmp eq ptr %68, null
-  call void @__cflat_record_node(i64 106883543660416)
+  call void @increment_cond_branch()
   br i1 %69, label %70, label %79
 
 70:                                               ; preds = %66
@@ -809,7 +813,7 @@ define dso_local i32 @sglib_dllist_add_after_if_not_member(ptr noundef %0, ptr n
   %77 = load ptr, ptr %76, align 8
   %78 = getelementptr inbounds %struct.dllist, ptr %77, i32 0, i32 1
   store ptr null, ptr %78, align 8
-  call void @__cflat_record_node(i64 106883543661216)
+  call void @increment_uncond_branch()
   br label %105
 
 79:                                               ; preds = %66
@@ -834,7 +838,7 @@ define dso_local i32 @sglib_dllist_add_after_if_not_member(ptr noundef %0, ptr n
   %95 = getelementptr inbounds %struct.dllist, ptr %94, i32 0, i32 1
   %96 = load ptr, ptr %95, align 8
   %97 = icmp ne ptr %96, null
-  call void @__cflat_record_node(i64 106883543663040)
+  call void @increment_cond_branch()
   br i1 %97, label %98, label %104
 
 98:                                               ; preds = %79
@@ -844,15 +848,15 @@ define dso_local i32 @sglib_dllist_add_after_if_not_member(ptr noundef %0, ptr n
   %102 = load ptr, ptr %101, align 8
   %103 = getelementptr inbounds %struct.dllist, ptr %102, i32 0, i32 2
   store ptr %99, ptr %103, align 8
-  call void @__cflat_record_node(i64 106883543655344)
+  call void @increment_uncond_branch()
   br label %104
 
 104:                                              ; preds = %98, %79
-  call void @__cflat_record_node(i64 106883543656384)
+  call void @increment_uncond_branch()
   br label %105
 
 105:                                              ; preds = %104, %70
-  call void @__cflat_record_node(i64 106883543656496)
+  call void @increment_uncond_branch()
   br label %106
 
 106:                                              ; preds = %105, %61
@@ -860,7 +864,7 @@ define dso_local i32 @sglib_dllist_add_after_if_not_member(ptr noundef %0, ptr n
   %108 = load ptr, ptr %107, align 8
   %109 = icmp eq ptr %108, null
   %110 = zext i1 %109 to i32
-  call void @__cflat_call_return(i64 106883543645664)
+  call void @increment_return()
   ret i32 %110
 }
 
@@ -876,13 +880,13 @@ define dso_local i32 @sglib_dllist_add_before_if_not_member(ptr noundef %0, ptr 
   %8 = load ptr, ptr %4, align 8
   %9 = load ptr, ptr %8, align 8
   store ptr %9, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543666400)
+  call void @increment_uncond_branch()
   br label %10
 
 10:                                               ; preds = %25, %3
   %11 = load ptr, ptr %7, align 8
   %12 = icmp ne ptr %11, null
-  call void @__cflat_record_node(i64 106883543668000)
+  call void @increment_cond_branch()
   br i1 %12, label %13, label %22
 
 13:                                               ; preds = %10
@@ -894,16 +898,16 @@ define dso_local i32 @sglib_dllist_add_before_if_not_member(ptr noundef %0, ptr 
   %19 = load i32, ptr %18, align 8
   %20 = sub nsw i32 %16, %19
   %21 = icmp ne i32 %20, 0
-  call void @__cflat_record_node(i64 106883543668608)
+  call void @increment_uncond_branch()
   br label %22
 
 22:                                               ; preds = %13, %10
   %23 = phi i1 [ false, %10 ], [ %21, %13 ]
-  call void @__cflat_record_node(i64 106883543669880)
+  call void @increment_cond_branch()
   br i1 %23, label %24, label %29
 
 24:                                               ; preds = %22
-  call void @__cflat_record_node(i64 106883543671008)
+  call void @increment_uncond_branch()
   br label %25
 
 25:                                               ; preds = %24
@@ -911,20 +915,21 @@ define dso_local i32 @sglib_dllist_add_before_if_not_member(ptr noundef %0, ptr 
   %27 = getelementptr inbounds %struct.dllist, ptr %26, i32 0, i32 2
   %28 = load ptr, ptr %27, align 8
   store ptr %28, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543671120)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %10, !llvm.loop !12
 
 29:                                               ; preds = %22
   %30 = load ptr, ptr %7, align 8
   %31 = icmp eq ptr %30, null
-  call void @__cflat_record_node(i64 106883543672032)
+  call void @increment_cond_branch()
   br i1 %31, label %32, label %61
 
 32:                                               ; preds = %29
   %33 = load ptr, ptr %4, align 8
   %34 = load ptr, ptr %33, align 8
   %35 = icmp ne ptr %34, null
-  call void @__cflat_record_node(i64 106883543672704)
+  call void @increment_cond_branch()
   br i1 %35, label %36, label %61
 
 36:                                               ; preds = %32
@@ -933,13 +938,13 @@ define dso_local i32 @sglib_dllist_add_before_if_not_member(ptr noundef %0, ptr 
   %39 = getelementptr inbounds %struct.dllist, ptr %38, i32 0, i32 1
   %40 = load ptr, ptr %39, align 8
   store ptr %40, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543673360)
+  call void @increment_uncond_branch()
   br label %41
 
 41:                                               ; preds = %56, %36
   %42 = load ptr, ptr %7, align 8
   %43 = icmp ne ptr %42, null
-  call void @__cflat_record_node(i64 106883543674288)
+  call void @increment_cond_branch()
   br i1 %43, label %44, label %53
 
 44:                                               ; preds = %41
@@ -951,16 +956,16 @@ define dso_local i32 @sglib_dllist_add_before_if_not_member(ptr noundef %0, ptr 
   %50 = load i32, ptr %49, align 8
   %51 = sub nsw i32 %47, %50
   %52 = icmp ne i32 %51, 0
-  call void @__cflat_record_node(i64 106883543674960)
+  call void @increment_uncond_branch()
   br label %53
 
 53:                                               ; preds = %44, %41
   %54 = phi i1 [ false, %41 ], [ %52, %44 ]
-  call void @__cflat_record_node(i64 106883543678296)
+  call void @increment_cond_branch()
   br i1 %54, label %55, label %60
 
 55:                                               ; preds = %53
-  call void @__cflat_record_node(i64 106883543678928)
+  call void @increment_uncond_branch()
   br label %56
 
 56:                                               ; preds = %55
@@ -968,11 +973,12 @@ define dso_local i32 @sglib_dllist_add_before_if_not_member(ptr noundef %0, ptr 
   %58 = getelementptr inbounds %struct.dllist, ptr %57, i32 0, i32 1
   %59 = load ptr, ptr %58, align 8
   store ptr %59, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543679040)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %41, !llvm.loop !13
 
 60:                                               ; preds = %53
-  call void @__cflat_record_node(i64 106883543680016)
+  call void @increment_uncond_branch()
   br label %61
 
 61:                                               ; preds = %60, %32, %29
@@ -981,14 +987,14 @@ define dso_local i32 @sglib_dllist_add_before_if_not_member(ptr noundef %0, ptr 
   store ptr %62, ptr %63, align 8
   %64 = load ptr, ptr %7, align 8
   %65 = icmp eq ptr %64, null
-  call void @__cflat_record_node(i64 106883543680128)
+  call void @increment_cond_branch()
   br i1 %65, label %66, label %106
 
 66:                                               ; preds = %61
   %67 = load ptr, ptr %4, align 8
   %68 = load ptr, ptr %67, align 8
   %69 = icmp eq ptr %68, null
-  call void @__cflat_record_node(i64 106883543681152)
+  call void @increment_cond_branch()
   br i1 %69, label %70, label %79
 
 70:                                               ; preds = %66
@@ -1003,7 +1009,7 @@ define dso_local i32 @sglib_dllist_add_before_if_not_member(ptr noundef %0, ptr 
   %77 = load ptr, ptr %76, align 8
   %78 = getelementptr inbounds %struct.dllist, ptr %77, i32 0, i32 1
   store ptr null, ptr %78, align 8
-  call void @__cflat_record_node(i64 106883543681952)
+  call void @increment_uncond_branch()
   br label %105
 
 79:                                               ; preds = %66
@@ -1028,7 +1034,7 @@ define dso_local i32 @sglib_dllist_add_before_if_not_member(ptr noundef %0, ptr 
   %95 = getelementptr inbounds %struct.dllist, ptr %94, i32 0, i32 2
   %96 = load ptr, ptr %95, align 8
   %97 = icmp ne ptr %96, null
-  call void @__cflat_record_node(i64 106883543683776)
+  call void @increment_cond_branch()
   br i1 %97, label %98, label %104
 
 98:                                               ; preds = %79
@@ -1038,15 +1044,15 @@ define dso_local i32 @sglib_dllist_add_before_if_not_member(ptr noundef %0, ptr 
   %102 = load ptr, ptr %101, align 8
   %103 = getelementptr inbounds %struct.dllist, ptr %102, i32 0, i32 1
   store ptr %99, ptr %103, align 8
-  call void @__cflat_record_node(i64 106883543676080)
+  call void @increment_uncond_branch()
   br label %104
 
 104:                                              ; preds = %98, %79
-  call void @__cflat_record_node(i64 106883543677120)
+  call void @increment_uncond_branch()
   br label %105
 
 105:                                              ; preds = %104, %70
-  call void @__cflat_record_node(i64 106883543677232)
+  call void @increment_uncond_branch()
   br label %106
 
 106:                                              ; preds = %105, %61
@@ -1054,7 +1060,7 @@ define dso_local i32 @sglib_dllist_add_before_if_not_member(ptr noundef %0, ptr 
   %108 = load ptr, ptr %107, align 8
   %109 = icmp eq ptr %108, null
   %110 = zext i1 %109 to i32
-  call void @__cflat_call_return(i64 106883543666400)
+  call void @increment_return()
   ret i32 %110
 }
 
@@ -1068,27 +1074,27 @@ define dso_local void @sglib_dllist_concat(ptr noundef %0, ptr noundef %1) #0 {
   %6 = load ptr, ptr %3, align 8
   %7 = load ptr, ptr %6, align 8
   %8 = icmp eq ptr %7, null
-  call void @__cflat_record_node(i64 106883543687104)
+  call void @increment_cond_branch()
   br i1 %8, label %9, label %12
 
 9:                                                ; preds = %2
   %10 = load ptr, ptr %4, align 8
   %11 = load ptr, ptr %3, align 8
   store ptr %10, ptr %11, align 8
-  call void @__cflat_record_node(i64 106883543688544)
+  call void @increment_uncond_branch()
   br label %62
 
 12:                                               ; preds = %2
   %13 = load ptr, ptr %4, align 8
   %14 = icmp ne ptr %13, null
-  call void @__cflat_record_node(i64 106883543689152)
+  call void @increment_cond_branch()
   br i1 %14, label %15, label %61
 
 15:                                               ; preds = %12
   %16 = load ptr, ptr %3, align 8
   %17 = load ptr, ptr %16, align 8
   store ptr %17, ptr %5, align 8
-  call void @__cflat_record_node(i64 106883543689760)
+  call void @increment_uncond_branch()
   br label %18
 
 18:                                               ; preds = %24, %15
@@ -1096,11 +1102,11 @@ define dso_local void @sglib_dllist_concat(ptr noundef %0, ptr noundef %1) #0 {
   %20 = getelementptr inbounds %struct.dllist, ptr %19, i32 0, i32 1
   %21 = load ptr, ptr %20, align 8
   %22 = icmp ne ptr %21, null
-  call void @__cflat_record_node(i64 106883543690368)
+  call void @increment_cond_branch()
   br i1 %22, label %23, label %28
 
 23:                                               ; preds = %18
-  call void @__cflat_record_node(i64 106883543691920)
+  call void @increment_uncond_branch()
   br label %24
 
 24:                                               ; preds = %23
@@ -1108,13 +1114,14 @@ define dso_local void @sglib_dllist_concat(ptr noundef %0, ptr noundef %1) #0 {
   %26 = getelementptr inbounds %struct.dllist, ptr %25, i32 0, i32 1
   %27 = load ptr, ptr %26, align 8
   store ptr %27, ptr %5, align 8
-  call void @__cflat_record_node(i64 106883543692032)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %18, !llvm.loop !14
 
 28:                                               ; preds = %18
   %29 = load ptr, ptr %5, align 8
   %30 = icmp eq ptr %29, null
-  call void @__cflat_record_node(i64 106883543693008)
+  call void @increment_cond_branch()
   br i1 %30, label %31, label %37
 
 31:                                               ; preds = %28
@@ -1126,7 +1133,7 @@ define dso_local void @sglib_dllist_concat(ptr noundef %0, ptr noundef %1) #0 {
   %35 = load ptr, ptr %5, align 8
   %36 = getelementptr inbounds %struct.dllist, ptr %35, i32 0, i32 1
   store ptr null, ptr %36, align 8
-  call void @__cflat_record_node(i64 106883543693680)
+  call void @increment_uncond_branch()
   br label %60
 
 37:                                               ; preds = %28
@@ -1148,7 +1155,7 @@ define dso_local void @sglib_dllist_concat(ptr noundef %0, ptr noundef %1) #0 {
   %50 = getelementptr inbounds %struct.dllist, ptr %49, i32 0, i32 1
   %51 = load ptr, ptr %50, align 8
   %52 = icmp ne ptr %51, null
-  call void @__cflat_record_node(i64 106883543695120)
+  call void @increment_cond_branch()
   br i1 %52, label %53, label %59
 
 53:                                               ; preds = %37
@@ -1158,23 +1165,23 @@ define dso_local void @sglib_dllist_concat(ptr noundef %0, ptr noundef %1) #0 {
   %57 = load ptr, ptr %56, align 8
   %58 = getelementptr inbounds %struct.dllist, ptr %57, i32 0, i32 2
   store ptr %54, ptr %58, align 8
-  call void @__cflat_record_node(i64 106883543700320)
+  call void @increment_uncond_branch()
   br label %59
 
 59:                                               ; preds = %53, %37
-  call void @__cflat_record_node(i64 106883543701360)
+  call void @increment_uncond_branch()
   br label %60
 
 60:                                               ; preds = %59, %31
-  call void @__cflat_record_node(i64 106883543701472)
+  call void @increment_uncond_branch()
   br label %61
 
 61:                                               ; preds = %60, %12
-  call void @__cflat_record_node(i64 106883543701584)
+  call void @increment_uncond_branch()
   br label %62
 
 62:                                               ; preds = %61, %9
-  call void @__cflat_call_return(i64 106883543687104)
+  call void @increment_return()
   ret void
 }
 
@@ -1191,7 +1198,7 @@ define dso_local void @sglib_dllist_delete(ptr noundef %0, ptr noundef %1) #0 {
   %8 = load ptr, ptr %5, align 8
   %9 = load ptr, ptr %4, align 8
   %10 = icmp eq ptr %8, %9
-  call void @__cflat_record_node(i64 106883543697408)
+  call void @increment_cond_branch()
   br i1 %10, label %11, label %25
 
 11:                                               ; preds = %2
@@ -1199,7 +1206,7 @@ define dso_local void @sglib_dllist_delete(ptr noundef %0, ptr noundef %1) #0 {
   %13 = getelementptr inbounds %struct.dllist, ptr %12, i32 0, i32 2
   %14 = load ptr, ptr %13, align 8
   %15 = icmp ne ptr %14, null
-  call void @__cflat_record_node(i64 106883543702112)
+  call void @increment_cond_branch()
   br i1 %15, label %16, label %20
 
 16:                                               ; preds = %11
@@ -1207,7 +1214,7 @@ define dso_local void @sglib_dllist_delete(ptr noundef %0, ptr noundef %1) #0 {
   %18 = getelementptr inbounds %struct.dllist, ptr %17, i32 0, i32 2
   %19 = load ptr, ptr %18, align 8
   store ptr %19, ptr %5, align 8
-  call void @__cflat_record_node(i64 106883543703040)
+  call void @increment_uncond_branch()
   br label %24
 
 20:                                               ; preds = %11
@@ -1215,11 +1222,11 @@ define dso_local void @sglib_dllist_delete(ptr noundef %0, ptr noundef %1) #0 {
   %22 = getelementptr inbounds %struct.dllist, ptr %21, i32 0, i32 1
   %23 = load ptr, ptr %22, align 8
   store ptr %23, ptr %5, align 8
-  call void @__cflat_record_node(i64 106883543703840)
+  call void @increment_uncond_branch()
   br label %24
 
 24:                                               ; preds = %20, %16
-  call void @__cflat_record_node(i64 106883543704560)
+  call void @increment_uncond_branch()
   br label %25
 
 25:                                               ; preds = %24, %2
@@ -1227,7 +1234,7 @@ define dso_local void @sglib_dllist_delete(ptr noundef %0, ptr noundef %1) #0 {
   %27 = getelementptr inbounds %struct.dllist, ptr %26, i32 0, i32 1
   %28 = load ptr, ptr %27, align 8
   %29 = icmp ne ptr %28, null
-  call void @__cflat_record_node(i64 106883543704672)
+  call void @increment_cond_branch()
   br i1 %29, label %30, label %38
 
 30:                                               ; preds = %25
@@ -1239,7 +1246,7 @@ define dso_local void @sglib_dllist_delete(ptr noundef %0, ptr noundef %1) #0 {
   %36 = load ptr, ptr %35, align 8
   %37 = getelementptr inbounds %struct.dllist, ptr %36, i32 0, i32 2
   store ptr %33, ptr %37, align 8
-  call void @__cflat_record_node(i64 106883543705600)
+  call void @increment_uncond_branch()
   br label %38
 
 38:                                               ; preds = %30, %25
@@ -1247,7 +1254,7 @@ define dso_local void @sglib_dllist_delete(ptr noundef %0, ptr noundef %1) #0 {
   %40 = getelementptr inbounds %struct.dllist, ptr %39, i32 0, i32 2
   %41 = load ptr, ptr %40, align 8
   %42 = icmp ne ptr %41, null
-  call void @__cflat_record_node(i64 106883543706960)
+  call void @increment_cond_branch()
   br i1 %42, label %43, label %51
 
 43:                                               ; preds = %38
@@ -1259,14 +1266,14 @@ define dso_local void @sglib_dllist_delete(ptr noundef %0, ptr noundef %1) #0 {
   %49 = load ptr, ptr %48, align 8
   %50 = getelementptr inbounds %struct.dllist, ptr %49, i32 0, i32 1
   store ptr %46, ptr %50, align 8
-  call void @__cflat_record_node(i64 106883543707888)
+  call void @increment_uncond_branch()
   br label %51
 
 51:                                               ; preds = %43, %38
   %52 = load ptr, ptr %5, align 8
   %53 = load ptr, ptr %3, align 8
   store ptr %52, ptr %53, align 8
-  call void @__cflat_call_return(i64 106883543697408)
+  call void @increment_return()
   ret void
 }
 
@@ -1283,13 +1290,13 @@ define dso_local i32 @sglib_dllist_delete_if_member(ptr noundef %0, ptr noundef 
   %9 = load ptr, ptr %4, align 8
   %10 = load ptr, ptr %9, align 8
   store ptr %10, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543708928)
+  call void @increment_uncond_branch()
   br label %11
 
 11:                                               ; preds = %26, %3
   %12 = load ptr, ptr %7, align 8
   %13 = icmp ne ptr %12, null
-  call void @__cflat_record_node(i64 106883543712000)
+  call void @increment_cond_branch()
   br i1 %13, label %14, label %23
 
 14:                                               ; preds = %11
@@ -1301,16 +1308,16 @@ define dso_local i32 @sglib_dllist_delete_if_member(ptr noundef %0, ptr noundef 
   %20 = load i32, ptr %19, align 8
   %21 = sub nsw i32 %17, %20
   %22 = icmp ne i32 %21, 0
-  call void @__cflat_record_node(i64 106883543712608)
+  call void @increment_uncond_branch()
   br label %23
 
 23:                                               ; preds = %14, %11
   %24 = phi i1 [ false, %11 ], [ %22, %14 ]
-  call void @__cflat_record_node(i64 106883543713880)
+  call void @increment_cond_branch()
   br i1 %24, label %25, label %30
 
 25:                                               ; preds = %23
-  call void @__cflat_record_node(i64 106883543714512)
+  call void @increment_uncond_branch()
   br label %26
 
 26:                                               ; preds = %25
@@ -1318,20 +1325,21 @@ define dso_local i32 @sglib_dllist_delete_if_member(ptr noundef %0, ptr noundef 
   %28 = getelementptr inbounds %struct.dllist, ptr %27, i32 0, i32 2
   %29 = load ptr, ptr %28, align 8
   store ptr %29, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543714624)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %11, !llvm.loop !15
 
 30:                                               ; preds = %23
   %31 = load ptr, ptr %7, align 8
   %32 = icmp eq ptr %31, null
-  call void @__cflat_record_node(i64 106883543715472)
+  call void @increment_cond_branch()
   br i1 %32, label %33, label %62
 
 33:                                               ; preds = %30
   %34 = load ptr, ptr %4, align 8
   %35 = load ptr, ptr %34, align 8
   %36 = icmp ne ptr %35, null
-  call void @__cflat_record_node(i64 106883543716080)
+  call void @increment_cond_branch()
   br i1 %36, label %37, label %62
 
 37:                                               ; preds = %33
@@ -1340,13 +1348,13 @@ define dso_local i32 @sglib_dllist_delete_if_member(ptr noundef %0, ptr noundef 
   %40 = getelementptr inbounds %struct.dllist, ptr %39, i32 0, i32 1
   %41 = load ptr, ptr %40, align 8
   store ptr %41, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543716736)
+  call void @increment_uncond_branch()
   br label %42
 
 42:                                               ; preds = %57, %37
   %43 = load ptr, ptr %7, align 8
   %44 = icmp ne ptr %43, null
-  call void @__cflat_record_node(i64 106883543717664)
+  call void @increment_cond_branch()
   br i1 %44, label %45, label %54
 
 45:                                               ; preds = %42
@@ -1358,16 +1366,16 @@ define dso_local i32 @sglib_dllist_delete_if_member(ptr noundef %0, ptr noundef 
   %51 = load i32, ptr %50, align 8
   %52 = sub nsw i32 %48, %51
   %53 = icmp ne i32 %52, 0
-  call void @__cflat_record_node(i64 106883543718336)
+  call void @increment_uncond_branch()
   br label %54
 
 54:                                               ; preds = %45, %42
   %55 = phi i1 [ false, %42 ], [ %53, %45 ]
-  call void @__cflat_record_node(i64 106883543721672)
+  call void @increment_cond_branch()
   br i1 %55, label %56, label %61
 
 56:                                               ; preds = %54
-  call void @__cflat_record_node(i64 106883543722304)
+  call void @increment_uncond_branch()
   br label %57
 
 57:                                               ; preds = %56
@@ -1375,11 +1383,12 @@ define dso_local i32 @sglib_dllist_delete_if_member(ptr noundef %0, ptr noundef 
   %59 = getelementptr inbounds %struct.dllist, ptr %58, i32 0, i32 1
   %60 = load ptr, ptr %59, align 8
   store ptr %60, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543722416)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %42, !llvm.loop !16
 
 61:                                               ; preds = %54
-  call void @__cflat_record_node(i64 106883543723392)
+  call void @increment_uncond_branch()
   br label %62
 
 62:                                               ; preds = %61, %33, %30
@@ -1388,7 +1397,7 @@ define dso_local i32 @sglib_dllist_delete_if_member(ptr noundef %0, ptr noundef 
   store ptr %63, ptr %64, align 8
   %65 = load ptr, ptr %7, align 8
   %66 = icmp ne ptr %65, null
-  call void @__cflat_record_node(i64 106883543723504)
+  call void @increment_cond_branch()
   br i1 %66, label %67, label %116
 
 67:                                               ; preds = %62
@@ -1398,7 +1407,7 @@ define dso_local i32 @sglib_dllist_delete_if_member(ptr noundef %0, ptr noundef 
   %70 = load ptr, ptr %8, align 8
   %71 = load ptr, ptr %7, align 8
   %72 = icmp eq ptr %70, %71
-  call void @__cflat_record_node(i64 106883543724528)
+  call void @increment_cond_branch()
   br i1 %72, label %73, label %87
 
 73:                                               ; preds = %67
@@ -1406,7 +1415,7 @@ define dso_local i32 @sglib_dllist_delete_if_member(ptr noundef %0, ptr noundef 
   %75 = getelementptr inbounds %struct.dllist, ptr %74, i32 0, i32 2
   %76 = load ptr, ptr %75, align 8
   %77 = icmp ne ptr %76, null
-  call void @__cflat_record_node(i64 106883543725744)
+  call void @increment_cond_branch()
   br i1 %77, label %78, label %82
 
 78:                                               ; preds = %73
@@ -1414,7 +1423,7 @@ define dso_local i32 @sglib_dllist_delete_if_member(ptr noundef %0, ptr noundef 
   %80 = getelementptr inbounds %struct.dllist, ptr %79, i32 0, i32 2
   %81 = load ptr, ptr %80, align 8
   store ptr %81, ptr %8, align 8
-  call void @__cflat_record_node(i64 106883543726736)
+  call void @increment_uncond_branch()
   br label %86
 
 82:                                               ; preds = %73
@@ -1422,11 +1431,11 @@ define dso_local i32 @sglib_dllist_delete_if_member(ptr noundef %0, ptr noundef 
   %84 = getelementptr inbounds %struct.dllist, ptr %83, i32 0, i32 1
   %85 = load ptr, ptr %84, align 8
   store ptr %85, ptr %8, align 8
-  call void @__cflat_record_node(i64 106883543727536)
+  call void @increment_uncond_branch()
   br label %86
 
 86:                                               ; preds = %82, %78
-  call void @__cflat_record_node(i64 106883543728256)
+  call void @increment_uncond_branch()
   br label %87
 
 87:                                               ; preds = %86, %67
@@ -1434,7 +1443,7 @@ define dso_local i32 @sglib_dllist_delete_if_member(ptr noundef %0, ptr noundef 
   %89 = getelementptr inbounds %struct.dllist, ptr %88, i32 0, i32 1
   %90 = load ptr, ptr %89, align 8
   %91 = icmp ne ptr %90, null
-  call void @__cflat_record_node(i64 106883543728368)
+  call void @increment_cond_branch()
   br i1 %91, label %92, label %100
 
 92:                                               ; preds = %87
@@ -1446,7 +1455,7 @@ define dso_local i32 @sglib_dllist_delete_if_member(ptr noundef %0, ptr noundef 
   %98 = load ptr, ptr %97, align 8
   %99 = getelementptr inbounds %struct.dllist, ptr %98, i32 0, i32 2
   store ptr %95, ptr %99, align 8
-  call void @__cflat_record_node(i64 106883543729296)
+  call void @increment_uncond_branch()
   br label %100
 
 100:                                              ; preds = %92, %87
@@ -1454,7 +1463,7 @@ define dso_local i32 @sglib_dllist_delete_if_member(ptr noundef %0, ptr noundef 
   %102 = getelementptr inbounds %struct.dllist, ptr %101, i32 0, i32 2
   %103 = load ptr, ptr %102, align 8
   %104 = icmp ne ptr %103, null
-  call void @__cflat_record_node(i64 106883543719568)
+  call void @increment_cond_branch()
   br i1 %104, label %105, label %113
 
 105:                                              ; preds = %100
@@ -1466,14 +1475,14 @@ define dso_local i32 @sglib_dllist_delete_if_member(ptr noundef %0, ptr noundef 
   %111 = load ptr, ptr %110, align 8
   %112 = getelementptr inbounds %struct.dllist, ptr %111, i32 0, i32 1
   store ptr %108, ptr %112, align 8
-  call void @__cflat_record_node(i64 106883543720496)
+  call void @increment_uncond_branch()
   br label %113
 
 113:                                              ; preds = %105, %100
   %114 = load ptr, ptr %8, align 8
   %115 = load ptr, ptr %4, align 8
   store ptr %114, ptr %115, align 8
-  call void @__cflat_record_node(i64 106883543735088)
+  call void @increment_uncond_branch()
   br label %116
 
 116:                                              ; preds = %113, %62
@@ -1481,7 +1490,7 @@ define dso_local i32 @sglib_dllist_delete_if_member(ptr noundef %0, ptr noundef 
   %118 = load ptr, ptr %117, align 8
   %119 = icmp ne ptr %118, null
   %120 = zext i1 %119 to i32
-  call void @__cflat_call_return(i64 106883543708928)
+  call void @increment_return()
   ret i32 %120
 }
 
@@ -1497,29 +1506,29 @@ define dso_local i32 @sglib_dllist_is_member(ptr noundef %0, ptr noundef %1) #0 
   store ptr %1, ptr %4, align 8
   %9 = load ptr, ptr %3, align 8
   store ptr %9, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543730192)
+  call void @increment_uncond_branch()
   br label %10
 
 10:                                               ; preds = %20, %2
   %11 = load ptr, ptr %7, align 8
   %12 = icmp ne ptr %11, null
-  call void @__cflat_record_node(i64 106883543731760)
+  call void @increment_cond_branch()
   br i1 %12, label %13, label %17
 
 13:                                               ; preds = %10
   %14 = load ptr, ptr %7, align 8
   %15 = load ptr, ptr %4, align 8
   %16 = icmp ne ptr %14, %15
-  call void @__cflat_record_node(i64 106883543732368)
+  call void @increment_uncond_branch()
   br label %17
 
 17:                                               ; preds = %13, %10
   %18 = phi i1 [ false, %10 ], [ %16, %13 ]
-  call void @__cflat_record_node(i64 106883543732856)
+  call void @increment_cond_branch()
   br i1 %18, label %19, label %24
 
 19:                                               ; preds = %17
-  call void @__cflat_record_node(i64 106883543733488)
+  call void @increment_uncond_branch()
   br label %20
 
 20:                                               ; preds = %19
@@ -1527,7 +1536,8 @@ define dso_local i32 @sglib_dllist_is_member(ptr noundef %0, ptr noundef %1) #0 
   %22 = getelementptr inbounds %struct.dllist, ptr %21, i32 0, i32 2
   %23 = load ptr, ptr %22, align 8
   store ptr %23, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543733600)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %10, !llvm.loop !17
 
 24:                                               ; preds = %17
@@ -1537,13 +1547,13 @@ define dso_local i32 @sglib_dllist_is_member(ptr noundef %0, ptr noundef %1) #0 
   store i32 %27, ptr %5, align 4
   %28 = load i32, ptr %5, align 4
   %29 = icmp eq i32 %28, 0
-  call void @__cflat_record_node(i64 106883543736832)
+  call void @increment_cond_branch()
   br i1 %29, label %30, label %56
 
 30:                                               ; preds = %24
   %31 = load ptr, ptr %3, align 8
   %32 = icmp ne ptr %31, null
-  call void @__cflat_record_node(i64 106883543738048)
+  call void @increment_cond_branch()
   br i1 %32, label %33, label %56
 
 33:                                               ; preds = %30
@@ -1553,29 +1563,29 @@ define dso_local i32 @sglib_dllist_is_member(ptr noundef %0, ptr noundef %1) #0 
   store ptr %36, ptr %6, align 8
   %37 = load ptr, ptr %6, align 8
   store ptr %37, ptr %8, align 8
-  call void @__cflat_record_node(i64 106883543738576)
+  call void @increment_uncond_branch()
   br label %38
 
 38:                                               ; preds = %48, %33
   %39 = load ptr, ptr %8, align 8
   %40 = icmp ne ptr %39, null
-  call void @__cflat_record_node(i64 106883543739664)
+  call void @increment_cond_branch()
   br i1 %40, label %41, label %45
 
 41:                                               ; preds = %38
   %42 = load ptr, ptr %8, align 8
   %43 = load ptr, ptr %4, align 8
   %44 = icmp ne ptr %42, %43
-  call void @__cflat_record_node(i64 106883543740336)
+  call void @increment_uncond_branch()
   br label %45
 
 45:                                               ; preds = %41, %38
   %46 = phi i1 [ false, %38 ], [ %44, %41 ]
-  call void @__cflat_record_node(i64 106883543740824)
+  call void @increment_cond_branch()
   br i1 %46, label %47, label %52
 
 47:                                               ; preds = %45
-  call void @__cflat_record_node(i64 106883543743520)
+  call void @increment_uncond_branch()
   br label %48
 
 48:                                               ; preds = %47
@@ -1583,7 +1593,8 @@ define dso_local i32 @sglib_dllist_is_member(ptr noundef %0, ptr noundef %1) #0 
   %50 = getelementptr inbounds %struct.dllist, ptr %49, i32 0, i32 1
   %51 = load ptr, ptr %50, align 8
   store ptr %51, ptr %8, align 8
-  call void @__cflat_record_node(i64 106883543743632)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %38, !llvm.loop !18
 
 52:                                               ; preds = %45
@@ -1591,12 +1602,12 @@ define dso_local i32 @sglib_dllist_is_member(ptr noundef %0, ptr noundef %1) #0 
   %54 = icmp ne ptr %53, null
   %55 = zext i1 %54 to i32
   store i32 %55, ptr %5, align 4
-  call void @__cflat_record_node(i64 106883543744608)
+  call void @increment_uncond_branch()
   br label %56
 
 56:                                               ; preds = %52, %30, %24
   %57 = load i32, ptr %5, align 4
-  call void @__cflat_call_return(i64 106883543730192)
+  call void @increment_return()
   ret i32 %57
 }
 
@@ -1612,13 +1623,13 @@ define dso_local ptr @sglib_dllist_find_member(ptr noundef %0, ptr noundef %1) #
   store ptr %1, ptr %4, align 8
   %9 = load ptr, ptr %3, align 8
   store ptr %9, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543741824)
+  call void @increment_uncond_branch()
   br label %10
 
 10:                                               ; preds = %25, %2
   %11 = load ptr, ptr %7, align 8
   %12 = icmp ne ptr %11, null
-  call void @__cflat_record_node(i64 106883543745504)
+  call void @increment_cond_branch()
   br i1 %12, label %13, label %22
 
 13:                                               ; preds = %10
@@ -1630,16 +1641,16 @@ define dso_local ptr @sglib_dllist_find_member(ptr noundef %0, ptr noundef %1) #
   %19 = load i32, ptr %18, align 8
   %20 = sub nsw i32 %16, %19
   %21 = icmp ne i32 %20, 0
-  call void @__cflat_record_node(i64 106883543746176)
+  call void @increment_uncond_branch()
   br label %22
 
 22:                                               ; preds = %13, %10
   %23 = phi i1 [ false, %10 ], [ %21, %13 ]
-  call void @__cflat_record_node(i64 106883543747448)
+  call void @increment_cond_branch()
   br i1 %23, label %24, label %29
 
 24:                                               ; preds = %22
-  call void @__cflat_record_node(i64 106883543748080)
+  call void @increment_uncond_branch()
   br label %25
 
 25:                                               ; preds = %24
@@ -1647,7 +1658,8 @@ define dso_local ptr @sglib_dllist_find_member(ptr noundef %0, ptr noundef %1) #
   %27 = getelementptr inbounds %struct.dllist, ptr %26, i32 0, i32 2
   %28 = load ptr, ptr %27, align 8
   store ptr %28, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543748192)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %10, !llvm.loop !19
 
 29:                                               ; preds = %22
@@ -1655,13 +1667,13 @@ define dso_local ptr @sglib_dllist_find_member(ptr noundef %0, ptr noundef %1) #
   store ptr %30, ptr %5, align 8
   %31 = load ptr, ptr %5, align 8
   %32 = icmp eq ptr %31, null
-  call void @__cflat_record_node(i64 106883543749168)
+  call void @increment_cond_branch()
   br i1 %32, label %33, label %62
 
 33:                                               ; preds = %29
   %34 = load ptr, ptr %3, align 8
   %35 = icmp ne ptr %34, null
-  call void @__cflat_record_node(i64 106883543750128)
+  call void @increment_cond_branch()
   br i1 %35, label %36, label %62
 
 36:                                               ; preds = %33
@@ -1671,13 +1683,13 @@ define dso_local ptr @sglib_dllist_find_member(ptr noundef %0, ptr noundef %1) #
   store ptr %39, ptr %6, align 8
   %40 = load ptr, ptr %6, align 8
   store ptr %40, ptr %8, align 8
-  call void @__cflat_record_node(i64 106883543750656)
+  call void @increment_uncond_branch()
   br label %41
 
 41:                                               ; preds = %56, %36
   %42 = load ptr, ptr %8, align 8
   %43 = icmp ne ptr %42, null
-  call void @__cflat_record_node(i64 106883543751744)
+  call void @increment_cond_branch()
   br i1 %43, label %44, label %53
 
 44:                                               ; preds = %41
@@ -1689,16 +1701,16 @@ define dso_local ptr @sglib_dllist_find_member(ptr noundef %0, ptr noundef %1) #
   %50 = load i32, ptr %49, align 8
   %51 = sub nsw i32 %47, %50
   %52 = icmp ne i32 %51, 0
-  call void @__cflat_record_node(i64 106883543752416)
+  call void @increment_uncond_branch()
   br label %53
 
 53:                                               ; preds = %44, %41
   %54 = phi i1 [ false, %41 ], [ %52, %44 ]
-  call void @__cflat_record_node(i64 106883543755752)
+  call void @increment_cond_branch()
   br i1 %54, label %55, label %60
 
 55:                                               ; preds = %53
-  call void @__cflat_record_node(i64 106883543756384)
+  call void @increment_uncond_branch()
   br label %56
 
 56:                                               ; preds = %55
@@ -1706,18 +1718,19 @@ define dso_local ptr @sglib_dllist_find_member(ptr noundef %0, ptr noundef %1) #
   %58 = getelementptr inbounds %struct.dllist, ptr %57, i32 0, i32 1
   %59 = load ptr, ptr %58, align 8
   store ptr %59, ptr %8, align 8
-  call void @__cflat_record_node(i64 106883543756496)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %41, !llvm.loop !20
 
 60:                                               ; preds = %53
   %61 = load ptr, ptr %8, align 8
   store ptr %61, ptr %5, align 8
-  call void @__cflat_record_node(i64 106883543757472)
+  call void @increment_uncond_branch()
   br label %62
 
 62:                                               ; preds = %60, %33, %29
   %63 = load ptr, ptr %5, align 8
-  call void @__cflat_call_return(i64 106883543741824)
+  call void @increment_return()
   ret ptr %63
 }
 
@@ -1731,11 +1744,11 @@ define dso_local ptr @sglib_dllist_get_first(ptr noundef %0) #0 {
   store ptr %5, ptr %4, align 8
   %6 = load ptr, ptr %4, align 8
   %7 = icmp ne ptr %6, null
-  call void @__cflat_record_node(i64 106883543753296)
+  call void @increment_cond_branch()
   br i1 %7, label %8, label %20
 
 8:                                                ; preds = %1
-  call void @__cflat_record_node(i64 106883543754816)
+  call void @increment_uncond_branch()
   br label %9
 
 9:                                                ; preds = %15, %8
@@ -1743,11 +1756,11 @@ define dso_local ptr @sglib_dllist_get_first(ptr noundef %0) #0 {
   %11 = getelementptr inbounds %struct.dllist, ptr %10, i32 0, i32 2
   %12 = load ptr, ptr %11, align 8
   %13 = icmp ne ptr %12, null
-  call void @__cflat_record_node(i64 106883543758112)
+  call void @increment_cond_branch()
   br i1 %13, label %14, label %19
 
 14:                                               ; preds = %9
-  call void @__cflat_record_node(i64 106883543759184)
+  call void @increment_uncond_branch()
   br label %15
 
 15:                                               ; preds = %14
@@ -1755,18 +1768,19 @@ define dso_local ptr @sglib_dllist_get_first(ptr noundef %0) #0 {
   %17 = getelementptr inbounds %struct.dllist, ptr %16, i32 0, i32 2
   %18 = load ptr, ptr %17, align 8
   store ptr %18, ptr %4, align 8
-  call void @__cflat_record_node(i64 106883543759296)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %9, !llvm.loop !21
 
 19:                                               ; preds = %9
-  call void @__cflat_record_node(i64 106883543760272)
+  call void @increment_uncond_branch()
   br label %20
 
 20:                                               ; preds = %19, %1
   %21 = load ptr, ptr %4, align 8
   store ptr %21, ptr %3, align 8
   %22 = load ptr, ptr %3, align 8
-  call void @__cflat_call_return(i64 106883543753296)
+  call void @increment_return()
   ret ptr %22
 }
 
@@ -1780,11 +1794,11 @@ define dso_local ptr @sglib_dllist_get_last(ptr noundef %0) #0 {
   store ptr %5, ptr %4, align 8
   %6 = load ptr, ptr %4, align 8
   %7 = icmp ne ptr %6, null
-  call void @__cflat_record_node(i64 106883543761392)
+  call void @increment_cond_branch()
   br i1 %7, label %8, label %20
 
 8:                                                ; preds = %1
-  call void @__cflat_record_node(i64 106883543762912)
+  call void @increment_uncond_branch()
   br label %9
 
 9:                                                ; preds = %15, %8
@@ -1792,11 +1806,11 @@ define dso_local ptr @sglib_dllist_get_last(ptr noundef %0) #0 {
   %11 = getelementptr inbounds %struct.dllist, ptr %10, i32 0, i32 1
   %12 = load ptr, ptr %11, align 8
   %13 = icmp ne ptr %12, null
-  call void @__cflat_record_node(i64 106883543763024)
+  call void @increment_cond_branch()
   br i1 %13, label %14, label %19
 
 14:                                               ; preds = %9
-  call void @__cflat_record_node(i64 106883543764096)
+  call void @increment_uncond_branch()
   br label %15
 
 15:                                               ; preds = %14
@@ -1804,18 +1818,19 @@ define dso_local ptr @sglib_dllist_get_last(ptr noundef %0) #0 {
   %17 = getelementptr inbounds %struct.dllist, ptr %16, i32 0, i32 1
   %18 = load ptr, ptr %17, align 8
   store ptr %18, ptr %4, align 8
-  call void @__cflat_record_node(i64 106883543764208)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %9, !llvm.loop !22
 
 19:                                               ; preds = %9
-  call void @__cflat_record_node(i64 106883543765184)
+  call void @increment_uncond_branch()
   br label %20
 
 20:                                               ; preds = %19, %1
   %21 = load ptr, ptr %4, align 8
   store ptr %21, ptr %3, align 8
   %22 = load ptr, ptr %3, align 8
-  call void @__cflat_call_return(i64 106883543761392)
+  call void @increment_return()
   ret ptr %22
 }
 
@@ -1842,11 +1857,11 @@ define dso_local void @sglib_dllist_sort(ptr noundef %0) #0 {
   store ptr %18, ptr %3, align 8
   %19 = load ptr, ptr %3, align 8
   %20 = icmp ne ptr %19, null
-  call void @__cflat_record_node(i64 106883543766304)
+  call void @increment_cond_branch()
   br i1 %20, label %21, label %177
 
 21:                                               ; preds = %1
-  call void @__cflat_record_node(i64 106883543769488)
+  call void @increment_uncond_branch()
   br label %22
 
 22:                                               ; preds = %28, %21
@@ -1854,11 +1869,11 @@ define dso_local void @sglib_dllist_sort(ptr noundef %0) #0 {
   %24 = getelementptr inbounds %struct.dllist, ptr %23, i32 0, i32 2
   %25 = load ptr, ptr %24, align 8
   %26 = icmp ne ptr %25, null
-  call void @__cflat_record_node(i64 106883543769600)
+  call void @increment_cond_branch()
   br i1 %26, label %27, label %32
 
 27:                                               ; preds = %22
-  call void @__cflat_record_node(i64 106883543770672)
+  call void @increment_uncond_branch()
   br label %28
 
 28:                                               ; preds = %27
@@ -1866,7 +1881,8 @@ define dso_local void @sglib_dllist_sort(ptr noundef %0) #0 {
   %30 = getelementptr inbounds %struct.dllist, ptr %29, i32 0, i32 2
   %31 = load ptr, ptr %30, align 8
   store ptr %31, ptr %3, align 8
-  call void @__cflat_record_node(i64 106883543770784)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %22, !llvm.loop !23
 
 32:                                               ; preds = %22
@@ -1874,13 +1890,13 @@ define dso_local void @sglib_dllist_sort(ptr noundef %0) #0 {
   store ptr %33, ptr %6, align 8
   store i32 1, ptr %14, align 4
   store i32 1, ptr %13, align 4
-  call void @__cflat_record_node(i64 106883543771760)
+  call void @increment_uncond_branch()
   br label %34
 
 34:                                               ; preds = %155, %32
   %35 = load i32, ptr %14, align 4
   %36 = icmp ne i32 %35, 0
-  call void @__cflat_record_node(i64 106883543772560)
+  call void @increment_cond_branch()
   br i1 %36, label %37, label %159
 
 37:                                               ; preds = %34
@@ -1889,13 +1905,13 @@ define dso_local void @sglib_dllist_sort(ptr noundef %0) #0 {
   store ptr null, ptr %6, align 8
   store ptr %6, ptr %11, align 8
   store i32 0, ptr %14, align 4
-  call void @__cflat_record_node(i64 106883543773232)
+  call void @increment_uncond_branch()
   br label %39
 
 39:                                               ; preds = %153, %37
   %40 = load ptr, ptr %9, align 8
   %41 = icmp ne ptr %40, null
-  call void @__cflat_record_node(i64 106883543774192)
+  call void @increment_cond_branch()
   br i1 %41, label %42, label %154
 
 42:                                               ; preds = %39
@@ -1904,29 +1920,29 @@ define dso_local void @sglib_dllist_sort(ptr noundef %0) #0 {
   store i32 1, ptr %12, align 4
   %44 = load ptr, ptr %7, align 8
   store ptr %44, ptr %10, align 8
-  call void @__cflat_record_node(i64 106883543774864)
+  call void @increment_uncond_branch()
   br label %45
 
 45:                                               ; preds = %55, %42
   %46 = load i32, ptr %12, align 4
   %47 = load i32, ptr %13, align 4
   %48 = icmp slt i32 %46, %47
-  call void @__cflat_record_node(i64 106883543775792)
+  call void @increment_cond_branch()
   br i1 %48, label %49, label %52
 
 49:                                               ; preds = %45
   %50 = load ptr, ptr %10, align 8
   %51 = icmp ne ptr %50, null
-  call void @__cflat_record_node(i64 106883543778656)
+  call void @increment_uncond_branch()
   br label %52
 
 52:                                               ; preds = %49, %45
   %53 = phi i1 [ false, %45 ], [ %51, %49 ]
-  call void @__cflat_record_node(i64 106883543779016)
+  call void @increment_cond_branch()
   br i1 %53, label %54, label %61
 
 54:                                               ; preds = %52
-  call void @__cflat_record_node(i64 106883543779648)
+  call void @increment_uncond_branch()
   br label %55
 
 55:                                               ; preds = %54
@@ -1937,20 +1953,21 @@ define dso_local void @sglib_dllist_sort(ptr noundef %0) #0 {
   %59 = getelementptr inbounds %struct.dllist, ptr %58, i32 0, i32 1
   %60 = load ptr, ptr %59, align 8
   store ptr %60, ptr %10, align 8
-  call void @__cflat_record_node(i64 106883543779760)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %45, !llvm.loop !24
 
 61:                                               ; preds = %52
   %62 = load ptr, ptr %10, align 8
   %63 = icmp eq ptr %62, null
-  call void @__cflat_record_node(i64 106883543781168)
+  call void @increment_cond_branch()
   br i1 %63, label %64, label %67
 
 64:                                               ; preds = %61
   %65 = load ptr, ptr %7, align 8
   %66 = load ptr, ptr %11, align 8
   store ptr %65, ptr %66, align 8
-  call void @__cflat_record_node(i64 106883543781840)
+  call void @increment_uncond_branch()
   br label %154
 
 67:                                               ; preds = %61
@@ -1964,29 +1981,29 @@ define dso_local void @sglib_dllist_sort(ptr noundef %0) #0 {
   store i32 1, ptr %12, align 4
   %73 = load ptr, ptr %8, align 8
   store ptr %73, ptr %10, align 8
-  call void @__cflat_record_node(i64 106883543782368)
+  call void @increment_uncond_branch()
   br label %74
 
 74:                                               ; preds = %84, %67
   %75 = load i32, ptr %12, align 4
   %76 = load i32, ptr %13, align 4
   %77 = icmp slt i32 %75, %76
-  call void @__cflat_record_node(i64 106883543784096)
+  call void @increment_cond_branch()
   br i1 %77, label %78, label %81
 
 78:                                               ; preds = %74
   %79 = load ptr, ptr %10, align 8
   %80 = icmp ne ptr %79, null
-  call void @__cflat_record_node(i64 106883543784832)
+  call void @increment_uncond_branch()
   br label %81
 
 81:                                               ; preds = %78, %74
   %82 = phi i1 [ false, %74 ], [ %80, %78 ]
-  call void @__cflat_record_node(i64 106883543785192)
+  call void @increment_cond_branch()
   br i1 %82, label %83, label %90
 
 83:                                               ; preds = %81
-  call void @__cflat_record_node(i64 106883543785824)
+  call void @increment_uncond_branch()
   br label %84
 
 84:                                               ; preds = %83
@@ -1997,18 +2014,19 @@ define dso_local void @sglib_dllist_sort(ptr noundef %0) #0 {
   %88 = getelementptr inbounds %struct.dllist, ptr %87, i32 0, i32 1
   %89 = load ptr, ptr %88, align 8
   store ptr %89, ptr %10, align 8
-  call void @__cflat_record_node(i64 106883543785936)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %74, !llvm.loop !25
 
 90:                                               ; preds = %81
   %91 = load ptr, ptr %10, align 8
   %92 = icmp eq ptr %91, null
-  call void @__cflat_record_node(i64 106883543787344)
+  call void @increment_cond_branch()
   br i1 %92, label %93, label %94
 
 93:                                               ; preds = %90
   store ptr null, ptr %9, align 8
-  call void @__cflat_record_node(i64 106883543788048)
+  call void @increment_uncond_branch()
   br label %100
 
 94:                                               ; preds = %90
@@ -2019,28 +2037,28 @@ define dso_local void @sglib_dllist_sort(ptr noundef %0) #0 {
   %98 = load ptr, ptr %10, align 8
   %99 = getelementptr inbounds %struct.dllist, ptr %98, i32 0, i32 1
   store ptr null, ptr %99, align 8
-  call void @__cflat_record_node(i64 106883543788368)
+  call void @increment_uncond_branch()
   br label %100
 
 100:                                              ; preds = %94, %93
-  call void @__cflat_record_node(i64 106883543777200)
+  call void @increment_uncond_branch()
   br label %101
 
 101:                                              ; preds = %134, %100
   %102 = load ptr, ptr %7, align 8
   %103 = icmp ne ptr %102, null
-  call void @__cflat_record_node(i64 106883543777312)
+  call void @increment_cond_branch()
   br i1 %103, label %104, label %107
 
 104:                                              ; preds = %101
   %105 = load ptr, ptr %8, align 8
   %106 = icmp ne ptr %105, null
-  call void @__cflat_record_node(i64 106883543777920)
+  call void @increment_uncond_branch()
   br label %107
 
 107:                                              ; preds = %104, %101
   %108 = phi i1 [ false, %101 ], [ %106, %104 ]
-  call void @__cflat_record_node(i64 106883543792840)
+  call void @increment_cond_branch()
   br i1 %108, label %109, label %135
 
 109:                                              ; preds = %107
@@ -2052,7 +2070,7 @@ define dso_local void @sglib_dllist_sort(ptr noundef %0) #0 {
   %115 = load i32, ptr %114, align 8
   %116 = sub nsw i32 %112, %115
   %117 = icmp slt i32 %116, 0
-  call void @__cflat_record_node(i64 106883543793392)
+  call void @increment_cond_branch()
   br i1 %117, label %118, label %126
 
 118:                                              ; preds = %109
@@ -2066,7 +2084,7 @@ define dso_local void @sglib_dllist_sort(ptr noundef %0) #0 {
   %124 = getelementptr inbounds %struct.dllist, ptr %123, i32 0, i32 1
   %125 = load ptr, ptr %124, align 8
   store ptr %125, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543794912)
+  call void @increment_uncond_branch()
   br label %134
 
 126:                                              ; preds = %109
@@ -2080,42 +2098,43 @@ define dso_local void @sglib_dllist_sort(ptr noundef %0) #0 {
   %132 = getelementptr inbounds %struct.dllist, ptr %131, i32 0, i32 1
   %133 = load ptr, ptr %132, align 8
   store ptr %133, ptr %8, align 8
-  call void @__cflat_record_node(i64 106883543796608)
+  call void @increment_uncond_branch()
   br label %134
 
 134:                                              ; preds = %126, %118
-  call void @__cflat_record_node(i64 106883543798224)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %101, !llvm.loop !26
 
 135:                                              ; preds = %107
   %136 = load ptr, ptr %7, align 8
   %137 = icmp ne ptr %136, null
-  call void @__cflat_record_node(i64 106883543798528)
+  call void @increment_cond_branch()
   br i1 %137, label %138, label %141
 
 138:                                              ; preds = %135
   %139 = load ptr, ptr %7, align 8
   %140 = load ptr, ptr %11, align 8
   store ptr %139, ptr %140, align 8
-  call void @__cflat_record_node(i64 106883543799200)
+  call void @increment_uncond_branch()
   br label %144
 
 141:                                              ; preds = %135
   %142 = load ptr, ptr %8, align 8
   %143 = load ptr, ptr %11, align 8
   store ptr %142, ptr %143, align 8
-  call void @__cflat_record_node(i64 106883543799808)
+  call void @increment_uncond_branch()
   br label %144
 
 144:                                              ; preds = %141, %138
-  call void @__cflat_record_node(i64 106883543800416)
+  call void @increment_uncond_branch()
   br label %145
 
 145:                                              ; preds = %149, %144
   %146 = load ptr, ptr %11, align 8
   %147 = load ptr, ptr %146, align 8
   %148 = icmp ne ptr %147, null
-  call void @__cflat_record_node(i64 106883543800528)
+  call void @increment_cond_branch()
   br i1 %148, label %149, label %153
 
 149:                                              ; preds = %145
@@ -2123,16 +2142,18 @@ define dso_local void @sglib_dllist_sort(ptr noundef %0) #0 {
   %151 = load ptr, ptr %150, align 8
   %152 = getelementptr inbounds %struct.dllist, ptr %151, i32 0, i32 1
   store ptr %152, ptr %11, align 8
-  call void @__cflat_record_node(i64 106883543801264)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %145, !llvm.loop !27
 
 153:                                              ; preds = %145
   store i32 1, ptr %14, align 4
-  call void @__cflat_record_node(i64 106883543802272)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %39, !llvm.loop !28
 
 154:                                              ; preds = %64, %39
-  call void @__cflat_record_node(i64 106883543802848)
+  call void @increment_uncond_branch()
   br label %155
 
 155:                                              ; preds = %154
@@ -2140,7 +2161,8 @@ define dso_local void @sglib_dllist_sort(ptr noundef %0) #0 {
   %157 = load i32, ptr %13, align 4
   %158 = add nsw i32 %156, %157
   store i32 %158, ptr %13, align 4
-  call void @__cflat_record_node(i64 106883543802960)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %34, !llvm.loop !29
 
 159:                                              ; preds = %34
@@ -2149,13 +2171,13 @@ define dso_local void @sglib_dllist_sort(ptr noundef %0) #0 {
   store ptr null, ptr %15, align 8
   %161 = load ptr, ptr %3, align 8
   store ptr %161, ptr %16, align 8
-  call void @__cflat_record_node(i64 106883543803888)
+  call void @increment_uncond_branch()
   br label %162
 
 162:                                              ; preds = %170, %159
   %163 = load ptr, ptr %16, align 8
   %164 = icmp ne ptr %163, null
-  call void @__cflat_record_node(i64 106883543804816)
+  call void @increment_cond_branch()
   br i1 %164, label %165, label %174
 
 165:                                              ; preds = %162
@@ -2165,7 +2187,7 @@ define dso_local void @sglib_dllist_sort(ptr noundef %0) #0 {
   store ptr %166, ptr %168, align 8
   %169 = load ptr, ptr %16, align 8
   store ptr %169, ptr %15, align 8
-  call void @__cflat_record_node(i64 106883543805488)
+  call void @increment_uncond_branch()
   br label %170
 
 170:                                              ; preds = %165
@@ -2173,18 +2195,19 @@ define dso_local void @sglib_dllist_sort(ptr noundef %0) #0 {
   %172 = getelementptr inbounds %struct.dllist, ptr %171, i32 0, i32 1
   %173 = load ptr, ptr %172, align 8
   store ptr %173, ptr %16, align 8
-  call void @__cflat_record_node(i64 106883543806576)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %162, !llvm.loop !30
 
 174:                                              ; preds = %162
   %175 = load ptr, ptr %3, align 8
   %176 = load ptr, ptr %2, align 8
   store ptr %175, ptr %176, align 8
-  call void @__cflat_record_node(i64 106883543807552)
+  call void @increment_uncond_branch()
   br label %177
 
 177:                                              ; preds = %174, %1
-  call void @__cflat_call_return(i64 106883543766304)
+  call void @increment_return()
   ret void
 }
 
@@ -2204,25 +2227,25 @@ define dso_local i32 @sglib_dllist_len(ptr noundef %0) #0 {
   store ptr %0, ptr %2, align 8
   %13 = load ptr, ptr %2, align 8
   %14 = icmp eq ptr %13, null
-  call void @__cflat_record_node(i64 106883543788976)
+  call void @increment_cond_branch()
   br i1 %14, label %15, label %16
 
 15:                                               ; preds = %1
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883543791184)
+  call void @increment_uncond_branch()
   br label %47
 
 16:                                               ; preds = %1
   store i32 0, ptr %5, align 4
   %17 = load ptr, ptr %2, align 8
   store ptr %17, ptr %9, align 8
-  call void @__cflat_record_node(i64 106883543791536)
+  call void @increment_uncond_branch()
   br label %18
 
 18:                                               ; preds = %21, %16
   %19 = load ptr, ptr %9, align 8
   %20 = icmp ne ptr %19, null
-  call void @__cflat_record_node(i64 106883543792144)
+  call void @increment_cond_branch()
   br i1 %20, label %21, label %28
 
 21:                                               ; preds = %18
@@ -2235,7 +2258,8 @@ define dso_local i32 @sglib_dllist_len(ptr noundef %0) #0 {
   store i32 %26, ptr %5, align 4
   %27 = load ptr, ptr %8, align 8
   store ptr %27, ptr %9, align 8
-  call void @__cflat_record_node(i64 106883543808400)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %18, !llvm.loop !31
 
 28:                                               ; preds = %18
@@ -2246,13 +2270,13 @@ define dso_local i32 @sglib_dllist_len(ptr noundef %0) #0 {
   store i32 0, ptr %6, align 4
   %32 = load ptr, ptr %4, align 8
   store ptr %32, ptr %12, align 8
-  call void @__cflat_record_node(i64 106883543810096)
+  call void @increment_uncond_branch()
   br label %33
 
 33:                                               ; preds = %36, %28
   %34 = load ptr, ptr %12, align 8
   %35 = icmp ne ptr %34, null
-  call void @__cflat_record_node(i64 106883543811344)
+  call void @increment_cond_branch()
   br i1 %35, label %36, label %43
 
 36:                                               ; preds = %33
@@ -2265,7 +2289,8 @@ define dso_local i32 @sglib_dllist_len(ptr noundef %0) #0 {
   store i32 %41, ptr %6, align 4
   %42 = load ptr, ptr %11, align 8
   store ptr %42, ptr %12, align 8
-  call void @__cflat_record_node(i64 106883543812016)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %33, !llvm.loop !32
 
 43:                                               ; preds = %33
@@ -2273,12 +2298,12 @@ define dso_local i32 @sglib_dllist_len(ptr noundef %0) #0 {
   %45 = load i32, ptr %6, align 4
   %46 = add nsw i32 %44, %45
   store i32 %46, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883543813712)
+  call void @increment_uncond_branch()
   br label %47
 
 47:                                               ; preds = %43, %15
   %48 = load i32, ptr %3, align 4
-  call void @__cflat_call_return(i64 106883543788976)
+  call void @increment_return()
   ret i32 %48
 }
 
@@ -2295,7 +2320,7 @@ define dso_local void @sglib_dllist_reverse(ptr noundef %0) #0 {
   store ptr %8, ptr %3, align 8
   %9 = load ptr, ptr %3, align 8
   %10 = icmp ne ptr %9, null
-  call void @__cflat_record_node(i64 106883543814832)
+  call void @increment_cond_branch()
   br i1 %10, label %11, label %51
 
 11:                                               ; preds = %1
@@ -2303,13 +2328,13 @@ define dso_local void @sglib_dllist_reverse(ptr noundef %0) #0 {
   %13 = getelementptr inbounds %struct.dllist, ptr %12, i32 0, i32 1
   %14 = load ptr, ptr %13, align 8
   store ptr %14, ptr %4, align 8
-  call void @__cflat_record_node(i64 106883543816944)
+  call void @increment_uncond_branch()
   br label %15
 
 15:                                               ; preds = %18, %11
   %16 = load ptr, ptr %3, align 8
   %17 = icmp ne ptr %16, null
-  call void @__cflat_record_node(i64 106883543817744)
+  call void @increment_cond_branch()
   br i1 %17, label %18, label %32
 
 18:                                               ; preds = %15
@@ -2331,17 +2356,18 @@ define dso_local void @sglib_dllist_reverse(ptr noundef %0) #0 {
   store ptr %28, ptr %30, align 8
   %31 = load ptr, ptr %5, align 8
   store ptr %31, ptr %3, align 8
-  call void @__cflat_record_node(i64 106883543818416)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %15, !llvm.loop !33
 
 32:                                               ; preds = %15
-  call void @__cflat_record_node(i64 106883543821584)
+  call void @increment_uncond_branch()
   br label %33
 
 33:                                               ; preds = %36, %32
   %34 = load ptr, ptr %4, align 8
   %35 = icmp ne ptr %34, null
-  call void @__cflat_record_node(i64 106883543821696)
+  call void @increment_cond_branch()
   br i1 %35, label %36, label %50
 
 36:                                               ; preds = %33
@@ -2363,15 +2389,16 @@ define dso_local void @sglib_dllist_reverse(ptr noundef %0) #0 {
   store ptr %46, ptr %48, align 8
   %49 = load ptr, ptr %6, align 8
   store ptr %49, ptr %4, align 8
-  call void @__cflat_record_node(i64 106883543822368)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %33, !llvm.loop !34
 
 50:                                               ; preds = %33
-  call void @__cflat_record_node(i64 106883543827520)
+  call void @increment_uncond_branch()
   br label %51
 
 51:                                               ; preds = %50, %1
-  call void @__cflat_call_return(i64 106883543814832)
+  call void @increment_return()
   ret void
 }
 
@@ -2403,7 +2430,7 @@ define dso_local ptr @sglib_dllist_it_init_on_equal(ptr noundef %0, ptr noundef 
   store ptr %18, ptr %20, align 8
   %21 = load ptr, ptr %6, align 8
   %22 = icmp ne ptr %21, null
-  call void @__cflat_record_node(i64 106883543824976)
+  call void @increment_cond_branch()
   br i1 %22, label %23, label %29
 
 23:                                               ; preds = %4
@@ -2413,14 +2440,14 @@ define dso_local ptr @sglib_dllist_it_init_on_equal(ptr noundef %0, ptr noundef 
   %27 = load ptr, ptr %5, align 8
   %28 = getelementptr inbounds %struct.sglib_dllist_iterator, ptr %27, i32 0, i32 2
   store ptr %26, ptr %28, align 8
-  call void @__cflat_record_node(i64 106883543830432)
+  call void @increment_uncond_branch()
   br label %29
 
 29:                                               ; preds = %23, %4
   %30 = load ptr, ptr %5, align 8
-  call void @__cflat_call_enter(i64 106883543831600, i64 106883543831472)
+  call void @increment_direct_call()
   %31 = call ptr @sglib_dllist_it_next(ptr noundef %30)
-  call void @__cflat_call_return(i64 106883543824976)
+  call void @increment_return()
   ret ptr %31
 }
 
@@ -2442,7 +2469,7 @@ define dso_local ptr @sglib_dllist_it_next(ptr noundef %0) #0 {
   %12 = getelementptr inbounds %struct.sglib_dllist_iterator, ptr %11, i32 0, i32 3
   %13 = load ptr, ptr %12, align 8
   %14 = icmp ne ptr %13, null
-  call void @__cflat_record_node(i64 106883543831600)
+  call void @increment_cond_branch()
   br i1 %14, label %15, label %38
 
 15:                                               ; preds = %1
@@ -2454,13 +2481,13 @@ define dso_local ptr @sglib_dllist_it_next(ptr noundef %0) #0 {
   %20 = getelementptr inbounds %struct.sglib_dllist_iterator, ptr %19, i32 0, i32 3
   %21 = load ptr, ptr %20, align 8
   store ptr %21, ptr %5, align 8
-  call void @__cflat_record_node(i64 106883543835200)
+  call void @increment_uncond_branch()
   br label %22
 
 22:                                               ; preds = %33, %15
   %23 = load ptr, ptr %3, align 8
   %24 = icmp ne ptr %23, null
-  call void @__cflat_record_node(i64 106883543836608)
+  call void @increment_cond_branch()
   br i1 %24, label %25, label %31
 
 25:                                               ; preds = %22
@@ -2469,12 +2496,12 @@ define dso_local ptr @sglib_dllist_it_next(ptr noundef %0) #0 {
   %28 = load ptr, ptr %3, align 8
   %29 = call i32 %26(ptr noundef %27, ptr noundef %28)
   %30 = icmp ne i32 %29, 0
-  call void @__cflat_record_node(i64 106883543837280)
+  call void @increment_uncond_branch()
   br label %31
 
 31:                                               ; preds = %25, %22
   %32 = phi i1 [ false, %22 ], [ %30, %25 ]
-  call void @__cflat_record_node(i64 106883543831704)
+  call void @increment_cond_branch()
   br i1 %32, label %33, label %37
 
 33:                                               ; preds = %31
@@ -2482,17 +2509,18 @@ define dso_local ptr @sglib_dllist_it_next(ptr noundef %0) #0 {
   %35 = getelementptr inbounds %struct.dllist, ptr %34, i32 0, i32 2
   %36 = load ptr, ptr %35, align 8
   store ptr %36, ptr %3, align 8
-  call void @__cflat_record_node(i64 106883543838624)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %22, !llvm.loop !35
 
 37:                                               ; preds = %31
-  call void @__cflat_record_node(i64 106883543839600)
+  call void @increment_uncond_branch()
   br label %38
 
 38:                                               ; preds = %37, %1
   %39 = load ptr, ptr %3, align 8
   %40 = icmp ne ptr %39, null
-  call void @__cflat_record_node(i64 106883543839712)
+  call void @increment_cond_branch()
   br i1 %40, label %41, label %47
 
 41:                                               ; preds = %38
@@ -2502,7 +2530,7 @@ define dso_local ptr @sglib_dllist_it_next(ptr noundef %0) #0 {
   %45 = load ptr, ptr %2, align 8
   %46 = getelementptr inbounds %struct.sglib_dllist_iterator, ptr %45, i32 0, i32 1
   store ptr %44, ptr %46, align 8
-  call void @__cflat_record_node(i64 106883543840320)
+  call void @increment_uncond_branch()
   br label %90
 
 47:                                               ; preds = %38
@@ -2517,7 +2545,7 @@ define dso_local ptr @sglib_dllist_it_next(ptr noundef %0) #0 {
   %54 = getelementptr inbounds %struct.sglib_dllist_iterator, ptr %53, i32 0, i32 3
   %55 = load ptr, ptr %54, align 8
   %56 = icmp ne ptr %55, null
-  call void @__cflat_record_node(i64 106883543843504)
+  call void @increment_cond_branch()
   br i1 %56, label %57, label %80
 
 57:                                               ; preds = %47
@@ -2529,13 +2557,13 @@ define dso_local ptr @sglib_dllist_it_next(ptr noundef %0) #0 {
   %62 = getelementptr inbounds %struct.sglib_dllist_iterator, ptr %61, i32 0, i32 3
   %63 = load ptr, ptr %62, align 8
   store ptr %63, ptr %5, align 8
-  call void @__cflat_record_node(i64 106883543845584)
+  call void @increment_uncond_branch()
   br label %64
 
 64:                                               ; preds = %75, %57
   %65 = load ptr, ptr %3, align 8
   %66 = icmp ne ptr %65, null
-  call void @__cflat_record_node(i64 106883543846992)
+  call void @increment_cond_branch()
   br i1 %66, label %67, label %73
 
 67:                                               ; preds = %64
@@ -2544,12 +2572,12 @@ define dso_local ptr @sglib_dllist_it_next(ptr noundef %0) #0 {
   %70 = load ptr, ptr %4, align 8
   %71 = call i32 %68(ptr noundef %69, ptr noundef %70)
   %72 = icmp ne i32 %71, 0
-  call void @__cflat_record_node(i64 106883543847664)
+  call void @increment_uncond_branch()
   br label %73
 
 73:                                               ; preds = %67, %64
   %74 = phi i1 [ false, %64 ], [ %72, %67 ]
-  call void @__cflat_record_node(i64 106883543848552)
+  call void @increment_cond_branch()
   br i1 %74, label %75, label %79
 
 75:                                               ; preds = %73
@@ -2557,17 +2585,18 @@ define dso_local ptr @sglib_dllist_it_next(ptr noundef %0) #0 {
   %77 = getelementptr inbounds %struct.dllist, ptr %76, i32 0, i32 1
   %78 = load ptr, ptr %77, align 8
   store ptr %78, ptr %3, align 8
-  call void @__cflat_record_node(i64 106883543849104)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %64, !llvm.loop !36
 
 79:                                               ; preds = %73
-  call void @__cflat_record_node(i64 106883543850080)
+  call void @increment_uncond_branch()
   br label %80
 
 80:                                               ; preds = %79, %47
   %81 = load ptr, ptr %3, align 8
   %82 = icmp ne ptr %81, null
-  call void @__cflat_record_node(i64 106883543850192)
+  call void @increment_cond_branch()
   br i1 %82, label %83, label %89
 
 83:                                               ; preds = %80
@@ -2577,11 +2606,11 @@ define dso_local ptr @sglib_dllist_it_next(ptr noundef %0) #0 {
   %87 = load ptr, ptr %2, align 8
   %88 = getelementptr inbounds %struct.sglib_dllist_iterator, ptr %87, i32 0, i32 2
   store ptr %86, ptr %88, align 8
-  call void @__cflat_record_node(i64 106883543850800)
+  call void @increment_uncond_branch()
   br label %89
 
 89:                                               ; preds = %83, %80
-  call void @__cflat_record_node(i64 106883543851840)
+  call void @increment_uncond_branch()
   br label %90
 
 90:                                               ; preds = %89, %41
@@ -2590,7 +2619,7 @@ define dso_local ptr @sglib_dllist_it_next(ptr noundef %0) #0 {
   %93 = getelementptr inbounds %struct.sglib_dllist_iterator, ptr %92, i32 0, i32 0
   store ptr %91, ptr %93, align 8
   %94 = load ptr, ptr %3, align 8
-  call void @__cflat_call_return(i64 106883543831600)
+  call void @increment_return()
   ret ptr %94
 }
 
@@ -2602,9 +2631,9 @@ define dso_local ptr @sglib_dllist_it_init(ptr noundef %0, ptr noundef %1) #0 {
   store ptr %1, ptr %4, align 8
   %5 = load ptr, ptr %3, align 8
   %6 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883543824976, i64 106883543841968)
+  call void @increment_direct_call()
   %7 = call ptr @sglib_dllist_it_init_on_equal(ptr noundef %5, ptr noundef %6, ptr noundef null, ptr noundef null)
-  call void @__cflat_call_return(i64 106883543841968)
+  call void @increment_return()
   ret ptr %7
 }
 
@@ -2615,7 +2644,7 @@ define dso_local ptr @sglib_dllist_it_current(ptr noundef %0) #0 {
   %3 = load ptr, ptr %2, align 8
   %4 = getelementptr inbounds %struct.sglib_dllist_iterator, ptr %3, i32 0, i32 0
   %5 = load ptr, ptr %4, align 8
-  call void @__cflat_call_return(i64 106883543853040)
+  call void @increment_return()
   ret ptr %5
 }
 
@@ -2626,7 +2655,7 @@ define dso_local i32 @ilist_hash_function(ptr noundef %0) #0 {
   %3 = load ptr, ptr %2, align 8
   %4 = getelementptr inbounds %struct.ilist, ptr %3, i32 0, i32 0
   %5 = load i32, ptr %4, align 8
-  call void @__cflat_call_return(i64 106883543854368)
+  call void @increment_return()
   ret i32 %5
 }
 
@@ -2640,29 +2669,29 @@ define dso_local i32 @sglib_ilist_is_member(ptr noundef %0, ptr noundef %1) #0 {
   store ptr %1, ptr %4, align 8
   %7 = load ptr, ptr %3, align 8
   store ptr %7, ptr %6, align 8
-  call void @__cflat_record_node(i64 106883543855744)
+  call void @increment_uncond_branch()
   br label %8
 
 8:                                                ; preds = %18, %2
   %9 = load ptr, ptr %6, align 8
   %10 = icmp ne ptr %9, null
-  call void @__cflat_record_node(i64 106883543857056)
+  call void @increment_cond_branch()
   br i1 %10, label %11, label %15
 
 11:                                               ; preds = %8
   %12 = load ptr, ptr %6, align 8
   %13 = load ptr, ptr %4, align 8
   %14 = icmp ne ptr %12, %13
-  call void @__cflat_record_node(i64 106883543857664)
+  call void @increment_uncond_branch()
   br label %15
 
 15:                                               ; preds = %11, %8
   %16 = phi i1 [ false, %8 ], [ %14, %11 ]
-  call void @__cflat_record_node(i64 106883543858152)
+  call void @increment_cond_branch()
   br i1 %16, label %17, label %22
 
 17:                                               ; preds = %15
-  call void @__cflat_record_node(i64 106883543858784)
+  call void @increment_uncond_branch()
   br label %18
 
 18:                                               ; preds = %17
@@ -2670,7 +2699,8 @@ define dso_local i32 @sglib_ilist_is_member(ptr noundef %0, ptr noundef %1) #0 {
   %20 = getelementptr inbounds %struct.ilist, ptr %19, i32 0, i32 1
   %21 = load ptr, ptr %20, align 8
   store ptr %21, ptr %6, align 8
-  call void @__cflat_record_node(i64 106883543858896)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %8, !llvm.loop !37
 
 22:                                               ; preds = %15
@@ -2679,7 +2709,7 @@ define dso_local i32 @sglib_ilist_is_member(ptr noundef %0, ptr noundef %1) #0 {
   %25 = zext i1 %24 to i32
   store i32 %25, ptr %5, align 4
   %26 = load i32, ptr %5, align 4
-  call void @__cflat_call_return(i64 106883543855744)
+  call void @increment_return()
   ret i32 %26
 }
 
@@ -2693,13 +2723,13 @@ define dso_local ptr @sglib_ilist_find_member(ptr noundef %0, ptr noundef %1) #0
   store ptr %1, ptr %4, align 8
   %7 = load ptr, ptr %3, align 8
   store ptr %7, ptr %6, align 8
-  call void @__cflat_record_node(i64 106883543861120)
+  call void @increment_uncond_branch()
   br label %8
 
 8:                                                ; preds = %23, %2
   %9 = load ptr, ptr %6, align 8
   %10 = icmp ne ptr %9, null
-  call void @__cflat_record_node(i64 106883543862432)
+  call void @increment_cond_branch()
   br i1 %10, label %11, label %20
 
 11:                                               ; preds = %8
@@ -2711,16 +2741,16 @@ define dso_local ptr @sglib_ilist_find_member(ptr noundef %0, ptr noundef %1) #0
   %17 = load i32, ptr %16, align 8
   %18 = sub nsw i32 %14, %17
   %19 = icmp ne i32 %18, 0
-  call void @__cflat_record_node(i64 106883543863104)
+  call void @increment_uncond_branch()
   br label %20
 
 20:                                               ; preds = %11, %8
   %21 = phi i1 [ false, %8 ], [ %19, %11 ]
-  call void @__cflat_record_node(i64 106883543864376)
+  call void @increment_cond_branch()
   br i1 %21, label %22, label %27
 
 22:                                               ; preds = %20
-  call void @__cflat_record_node(i64 106883543865008)
+  call void @increment_uncond_branch()
   br label %23
 
 23:                                               ; preds = %22
@@ -2728,14 +2758,15 @@ define dso_local ptr @sglib_ilist_find_member(ptr noundef %0, ptr noundef %1) #0
   %25 = getelementptr inbounds %struct.ilist, ptr %24, i32 0, i32 1
   %26 = load ptr, ptr %25, align 8
   store ptr %26, ptr %6, align 8
-  call void @__cflat_record_node(i64 106883543865120)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %8, !llvm.loop !38
 
 27:                                               ; preds = %20
   %28 = load ptr, ptr %6, align 8
   store ptr %28, ptr %5, align 8
   %29 = load ptr, ptr %5, align 8
-  call void @__cflat_call_return(i64 106883543861120)
+  call void @increment_return()
   ret ptr %29
 }
 
@@ -2751,13 +2782,13 @@ define dso_local i32 @sglib_ilist_add_if_not_member(ptr noundef %0, ptr noundef 
   %8 = load ptr, ptr %4, align 8
   %9 = load ptr, ptr %8, align 8
   store ptr %9, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543867248)
+  call void @increment_uncond_branch()
   br label %10
 
 10:                                               ; preds = %25, %3
   %11 = load ptr, ptr %7, align 8
   %12 = icmp ne ptr %11, null
-  call void @__cflat_record_node(i64 106883543868848)
+  call void @increment_cond_branch()
   br i1 %12, label %13, label %22
 
 13:                                               ; preds = %10
@@ -2769,16 +2800,16 @@ define dso_local i32 @sglib_ilist_add_if_not_member(ptr noundef %0, ptr noundef 
   %19 = load i32, ptr %18, align 8
   %20 = sub nsw i32 %16, %19
   %21 = icmp ne i32 %20, 0
-  call void @__cflat_record_node(i64 106883543869520)
+  call void @increment_uncond_branch()
   br label %22
 
 22:                                               ; preds = %13, %10
   %23 = phi i1 [ false, %10 ], [ %21, %13 ]
-  call void @__cflat_record_node(i64 106883543870792)
+  call void @increment_cond_branch()
   br i1 %23, label %24, label %29
 
 24:                                               ; preds = %22
-  call void @__cflat_record_node(i64 106883543871424)
+  call void @increment_uncond_branch()
   br label %25
 
 25:                                               ; preds = %24
@@ -2786,7 +2817,8 @@ define dso_local i32 @sglib_ilist_add_if_not_member(ptr noundef %0, ptr noundef 
   %27 = getelementptr inbounds %struct.ilist, ptr %26, i32 0, i32 1
   %28 = load ptr, ptr %27, align 8
   store ptr %28, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543871536)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %10, !llvm.loop !39
 
 29:                                               ; preds = %22
@@ -2795,7 +2827,7 @@ define dso_local i32 @sglib_ilist_add_if_not_member(ptr noundef %0, ptr noundef 
   store ptr %30, ptr %31, align 8
   %32 = load ptr, ptr %7, align 8
   %33 = icmp eq ptr %32, null
-  call void @__cflat_record_node(i64 106883543872512)
+  call void @increment_cond_branch()
   br i1 %33, label %34, label %41
 
 34:                                               ; preds = %29
@@ -2807,7 +2839,7 @@ define dso_local i32 @sglib_ilist_add_if_not_member(ptr noundef %0, ptr noundef 
   %39 = load ptr, ptr %5, align 8
   %40 = load ptr, ptr %4, align 8
   store ptr %39, ptr %40, align 8
-  call void @__cflat_record_node(i64 106883543873600)
+  call void @increment_uncond_branch()
   br label %41
 
 41:                                               ; preds = %34, %29
@@ -2815,7 +2847,7 @@ define dso_local i32 @sglib_ilist_add_if_not_member(ptr noundef %0, ptr noundef 
   %43 = load ptr, ptr %42, align 8
   %44 = icmp eq ptr %43, null
   %45 = zext i1 %44 to i32
-  call void @__cflat_call_return(i64 106883543867248)
+  call void @increment_return()
   ret i32 %45
 }
 
@@ -2833,7 +2865,7 @@ define dso_local void @sglib_ilist_add(ptr noundef %0, ptr noundef %1) #0 {
   %9 = load ptr, ptr %4, align 8
   %10 = load ptr, ptr %3, align 8
   store ptr %9, ptr %10, align 8
-  call void @__cflat_call_return(i64 106883543875920)
+  call void @increment_return()
   ret void
 }
 
@@ -2847,21 +2879,21 @@ define dso_local void @sglib_ilist_concat(ptr noundef %0, ptr noundef %1) #0 {
   %6 = load ptr, ptr %3, align 8
   %7 = load ptr, ptr %6, align 8
   %8 = icmp eq ptr %7, null
-  call void @__cflat_record_node(i64 106883543878304)
+  call void @increment_cond_branch()
   br i1 %8, label %9, label %12
 
 9:                                                ; preds = %2
   %10 = load ptr, ptr %4, align 8
   %11 = load ptr, ptr %3, align 8
   store ptr %10, ptr %11, align 8
-  call void @__cflat_record_node(i64 106883543879744)
+  call void @increment_uncond_branch()
   br label %29
 
 12:                                               ; preds = %2
   %13 = load ptr, ptr %3, align 8
   %14 = load ptr, ptr %13, align 8
   store ptr %14, ptr %5, align 8
-  call void @__cflat_record_node(i64 106883543880352)
+  call void @increment_uncond_branch()
   br label %15
 
 15:                                               ; preds = %21, %12
@@ -2869,11 +2901,11 @@ define dso_local void @sglib_ilist_concat(ptr noundef %0, ptr noundef %1) #0 {
   %17 = getelementptr inbounds %struct.ilist, ptr %16, i32 0, i32 1
   %18 = load ptr, ptr %17, align 8
   %19 = icmp ne ptr %18, null
-  call void @__cflat_record_node(i64 106883543880960)
+  call void @increment_cond_branch()
   br i1 %19, label %20, label %25
 
 20:                                               ; preds = %15
-  call void @__cflat_record_node(i64 106883543882032)
+  call void @increment_uncond_branch()
   br label %21
 
 21:                                               ; preds = %20
@@ -2881,7 +2913,8 @@ define dso_local void @sglib_ilist_concat(ptr noundef %0, ptr noundef %1) #0 {
   %23 = getelementptr inbounds %struct.ilist, ptr %22, i32 0, i32 1
   %24 = load ptr, ptr %23, align 8
   store ptr %24, ptr %5, align 8
-  call void @__cflat_record_node(i64 106883543882144)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %15, !llvm.loop !40
 
 25:                                               ; preds = %15
@@ -2889,11 +2922,11 @@ define dso_local void @sglib_ilist_concat(ptr noundef %0, ptr noundef %1) #0 {
   %27 = load ptr, ptr %5, align 8
   %28 = getelementptr inbounds %struct.ilist, ptr %27, i32 0, i32 1
   store ptr %26, ptr %28, align 8
-  call void @__cflat_record_node(i64 106883543883120)
+  call void @increment_uncond_branch()
   br label %29
 
 29:                                               ; preds = %25, %9
-  call void @__cflat_call_return(i64 106883543878304)
+  call void @increment_return()
   ret void
 }
 
@@ -2906,14 +2939,14 @@ define dso_local void @sglib_ilist_delete(ptr noundef %0, ptr noundef %1) #0 {
   store ptr %1, ptr %4, align 8
   %6 = load ptr, ptr %3, align 8
   store ptr %6, ptr %5, align 8
-  call void @__cflat_record_node(i64 106883543886512)
+  call void @increment_uncond_branch()
   br label %7
 
 7:                                                ; preds = %19, %2
   %8 = load ptr, ptr %5, align 8
   %9 = load ptr, ptr %8, align 8
   %10 = icmp ne ptr %9, null
-  call void @__cflat_record_node(i64 106883543887696)
+  call void @increment_cond_branch()
   br i1 %10, label %11, label %16
 
 11:                                               ; preds = %7
@@ -2921,16 +2954,16 @@ define dso_local void @sglib_ilist_delete(ptr noundef %0, ptr noundef %1) #0 {
   %13 = load ptr, ptr %12, align 8
   %14 = load ptr, ptr %4, align 8
   %15 = icmp ne ptr %13, %14
-  call void @__cflat_record_node(i64 106883543888432)
+  call void @increment_uncond_branch()
   br label %16
 
 16:                                               ; preds = %11, %7
   %17 = phi i1 [ false, %7 ], [ %15, %11 ]
-  call void @__cflat_record_node(i64 106883543889048)
+  call void @increment_cond_branch()
   br i1 %17, label %18, label %23
 
 18:                                               ; preds = %16
-  call void @__cflat_record_node(i64 106883543889680)
+  call void @increment_uncond_branch()
   br label %19
 
 19:                                               ; preds = %18
@@ -2938,7 +2971,8 @@ define dso_local void @sglib_ilist_delete(ptr noundef %0, ptr noundef %1) #0 {
   %21 = load ptr, ptr %20, align 8
   %22 = getelementptr inbounds %struct.ilist, ptr %21, i32 0, i32 1
   store ptr %22, ptr %5, align 8
-  call void @__cflat_record_node(i64 106883543889792)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %7, !llvm.loop !41
 
 23:                                               ; preds = %16
@@ -2948,7 +2982,7 @@ define dso_local void @sglib_ilist_delete(ptr noundef %0, ptr noundef %1) #0 {
   %27 = load ptr, ptr %26, align 8
   %28 = load ptr, ptr %5, align 8
   store ptr %27, ptr %28, align 8
-  call void @__cflat_call_return(i64 106883543886512)
+  call void @increment_return()
   ret void
 }
 
@@ -2963,14 +2997,14 @@ define dso_local i32 @sglib_ilist_delete_if_member(ptr noundef %0, ptr noundef %
   store ptr %2, ptr %6, align 8
   %8 = load ptr, ptr %4, align 8
   store ptr %8, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543893904)
+  call void @increment_uncond_branch()
   br label %9
 
 9:                                                ; preds = %26, %3
   %10 = load ptr, ptr %7, align 8
   %11 = load ptr, ptr %10, align 8
   %12 = icmp ne ptr %11, null
-  call void @__cflat_record_node(i64 106883543895376)
+  call void @increment_cond_branch()
   br i1 %12, label %13, label %23
 
 13:                                               ; preds = %9
@@ -2983,16 +3017,16 @@ define dso_local i32 @sglib_ilist_delete_if_member(ptr noundef %0, ptr noundef %
   %20 = load i32, ptr %19, align 8
   %21 = sub nsw i32 %17, %20
   %22 = icmp ne i32 %21, 0
-  call void @__cflat_record_node(i64 106883543896176)
+  call void @increment_uncond_branch()
   br label %23
 
 23:                                               ; preds = %13, %9
   %24 = phi i1 [ false, %9 ], [ %22, %13 ]
-  call void @__cflat_record_node(i64 106883543897576)
+  call void @increment_cond_branch()
   br i1 %24, label %25, label %30
 
 25:                                               ; preds = %23
-  call void @__cflat_record_node(i64 106883543898208)
+  call void @increment_uncond_branch()
   br label %26
 
 26:                                               ; preds = %25
@@ -3000,7 +3034,8 @@ define dso_local i32 @sglib_ilist_delete_if_member(ptr noundef %0, ptr noundef %
   %28 = load ptr, ptr %27, align 8
   %29 = getelementptr inbounds %struct.ilist, ptr %28, i32 0, i32 1
   store ptr %29, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543898320)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %9, !llvm.loop !42
 
 30:                                               ; preds = %23
@@ -3011,7 +3046,7 @@ define dso_local i32 @sglib_ilist_delete_if_member(ptr noundef %0, ptr noundef %
   %34 = load ptr, ptr %7, align 8
   %35 = load ptr, ptr %34, align 8
   %36 = icmp ne ptr %35, null
-  call void @__cflat_record_node(i64 106883543899296)
+  call void @increment_cond_branch()
   br i1 %36, label %37, label %43
 
 37:                                               ; preds = %30
@@ -3021,7 +3056,7 @@ define dso_local i32 @sglib_ilist_delete_if_member(ptr noundef %0, ptr noundef %
   %41 = load ptr, ptr %40, align 8
   %42 = load ptr, ptr %7, align 8
   store ptr %41, ptr %42, align 8
-  call void @__cflat_record_node(i64 106883543900640)
+  call void @increment_uncond_branch()
   br label %43
 
 43:                                               ; preds = %37, %30
@@ -3029,7 +3064,7 @@ define dso_local i32 @sglib_ilist_delete_if_member(ptr noundef %0, ptr noundef %
   %45 = load ptr, ptr %44, align 8
   %46 = icmp ne ptr %45, null
   %47 = zext i1 %46 to i32
-  call void @__cflat_call_return(i64 106883543893904)
+  call void @increment_return()
   ret i32 %47
 }
 
@@ -3051,13 +3086,13 @@ define dso_local void @sglib_ilist_sort(ptr noundef %0) #0 {
   store ptr %13, ptr %3, align 8
   store i32 1, ptr %11, align 4
   store i32 1, ptr %10, align 4
-  call void @__cflat_record_node(i64 106883543902560)
+  call void @increment_uncond_branch()
   br label %14
 
 14:                                               ; preds = %135, %1
   %15 = load i32, ptr %11, align 4
   %16 = icmp ne i32 %15, 0
-  call void @__cflat_record_node(i64 106883543905104)
+  call void @increment_cond_branch()
   br i1 %16, label %17, label %139
 
 17:                                               ; preds = %14
@@ -3066,13 +3101,13 @@ define dso_local void @sglib_ilist_sort(ptr noundef %0) #0 {
   store ptr null, ptr %3, align 8
   store ptr %3, ptr %8, align 8
   store i32 0, ptr %11, align 4
-  call void @__cflat_record_node(i64 106883543905712)
+  call void @increment_uncond_branch()
   br label %19
 
 19:                                               ; preds = %133, %17
   %20 = load ptr, ptr %6, align 8
   %21 = icmp ne ptr %20, null
-  call void @__cflat_record_node(i64 106883543906672)
+  call void @increment_cond_branch()
   br i1 %21, label %22, label %134
 
 22:                                               ; preds = %19
@@ -3081,29 +3116,29 @@ define dso_local void @sglib_ilist_sort(ptr noundef %0) #0 {
   store i32 1, ptr %9, align 4
   %24 = load ptr, ptr %4, align 8
   store ptr %24, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543907280)
+  call void @increment_uncond_branch()
   br label %25
 
 25:                                               ; preds = %35, %22
   %26 = load i32, ptr %9, align 4
   %27 = load i32, ptr %10, align 4
   %28 = icmp slt i32 %26, %27
-  call void @__cflat_record_node(i64 106883543908208)
+  call void @increment_cond_branch()
   br i1 %28, label %29, label %32
 
 29:                                               ; preds = %25
   %30 = load ptr, ptr %7, align 8
   %31 = icmp ne ptr %30, null
-  call void @__cflat_record_node(i64 106883543909008)
+  call void @increment_uncond_branch()
   br label %32
 
 32:                                               ; preds = %29, %25
   %33 = phi i1 [ false, %25 ], [ %31, %29 ]
-  call void @__cflat_record_node(i64 106883543909368)
+  call void @increment_cond_branch()
   br i1 %33, label %34, label %41
 
 34:                                               ; preds = %32
-  call void @__cflat_record_node(i64 106883543910000)
+  call void @increment_uncond_branch()
   br label %35
 
 35:                                               ; preds = %34
@@ -3114,20 +3149,21 @@ define dso_local void @sglib_ilist_sort(ptr noundef %0) #0 {
   %39 = getelementptr inbounds %struct.ilist, ptr %38, i32 0, i32 1
   %40 = load ptr, ptr %39, align 8
   store ptr %40, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543910112)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %25, !llvm.loop !43
 
 41:                                               ; preds = %32
   %42 = load ptr, ptr %7, align 8
   %43 = icmp eq ptr %42, null
-  call void @__cflat_record_node(i64 106883543911520)
+  call void @increment_cond_branch()
   br i1 %43, label %44, label %47
 
 44:                                               ; preds = %41
   %45 = load ptr, ptr %4, align 8
   %46 = load ptr, ptr %8, align 8
   store ptr %45, ptr %46, align 8
-  call void @__cflat_record_node(i64 106883543912192)
+  call void @increment_uncond_branch()
   br label %134
 
 47:                                               ; preds = %41
@@ -3141,29 +3177,29 @@ define dso_local void @sglib_ilist_sort(ptr noundef %0) #0 {
   store i32 1, ptr %9, align 4
   %53 = load ptr, ptr %5, align 8
   store ptr %53, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543914784)
+  call void @increment_uncond_branch()
   br label %54
 
 54:                                               ; preds = %64, %47
   %55 = load i32, ptr %9, align 4
   %56 = load i32, ptr %10, align 4
   %57 = icmp slt i32 %55, %56
-  call void @__cflat_record_node(i64 106883543916512)
+  call void @increment_cond_branch()
   br i1 %57, label %58, label %61
 
 58:                                               ; preds = %54
   %59 = load ptr, ptr %7, align 8
   %60 = icmp ne ptr %59, null
-  call void @__cflat_record_node(i64 106883543917248)
+  call void @increment_uncond_branch()
   br label %61
 
 61:                                               ; preds = %58, %54
   %62 = phi i1 [ false, %54 ], [ %60, %58 ]
-  call void @__cflat_record_node(i64 106883543917608)
+  call void @increment_cond_branch()
   br i1 %62, label %63, label %70
 
 63:                                               ; preds = %61
-  call void @__cflat_record_node(i64 106883543918240)
+  call void @increment_uncond_branch()
   br label %64
 
 64:                                               ; preds = %63
@@ -3174,18 +3210,19 @@ define dso_local void @sglib_ilist_sort(ptr noundef %0) #0 {
   %68 = getelementptr inbounds %struct.ilist, ptr %67, i32 0, i32 1
   %69 = load ptr, ptr %68, align 8
   store ptr %69, ptr %7, align 8
-  call void @__cflat_record_node(i64 106883543918352)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %54, !llvm.loop !44
 
 70:                                               ; preds = %61
   %71 = load ptr, ptr %7, align 8
   %72 = icmp eq ptr %71, null
-  call void @__cflat_record_node(i64 106883543919760)
+  call void @increment_cond_branch()
   br i1 %72, label %73, label %74
 
 73:                                               ; preds = %70
   store ptr null, ptr %6, align 8
-  call void @__cflat_record_node(i64 106883543920464)
+  call void @increment_uncond_branch()
   br label %80
 
 74:                                               ; preds = %70
@@ -3196,28 +3233,28 @@ define dso_local void @sglib_ilist_sort(ptr noundef %0) #0 {
   %78 = load ptr, ptr %7, align 8
   %79 = getelementptr inbounds %struct.ilist, ptr %78, i32 0, i32 1
   store ptr null, ptr %79, align 8
-  call void @__cflat_record_node(i64 106883543920784)
+  call void @increment_uncond_branch()
   br label %80
 
 80:                                               ; preds = %74, %73
-  call void @__cflat_record_node(i64 106883543922064)
+  call void @increment_uncond_branch()
   br label %81
 
 81:                                               ; preds = %114, %80
   %82 = load ptr, ptr %4, align 8
   %83 = icmp ne ptr %82, null
-  call void @__cflat_record_node(i64 106883543922176)
+  call void @increment_cond_branch()
   br i1 %83, label %84, label %87
 
 84:                                               ; preds = %81
   %85 = load ptr, ptr %5, align 8
   %86 = icmp ne ptr %85, null
-  call void @__cflat_record_node(i64 106883543922784)
+  call void @increment_uncond_branch()
   br label %87
 
 87:                                               ; preds = %84, %81
   %88 = phi i1 [ false, %81 ], [ %86, %84 ]
-  call void @__cflat_record_node(i64 106883543923144)
+  call void @increment_cond_branch()
   br i1 %88, label %89, label %115
 
 89:                                               ; preds = %87
@@ -3229,7 +3266,7 @@ define dso_local void @sglib_ilist_sort(ptr noundef %0) #0 {
   %95 = load i32, ptr %94, align 8
   %96 = sub nsw i32 %92, %95
   %97 = icmp slt i32 %96, 0
-  call void @__cflat_record_node(i64 106883543923696)
+  call void @increment_cond_branch()
   br i1 %97, label %98, label %106
 
 98:                                               ; preds = %89
@@ -3243,7 +3280,7 @@ define dso_local void @sglib_ilist_sort(ptr noundef %0) #0 {
   %104 = getelementptr inbounds %struct.ilist, ptr %103, i32 0, i32 1
   %105 = load ptr, ptr %104, align 8
   store ptr %105, ptr %4, align 8
-  call void @__cflat_record_node(i64 106883543913408)
+  call void @increment_uncond_branch()
   br label %114
 
 106:                                              ; preds = %89
@@ -3257,42 +3294,43 @@ define dso_local void @sglib_ilist_sort(ptr noundef %0) #0 {
   %112 = getelementptr inbounds %struct.ilist, ptr %111, i32 0, i32 1
   %113 = load ptr, ptr %112, align 8
   store ptr %113, ptr %5, align 8
-  call void @__cflat_record_node(i64 106883543929056)
+  call void @increment_uncond_branch()
   br label %114
 
 114:                                              ; preds = %106, %98
-  call void @__cflat_record_node(i64 106883543930672)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %81, !llvm.loop !45
 
 115:                                              ; preds = %87
   %116 = load ptr, ptr %4, align 8
   %117 = icmp ne ptr %116, null
-  call void @__cflat_record_node(i64 106883543930976)
+  call void @increment_cond_branch()
   br i1 %117, label %118, label %121
 
 118:                                              ; preds = %115
   %119 = load ptr, ptr %4, align 8
   %120 = load ptr, ptr %8, align 8
   store ptr %119, ptr %120, align 8
-  call void @__cflat_record_node(i64 106883543931648)
+  call void @increment_uncond_branch()
   br label %124
 
 121:                                              ; preds = %115
   %122 = load ptr, ptr %5, align 8
   %123 = load ptr, ptr %8, align 8
   store ptr %122, ptr %123, align 8
-  call void @__cflat_record_node(i64 106883543932256)
+  call void @increment_uncond_branch()
   br label %124
 
 124:                                              ; preds = %121, %118
-  call void @__cflat_record_node(i64 106883543932864)
+  call void @increment_uncond_branch()
   br label %125
 
 125:                                              ; preds = %129, %124
   %126 = load ptr, ptr %8, align 8
   %127 = load ptr, ptr %126, align 8
   %128 = icmp ne ptr %127, null
-  call void @__cflat_record_node(i64 106883543932976)
+  call void @increment_cond_branch()
   br i1 %128, label %129, label %133
 
 129:                                              ; preds = %125
@@ -3300,16 +3338,18 @@ define dso_local void @sglib_ilist_sort(ptr noundef %0) #0 {
   %131 = load ptr, ptr %130, align 8
   %132 = getelementptr inbounds %struct.ilist, ptr %131, i32 0, i32 1
   store ptr %132, ptr %8, align 8
-  call void @__cflat_record_node(i64 106883543933712)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %125, !llvm.loop !46
 
 133:                                              ; preds = %125
   store i32 1, ptr %11, align 4
-  call void @__cflat_record_node(i64 106883543934720)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %19, !llvm.loop !47
 
 134:                                              ; preds = %44, %19
-  call void @__cflat_record_node(i64 106883543935296)
+  call void @increment_uncond_branch()
   br label %135
 
 135:                                              ; preds = %134
@@ -3317,14 +3357,15 @@ define dso_local void @sglib_ilist_sort(ptr noundef %0) #0 {
   %137 = load i32, ptr %10, align 4
   %138 = add nsw i32 %136, %137
   store i32 %138, ptr %10, align 4
-  call void @__cflat_record_node(i64 106883543935408)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %14, !llvm.loop !48
 
 139:                                              ; preds = %14
   %140 = load ptr, ptr %3, align 8
   %141 = load ptr, ptr %2, align 8
   store ptr %140, ptr %141, align 8
-  call void @__cflat_call_return(i64 106883543902560)
+  call void @increment_return()
   ret void
 }
 
@@ -3339,13 +3380,13 @@ define dso_local i32 @sglib_ilist_len(ptr noundef %0) #0 {
   store i32 0, ptr %3, align 4
   %7 = load ptr, ptr %2, align 8
   store ptr %7, ptr %6, align 8
-  call void @__cflat_record_node(i64 106883543924992)
+  call void @increment_uncond_branch()
   br label %8
 
 8:                                                ; preds = %11, %1
   %9 = load ptr, ptr %6, align 8
   %10 = icmp ne ptr %9, null
-  call void @__cflat_record_node(i64 106883543926432)
+  call void @increment_cond_branch()
   br i1 %10, label %11, label %18
 
 11:                                               ; preds = %8
@@ -3358,12 +3399,13 @@ define dso_local i32 @sglib_ilist_len(ptr noundef %0) #0 {
   store i32 %16, ptr %3, align 4
   %17 = load ptr, ptr %5, align 8
   store ptr %17, ptr %6, align 8
-  call void @__cflat_record_node(i64 106883543927104)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %8, !llvm.loop !49
 
 18:                                               ; preds = %8
   %19 = load i32, ptr %3, align 4
-  call void @__cflat_call_return(i64 106883543924992)
+  call void @increment_return()
   ret i32 %19
 }
 
@@ -3378,13 +3420,13 @@ define dso_local void @sglib_ilist_reverse(ptr noundef %0) #0 {
   %7 = load ptr, ptr %6, align 8
   store ptr %7, ptr %3, align 8
   store ptr null, ptr %5, align 8
-  call void @__cflat_record_node(i64 106883543937696)
+  call void @increment_uncond_branch()
   br label %8
 
 8:                                                ; preds = %11, %1
   %9 = load ptr, ptr %3, align 8
   %10 = icmp ne ptr %9, null
-  call void @__cflat_record_node(i64 106883543939136)
+  call void @increment_cond_branch()
   br i1 %10, label %11, label %20
 
 11:                                               ; preds = %8
@@ -3400,14 +3442,15 @@ define dso_local void @sglib_ilist_reverse(ptr noundef %0) #0 {
   store ptr %18, ptr %5, align 8
   %19 = load ptr, ptr %4, align 8
   store ptr %19, ptr %3, align 8
-  call void @__cflat_record_node(i64 106883543939808)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %8, !llvm.loop !50
 
 20:                                               ; preds = %8
   %21 = load ptr, ptr %5, align 8
   %22 = load ptr, ptr %2, align 8
   store ptr %21, ptr %22, align 8
-  call void @__cflat_call_return(i64 106883543937696)
+  call void @increment_return()
   ret void
 }
 
@@ -3434,9 +3477,9 @@ define dso_local ptr @sglib_ilist_it_init_on_equal(ptr noundef %0, ptr noundef %
   %17 = getelementptr inbounds %struct.sglib_ilist_iterator, ptr %16, i32 0, i32 1
   store ptr %15, ptr %17, align 8
   %18 = load ptr, ptr %5, align 8
-  call void @__cflat_call_enter(i64 106883543946240, i64 106883543943136)
+  call void @increment_direct_call()
   %19 = call ptr @sglib_ilist_it_next(ptr noundef %18)
-  call void @__cflat_call_return(i64 106883543943136)
+  call void @increment_return()
   ret ptr %19
 }
 
@@ -3458,7 +3501,7 @@ define dso_local ptr @sglib_ilist_it_next(ptr noundef %0) #0 {
   %12 = getelementptr inbounds %struct.sglib_ilist_iterator, ptr %11, i32 0, i32 2
   %13 = load ptr, ptr %12, align 8
   %14 = icmp ne ptr %13, null
-  call void @__cflat_record_node(i64 106883543946240)
+  call void @increment_cond_branch()
   br i1 %14, label %15, label %38
 
 15:                                               ; preds = %1
@@ -3470,13 +3513,13 @@ define dso_local ptr @sglib_ilist_it_next(ptr noundef %0) #0 {
   %20 = getelementptr inbounds %struct.sglib_ilist_iterator, ptr %19, i32 0, i32 2
   %21 = load ptr, ptr %20, align 8
   store ptr %21, ptr %5, align 8
-  call void @__cflat_record_node(i64 106883543949872)
+  call void @increment_uncond_branch()
   br label %22
 
 22:                                               ; preds = %33, %15
   %23 = load ptr, ptr %3, align 8
   %24 = icmp ne ptr %23, null
-  call void @__cflat_record_node(i64 106883543951280)
+  call void @increment_cond_branch()
   br i1 %24, label %25, label %31
 
 25:                                               ; preds = %22
@@ -3485,12 +3528,12 @@ define dso_local ptr @sglib_ilist_it_next(ptr noundef %0) #0 {
   %28 = load ptr, ptr %4, align 8
   %29 = call i32 %26(ptr noundef %27, ptr noundef %28)
   %30 = icmp ne i32 %29, 0
-  call void @__cflat_record_node(i64 106883543951952)
+  call void @increment_uncond_branch()
   br label %31
 
 31:                                               ; preds = %25, %22
   %32 = phi i1 [ false, %22 ], [ %30, %25 ]
-  call void @__cflat_record_node(i64 106883543946344)
+  call void @increment_cond_branch()
   br i1 %32, label %33, label %37
 
 33:                                               ; preds = %31
@@ -3498,11 +3541,12 @@ define dso_local ptr @sglib_ilist_it_next(ptr noundef %0) #0 {
   %35 = getelementptr inbounds %struct.ilist, ptr %34, i32 0, i32 1
   %36 = load ptr, ptr %35, align 8
   store ptr %36, ptr %3, align 8
-  call void @__cflat_record_node(i64 106883543953296)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %22, !llvm.loop !51
 
 37:                                               ; preds = %31
-  call void @__cflat_record_node(i64 106883543954272)
+  call void @increment_uncond_branch()
   br label %38
 
 38:                                               ; preds = %37, %1
@@ -3512,7 +3556,7 @@ define dso_local ptr @sglib_ilist_it_next(ptr noundef %0) #0 {
   store ptr %39, ptr %41, align 8
   %42 = load ptr, ptr %3, align 8
   %43 = icmp ne ptr %42, null
-  call void @__cflat_record_node(i64 106883543954384)
+  call void @increment_cond_branch()
   br i1 %43, label %44, label %50
 
 44:                                               ; preds = %38
@@ -3522,12 +3566,12 @@ define dso_local ptr @sglib_ilist_it_next(ptr noundef %0) #0 {
   %48 = load ptr, ptr %2, align 8
   %49 = getelementptr inbounds %struct.sglib_ilist_iterator, ptr %48, i32 0, i32 1
   store ptr %47, ptr %49, align 8
-  call void @__cflat_record_node(i64 106883543955600)
+  call void @increment_uncond_branch()
   br label %50
 
 50:                                               ; preds = %44, %38
   %51 = load ptr, ptr %3, align 8
-  call void @__cflat_call_return(i64 106883543946240)
+  call void @increment_return()
   ret ptr %51
 }
 
@@ -3539,9 +3583,9 @@ define dso_local ptr @sglib_ilist_it_init(ptr noundef %0, ptr noundef %1) #0 {
   store ptr %1, ptr %4, align 8
   %5 = load ptr, ptr %3, align 8
   %6 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883543943136, i64 106883543956576)
+  call void @increment_direct_call()
   %7 = call ptr @sglib_ilist_it_init_on_equal(ptr noundef %5, ptr noundef %6, ptr noundef null, ptr noundef null)
-  call void @__cflat_call_return(i64 106883543956576)
+  call void @increment_return()
   ret ptr %7
 }
 
@@ -3552,7 +3596,7 @@ define dso_local ptr @sglib_ilist_it_current(ptr noundef %0) #0 {
   %3 = load ptr, ptr %2, align 8
   %4 = getelementptr inbounds %struct.sglib_ilist_iterator, ptr %3, i32 0, i32 0
   %5 = load ptr, ptr %4, align 8
-  call void @__cflat_call_return(i64 106883543959184)
+  call void @increment_return()
   ret ptr %5
 }
 
@@ -3562,13 +3606,13 @@ define dso_local void @sglib_hashed_ilist_init(ptr noundef %0) #0 {
   %3 = alloca i32, align 4
   store ptr %0, ptr %2, align 8
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883543960512)
+  call void @increment_uncond_branch()
   br label %4
 
 4:                                                ; preds = %12, %1
   %5 = load i32, ptr %3, align 4
   %6 = icmp ult i32 %5, 20
-  call void @__cflat_record_node(i64 106883543961280)
+  call void @increment_cond_branch()
   br i1 %6, label %7, label %15
 
 7:                                                ; preds = %4
@@ -3577,18 +3621,19 @@ define dso_local void @sglib_hashed_ilist_init(ptr noundef %0) #0 {
   %10 = zext i32 %9 to i64
   %11 = getelementptr inbounds ptr, ptr %8, i64 %10
   store ptr null, ptr %11, align 8
-  call void @__cflat_record_node(i64 106883543961888)
+  call void @increment_uncond_branch()
   br label %12
 
 12:                                               ; preds = %7
   %13 = load i32, ptr %3, align 4
   %14 = add i32 %13, 1
   store i32 %14, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883543962768)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %4, !llvm.loop !52
 
 15:                                               ; preds = %4
-  call void @__cflat_call_return(i64 106883543960512)
+  call void @increment_return()
   ret void
 }
 
@@ -3600,7 +3645,7 @@ define dso_local void @sglib_hashed_ilist_add(ptr noundef %0, ptr noundef %1) #0
   store ptr %0, ptr %3, align 8
   store ptr %1, ptr %4, align 8
   %6 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883543854368, i64 106883543964176)
+  call void @increment_direct_call()
   %7 = call i32 @ilist_hash_function(ptr noundef %6)
   %8 = urem i32 %7, 20
   store i32 %8, ptr %5, align 4
@@ -3609,9 +3654,9 @@ define dso_local void @sglib_hashed_ilist_add(ptr noundef %0, ptr noundef %1) #0
   %11 = zext i32 %10 to i64
   %12 = getelementptr inbounds ptr, ptr %9, i64 %11
   %13 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883543875920, i64 106883543964176)
+  call void @increment_direct_call()
   call void @sglib_ilist_add(ptr noundef %12, ptr noundef %13)
-  call void @__cflat_call_return(i64 106883543964176)
+  call void @increment_return()
   ret void
 }
 
@@ -3625,7 +3670,7 @@ define dso_local i32 @sglib_hashed_ilist_add_if_not_member(ptr noundef %0, ptr n
   store ptr %1, ptr %5, align 8
   store ptr %2, ptr %6, align 8
   %8 = load ptr, ptr %5, align 8
-  call void @__cflat_call_enter(i64 106883543854368, i64 106883543967184)
+  call void @increment_direct_call()
   %9 = call i32 @ilist_hash_function(ptr noundef %8)
   %10 = urem i32 %9, 20
   store i32 %10, ptr %7, align 4
@@ -3635,9 +3680,9 @@ define dso_local i32 @sglib_hashed_ilist_add_if_not_member(ptr noundef %0, ptr n
   %14 = getelementptr inbounds ptr, ptr %11, i64 %13
   %15 = load ptr, ptr %5, align 8
   %16 = load ptr, ptr %6, align 8
-  call void @__cflat_call_enter(i64 106883543867248, i64 106883543967184)
+  call void @increment_direct_call()
   %17 = call i32 @sglib_ilist_add_if_not_member(ptr noundef %14, ptr noundef %15, ptr noundef %16)
-  call void @__cflat_call_return(i64 106883543967184)
+  call void @increment_return()
   ret i32 %17
 }
 
@@ -3649,7 +3694,7 @@ define dso_local void @sglib_hashed_ilist_delete(ptr noundef %0, ptr noundef %1)
   store ptr %0, ptr %3, align 8
   store ptr %1, ptr %4, align 8
   %6 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883543854368, i64 106883543970320)
+  call void @increment_direct_call()
   %7 = call i32 @ilist_hash_function(ptr noundef %6)
   %8 = urem i32 %7, 20
   store i32 %8, ptr %5, align 4
@@ -3658,9 +3703,9 @@ define dso_local void @sglib_hashed_ilist_delete(ptr noundef %0, ptr noundef %1)
   %11 = zext i32 %10 to i64
   %12 = getelementptr inbounds ptr, ptr %9, i64 %11
   %13 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883543886512, i64 106883543970320)
+  call void @increment_direct_call()
   call void @sglib_ilist_delete(ptr noundef %12, ptr noundef %13)
-  call void @__cflat_call_return(i64 106883543970320)
+  call void @increment_return()
   ret void
 }
 
@@ -3674,7 +3719,7 @@ define dso_local i32 @sglib_hashed_ilist_delete_if_member(ptr noundef %0, ptr no
   store ptr %1, ptr %5, align 8
   store ptr %2, ptr %6, align 8
   %8 = load ptr, ptr %5, align 8
-  call void @__cflat_call_enter(i64 106883543854368, i64 106883543973328)
+  call void @increment_direct_call()
   %9 = call i32 @ilist_hash_function(ptr noundef %8)
   %10 = urem i32 %9, 20
   store i32 %10, ptr %7, align 4
@@ -3684,9 +3729,9 @@ define dso_local i32 @sglib_hashed_ilist_delete_if_member(ptr noundef %0, ptr no
   %14 = getelementptr inbounds ptr, ptr %11, i64 %13
   %15 = load ptr, ptr %5, align 8
   %16 = load ptr, ptr %6, align 8
-  call void @__cflat_call_enter(i64 106883543893904, i64 106883543973328)
+  call void @increment_direct_call()
   %17 = call i32 @sglib_ilist_delete_if_member(ptr noundef %14, ptr noundef %15, ptr noundef %16)
-  call void @__cflat_call_return(i64 106883543973328)
+  call void @increment_return()
   ret i32 %17
 }
 
@@ -3698,7 +3743,7 @@ define dso_local i32 @sglib_hashed_ilist_is_member(ptr noundef %0, ptr noundef %
   store ptr %0, ptr %3, align 8
   store ptr %1, ptr %4, align 8
   %6 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883543854368, i64 106883543976464)
+  call void @increment_direct_call()
   %7 = call i32 @ilist_hash_function(ptr noundef %6)
   %8 = urem i32 %7, 20
   store i32 %8, ptr %5, align 4
@@ -3708,9 +3753,9 @@ define dso_local i32 @sglib_hashed_ilist_is_member(ptr noundef %0, ptr noundef %
   %12 = getelementptr inbounds ptr, ptr %9, i64 %11
   %13 = load ptr, ptr %12, align 8
   %14 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883543855744, i64 106883543976464)
+  call void @increment_direct_call()
   %15 = call i32 @sglib_ilist_is_member(ptr noundef %13, ptr noundef %14)
-  call void @__cflat_call_return(i64 106883543976464)
+  call void @increment_return()
   ret i32 %15
 }
 
@@ -3722,7 +3767,7 @@ define dso_local ptr @sglib_hashed_ilist_find_member(ptr noundef %0, ptr noundef
   store ptr %0, ptr %3, align 8
   store ptr %1, ptr %4, align 8
   %6 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883543854368, i64 106883543979552)
+  call void @increment_direct_call()
   %7 = call i32 @ilist_hash_function(ptr noundef %6)
   %8 = urem i32 %7, 20
   store i32 %8, ptr %5, align 4
@@ -3732,9 +3777,9 @@ define dso_local ptr @sglib_hashed_ilist_find_member(ptr noundef %0, ptr noundef
   %12 = getelementptr inbounds ptr, ptr %9, i64 %11
   %13 = load ptr, ptr %12, align 8
   %14 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883543861120, i64 106883543979552)
+  call void @increment_direct_call()
   %15 = call ptr @sglib_ilist_find_member(ptr noundef %13, ptr noundef %14)
-  call void @__cflat_call_return(i64 106883543979552)
+  call void @increment_return()
   ret ptr %15
 }
 
@@ -3779,25 +3824,25 @@ define dso_local ptr @sglib_hashed_ilist_it_init_on_equal(ptr noundef %0, ptr no
   %33 = load ptr, ptr %5, align 8
   %34 = getelementptr inbounds %struct.sglib_hashed_ilist_iterator, ptr %33, i32 0, i32 4
   %35 = load ptr, ptr %34, align 8
-  call void @__cflat_call_enter(i64 106883543943136, i64 106883543982768)
+  call void @increment_direct_call()
   %36 = call ptr @sglib_ilist_it_init_on_equal(ptr noundef %22, ptr noundef %29, ptr noundef %32, ptr noundef %35)
   store ptr %36, ptr %9, align 8
   %37 = load ptr, ptr %9, align 8
   %38 = icmp eq ptr %37, null
-  call void @__cflat_record_node(i64 106883543982768)
+  call void @increment_cond_branch()
   br i1 %38, label %39, label %42
 
 39:                                               ; preds = %4
   %40 = load ptr, ptr %5, align 8
-  call void @__cflat_call_enter(i64 106883543989840, i64 106883543989712)
+  call void @increment_direct_call()
   %41 = call ptr @sglib_hashed_ilist_it_next(ptr noundef %40)
   store ptr %41, ptr %9, align 8
-  call void @__cflat_record_node(i64 106883543989712)
+  call void @increment_uncond_branch()
   br label %42
 
 42:                                               ; preds = %39, %4
   %43 = load ptr, ptr %9, align 8
-  call void @__cflat_call_return(i64 106883543982768)
+  call void @increment_return()
   ret ptr %43
 }
 
@@ -3808,16 +3853,16 @@ define dso_local ptr @sglib_hashed_ilist_it_next(ptr noundef %0) #0 {
   store ptr %0, ptr %2, align 8
   %4 = load ptr, ptr %2, align 8
   %5 = getelementptr inbounds %struct.sglib_hashed_ilist_iterator, ptr %4, i32 0, i32 0
-  call void @__cflat_call_enter(i64 106883543946240, i64 106883543989840)
+  call void @increment_direct_call()
   %6 = call ptr @sglib_ilist_it_next(ptr noundef %5)
   store ptr %6, ptr %3, align 8
-  call void @__cflat_record_node(i64 106883543989840)
+  call void @increment_uncond_branch()
   br label %7
 
 7:                                                ; preds = %18, %1
   %8 = load ptr, ptr %3, align 8
   %9 = icmp eq ptr %8, null
-  call void @__cflat_record_node(i64 106883543992448)
+  call void @increment_cond_branch()
   br i1 %9, label %10, label %16
 
 10:                                               ; preds = %7
@@ -3827,12 +3872,12 @@ define dso_local ptr @sglib_hashed_ilist_it_next(ptr noundef %0) #0 {
   %14 = add nsw i32 %13, 1
   store i32 %14, ptr %12, align 8
   %15 = icmp slt i32 %14, 20
-  call void @__cflat_record_node(i64 106883543993120)
+  call void @increment_uncond_branch()
   br label %16
 
 16:                                               ; preds = %10, %7
   %17 = phi i1 [ false, %7 ], [ %15, %10 ]
-  call void @__cflat_record_node(i64 106883543989944)
+  call void @increment_cond_branch()
   br i1 %17, label %18, label %37
 
 18:                                               ; preds = %16
@@ -3853,15 +3898,16 @@ define dso_local ptr @sglib_hashed_ilist_it_next(ptr noundef %0) #0 {
   %33 = load ptr, ptr %2, align 8
   %34 = getelementptr inbounds %struct.sglib_hashed_ilist_iterator, ptr %33, i32 0, i32 4
   %35 = load ptr, ptr %34, align 8
-  call void @__cflat_call_enter(i64 106883543943136, i64 106883543994560)
+  call void @increment_direct_call()
   %36 = call ptr @sglib_ilist_it_init_on_equal(ptr noundef %20, ptr noundef %29, ptr noundef %32, ptr noundef %35)
   store ptr %36, ptr %3, align 8
-  call void @__cflat_record_node(i64 106883543994560)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %7, !llvm.loop !53
 
 37:                                               ; preds = %16
   %38 = load ptr, ptr %3, align 8
-  call void @__cflat_call_return(i64 106883543989840)
+  call void @increment_return()
   ret ptr %38
 }
 
@@ -3873,9 +3919,9 @@ define dso_local ptr @sglib_hashed_ilist_it_init(ptr noundef %0, ptr noundef %1)
   store ptr %1, ptr %4, align 8
   %5 = load ptr, ptr %3, align 8
   %6 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883543982768, i64 106883543998672)
+  call void @increment_direct_call()
   %7 = call ptr @sglib_hashed_ilist_it_init_on_equal(ptr noundef %5, ptr noundef %6, ptr noundef null, ptr noundef null)
-  call void @__cflat_call_return(i64 106883543998672)
+  call void @increment_return()
   ret ptr %7
 }
 
@@ -3885,9 +3931,9 @@ define dso_local ptr @sglib_hashed_ilist_it_current(ptr noundef %0) #0 {
   store ptr %0, ptr %2, align 8
   %3 = load ptr, ptr %2, align 8
   %4 = getelementptr inbounds %struct.sglib_hashed_ilist_iterator, ptr %3, i32 0, i32 0
-  call void @__cflat_call_enter(i64 106883543959184, i64 106883544000448)
+  call void @increment_direct_call()
   %5 = call ptr @sglib_ilist_it_current(ptr noundef %4)
-  call void @__cflat_call_return(i64 106883544000448)
+  call void @increment_return()
   ret ptr %5
 }
 
@@ -3901,7 +3947,7 @@ define dso_local void @sglib_iq_init(ptr noundef %0) #0 {
   %5 = load ptr, ptr %2, align 8
   %6 = getelementptr inbounds %struct.iq, ptr %5, i32 0, i32 1
   store i32 0, ptr %6, align 4
-  call void @__cflat_call_return(i64 106883544001840)
+  call void @increment_return()
   ret void
 }
 
@@ -3917,7 +3963,7 @@ define dso_local i32 @sglib_iq_is_empty(ptr noundef %0) #0 {
   %8 = load i32, ptr %7, align 4
   %9 = icmp eq i32 %5, %8
   %10 = zext i1 %9 to i32
-  call void @__cflat_call_return(i64 106883544003696)
+  call void @increment_return()
   ret i32 %10
 }
 
@@ -3935,7 +3981,7 @@ define dso_local i32 @sglib_iq_is_full(ptr noundef %0) #0 {
   %10 = srem i32 %9, 101
   %11 = icmp eq i32 %5, %10
   %12 = zext i1 %11 to i32
-  call void @__cflat_call_return(i64 106883544005728)
+  call void @increment_return()
   ret i32 %12
 }
 
@@ -3951,7 +3997,7 @@ define dso_local i32 @sglib_iq_first_element(ptr noundef %0) #0 {
   %8 = sext i32 %7 to i64
   %9 = getelementptr inbounds [101 x i32], ptr %4, i64 0, i64 %8
   %10 = load i32, ptr %9, align 4
-  call void @__cflat_call_return(i64 106883544008096)
+  call void @increment_return()
   ret i32 %10
 }
 
@@ -3966,7 +4012,7 @@ define dso_local ptr @sglib_iq_first_element_ptr(ptr noundef %0) #0 {
   %7 = load i32, ptr %6, align 4
   %8 = sext i32 %7 to i64
   %9 = getelementptr inbounds [101 x i32], ptr %4, i64 0, i64 %8
-  call void @__cflat_call_return(i64 106883544010192)
+  call void @increment_return()
   ret ptr %9
 }
 
@@ -3983,11 +4029,11 @@ define dso_local void @sglib_iq_add_next(ptr noundef %0) #0 {
   %9 = add nsw i32 %8, 1
   %10 = srem i32 %9, 101
   %11 = icmp eq i32 %5, %10
-  call void @__cflat_record_node(i64 106883544012144)
+  call void @increment_cond_branch()
   br i1 %11, label %12, label %13
 
 12:                                               ; preds = %1
-  call void @__cflat_record_node(i64 106883544014160)
+  call void @increment_uncond_branch()
   br label %13
 
 13:                                               ; preds = %12, %1
@@ -3999,7 +4045,7 @@ define dso_local void @sglib_iq_add_next(ptr noundef %0) #0 {
   %19 = load ptr, ptr %2, align 8
   %20 = getelementptr inbounds %struct.iq, ptr %19, i32 0, i32 2
   store i32 %18, ptr %20, align 4
-  call void @__cflat_call_return(i64 106883544012144)
+  call void @increment_return()
   ret void
 }
 
@@ -4027,11 +4073,11 @@ define dso_local void @sglib_iq_add(ptr noundef %0, i32 noundef %1) #0 {
   %19 = add nsw i32 %18, 1
   %20 = srem i32 %19, 101
   %21 = icmp eq i32 %15, %20
-  call void @__cflat_record_node(i64 106883544016048)
+  call void @increment_cond_branch()
   br i1 %21, label %22, label %23
 
 22:                                               ; preds = %2
-  call void @__cflat_record_node(i64 106883544019648)
+  call void @increment_uncond_branch()
   br label %23
 
 23:                                               ; preds = %22, %2
@@ -4043,7 +4089,7 @@ define dso_local void @sglib_iq_add(ptr noundef %0, i32 noundef %1) #0 {
   %29 = load ptr, ptr %3, align 8
   %30 = getelementptr inbounds %struct.iq, ptr %29, i32 0, i32 2
   store i32 %28, ptr %30, align 4
-  call void @__cflat_call_return(i64 106883544016048)
+  call void @increment_return()
   ret void
 }
 
@@ -4058,11 +4104,11 @@ define dso_local void @sglib_iq_delete_first(ptr noundef %0) #0 {
   %7 = getelementptr inbounds %struct.iq, ptr %6, i32 0, i32 2
   %8 = load i32, ptr %7, align 4
   %9 = icmp eq i32 %5, %8
-  call void @__cflat_record_node(i64 106883544021584)
+  call void @increment_cond_branch()
   br i1 %9, label %10, label %11
 
 10:                                               ; preds = %1
-  call void @__cflat_record_node(i64 106883544023248)
+  call void @increment_uncond_branch()
   br label %11
 
 11:                                               ; preds = %10, %1
@@ -4074,7 +4120,7 @@ define dso_local void @sglib_iq_delete_first(ptr noundef %0) #0 {
   %17 = load ptr, ptr %2, align 8
   %18 = getelementptr inbounds %struct.iq, ptr %17, i32 0, i32 1
   store i32 %16, ptr %18, align 4
-  call void @__cflat_call_return(i64 106883544021584)
+  call void @increment_return()
   ret void
 }
 
@@ -4089,11 +4135,11 @@ define dso_local void @sglib_iq_delete(ptr noundef %0) #0 {
   %7 = getelementptr inbounds %struct.iq, ptr %6, i32 0, i32 2
   %8 = load i32, ptr %7, align 4
   %9 = icmp eq i32 %5, %8
-  call void @__cflat_record_node(i64 106883544025088)
+  call void @increment_cond_branch()
   br i1 %9, label %10, label %11
 
 10:                                               ; preds = %1
-  call void @__cflat_record_node(i64 106883544026752)
+  call void @increment_uncond_branch()
   br label %11
 
 11:                                               ; preds = %10, %1
@@ -4105,7 +4151,7 @@ define dso_local void @sglib_iq_delete(ptr noundef %0) #0 {
   %17 = load ptr, ptr %2, align 8
   %18 = getelementptr inbounds %struct.iq, ptr %17, i32 0, i32 1
   store i32 %16, ptr %18, align 4
-  call void @__cflat_call_return(i64 106883544025088)
+  call void @increment_return()
   ret void
 }
 
@@ -4126,11 +4172,11 @@ define dso_local i32 @sglib___rbtree_delete_recursive(ptr noundef %0, ptr nounde
   store i32 0, ptr %8, align 4
   %12 = load ptr, ptr %5, align 8
   %13 = icmp eq ptr %12, null
-  call void @__cflat_record_node(i64 106883544028688)
+  call void @increment_cond_branch()
   br i1 %13, label %14, label %15
 
 14:                                               ; preds = %2
-  call void @__cflat_record_node(i64 106883544031232)
+  call void @increment_uncond_branch()
   br label %137
 
 15:                                               ; preds = %2
@@ -4144,87 +4190,87 @@ define dso_local i32 @sglib___rbtree_delete_recursive(ptr noundef %0, ptr nounde
   store i32 %22, ptr %7, align 4
   %23 = load i32, ptr %7, align 4
   %24 = icmp slt i32 %23, 0
-  call void @__cflat_record_node(i64 106883544031344)
+  call void @increment_cond_branch()
   br i1 %24, label %32, label %25
 
 25:                                               ; preds = %15
   %26 = load i32, ptr %7, align 4
   %27 = icmp eq i32 %26, 0
-  call void @__cflat_record_node(i64 106883544033216)
+  call void @increment_cond_branch()
   br i1 %27, label %28, label %43
 
 28:                                               ; preds = %25
   %29 = load ptr, ptr %4, align 8
   %30 = load ptr, ptr %5, align 8
   %31 = icmp ult ptr %29, %30
-  call void @__cflat_record_node(i64 106883544033888)
+  call void @increment_cond_branch()
   br i1 %31, label %32, label %43
 
 32:                                               ; preds = %28, %15
   %33 = load ptr, ptr %5, align 8
   %34 = getelementptr inbounds %struct.rbtree, ptr %33, i32 0, i32 2
   %35 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883544028688, i64 106883544034464)
+  call void @increment_direct_call()
   %36 = call i32 @sglib___rbtree_delete_recursive(ptr noundef %34, ptr noundef %35)
   store i32 %36, ptr %9, align 4
   %37 = load i32, ptr %9, align 4
   %38 = icmp ne i32 %37, 0
-  call void @__cflat_record_node(i64 106883544034464)
+  call void @increment_cond_branch()
   br i1 %38, label %39, label %42
 
 39:                                               ; preds = %32
   %40 = load ptr, ptr %3, align 8
-  call void @__cflat_call_enter(i64 106883544036128, i64 106883544036000)
+  call void @increment_direct_call()
   %41 = call i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %40)
   store i32 %41, ptr %8, align 4
-  call void @__cflat_record_node(i64 106883544036000)
+  call void @increment_uncond_branch()
   br label %42
 
 42:                                               ; preds = %39, %32
-  call void @__cflat_record_node(i64 106883544037008)
+  call void @increment_uncond_branch()
   br label %136
 
 43:                                               ; preds = %28, %25
   %44 = load i32, ptr %7, align 4
   %45 = icmp sgt i32 %44, 0
-  call void @__cflat_record_node(i64 106883544037120)
+  call void @increment_cond_branch()
   br i1 %45, label %53, label %46
 
 46:                                               ; preds = %43
   %47 = load i32, ptr %7, align 4
   %48 = icmp eq i32 %47, 0
-  call void @__cflat_record_node(i64 106883544037728)
+  call void @increment_cond_branch()
   br i1 %48, label %49, label %64
 
 49:                                               ; preds = %46
   %50 = load ptr, ptr %4, align 8
   %51 = load ptr, ptr %5, align 8
   %52 = icmp ugt ptr %50, %51
-  call void @__cflat_record_node(i64 106883544040464)
+  call void @increment_cond_branch()
   br i1 %52, label %53, label %64
 
 53:                                               ; preds = %49, %43
   %54 = load ptr, ptr %5, align 8
   %55 = getelementptr inbounds %struct.rbtree, ptr %54, i32 0, i32 3
   %56 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883544028688, i64 106883544041040)
+  call void @increment_direct_call()
   %57 = call i32 @sglib___rbtree_delete_recursive(ptr noundef %55, ptr noundef %56)
   store i32 %57, ptr %9, align 4
   %58 = load i32, ptr %9, align 4
   %59 = icmp ne i32 %58, 0
-  call void @__cflat_record_node(i64 106883544041040)
+  call void @increment_cond_branch()
   br i1 %59, label %60, label %63
 
 60:                                               ; preds = %53
   %61 = load ptr, ptr %3, align 8
-  call void @__cflat_call_enter(i64 106883544042656, i64 106883544042528)
+  call void @increment_direct_call()
   %62 = call i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %61)
   store i32 %62, ptr %8, align 4
-  call void @__cflat_record_node(i64 106883544042528)
+  call void @increment_uncond_branch()
   br label %63
 
 63:                                               ; preds = %60, %53
-  call void @__cflat_record_node(i64 106883544043536)
+  call void @increment_uncond_branch()
   br label %135
 
 64:                                               ; preds = %49, %46
@@ -4232,7 +4278,7 @@ define dso_local i32 @sglib___rbtree_delete_recursive(ptr noundef %0, ptr nounde
   %66 = getelementptr inbounds %struct.rbtree, ptr %65, i32 0, i32 2
   %67 = load ptr, ptr %66, align 8
   %68 = icmp eq ptr %67, null
-  call void @__cflat_record_node(i64 106883544043648)
+  call void @increment_cond_branch()
   br i1 %68, label %69, label %107
 
 69:                                               ; preds = %64
@@ -4240,7 +4286,7 @@ define dso_local i32 @sglib___rbtree_delete_recursive(ptr noundef %0, ptr nounde
   %71 = getelementptr inbounds %struct.rbtree, ptr %70, i32 0, i32 3
   %72 = load ptr, ptr %71, align 8
   %73 = icmp eq ptr %72, null
-  call void @__cflat_record_node(i64 106883544044576)
+  call void @increment_cond_branch()
   br i1 %73, label %74, label %82
 
 74:                                               ; preds = %69
@@ -4253,7 +4299,7 @@ define dso_local i32 @sglib___rbtree_delete_recursive(ptr noundef %0, ptr nounde
   %80 = icmp eq i32 %79, 0
   %81 = zext i1 %80 to i32
   store i32 %81, ptr %8, align 4
-  call void @__cflat_record_node(i64 106883544045568)
+  call void @increment_uncond_branch()
   br label %106
 
 82:                                               ; preds = %69
@@ -4262,7 +4308,7 @@ define dso_local i32 @sglib___rbtree_delete_recursive(ptr noundef %0, ptr nounde
   %85 = load i8, ptr %84, align 4
   %86 = zext i8 %85 to i32
   %87 = icmp eq i32 %86, 0
-  call void @__cflat_record_node(i64 106883544047024)
+  call void @increment_cond_branch()
   br i1 %87, label %88, label %97
 
 88:                                               ; preds = %82
@@ -4273,12 +4319,12 @@ define dso_local i32 @sglib___rbtree_delete_recursive(ptr noundef %0, ptr nounde
   %93 = load i8, ptr %92, align 4
   %94 = zext i8 %93 to i32
   %95 = icmp eq i32 %94, 0
-  call void @__cflat_record_node(i64 106883544048128)
+  call void @increment_cond_branch()
   br i1 %95, label %96, label %97
 
 96:                                               ; preds = %88
   store i32 1, ptr %8, align 4
-  call void @__cflat_record_node(i64 106883544038144)
+  call void @increment_uncond_branch()
   br label %97
 
 97:                                               ; preds = %96, %88, %82
@@ -4292,17 +4338,17 @@ define dso_local i32 @sglib___rbtree_delete_recursive(ptr noundef %0, ptr nounde
   %104 = load ptr, ptr %103, align 8
   %105 = load ptr, ptr %3, align 8
   store ptr %104, ptr %105, align 8
-  call void @__cflat_record_node(i64 106883544038384)
+  call void @increment_uncond_branch()
   br label %106
 
 106:                                              ; preds = %97, %74
-  call void @__cflat_record_node(i64 106883544053456)
+  call void @increment_uncond_branch()
   br label %134
 
 107:                                              ; preds = %64
   %108 = load ptr, ptr %5, align 8
   %109 = getelementptr inbounds %struct.rbtree, ptr %108, i32 0, i32 2
-  call void @__cflat_call_enter(i64 106883544053888, i64 106883544053568)
+  call void @increment_direct_call()
   %110 = call i32 @sglib___rbtree_delete_rightmost_leaf(ptr noundef %109, ptr noundef %6)
   store i32 %110, ptr %9, align 4
   %111 = load ptr, ptr %5, align 8
@@ -4328,36 +4374,36 @@ define dso_local i32 @sglib___rbtree_delete_recursive(ptr noundef %0, ptr nounde
   store ptr %126, ptr %127, align 8
   %128 = load i32, ptr %9, align 4
   %129 = icmp ne i32 %128, 0
-  call void @__cflat_record_node(i64 106883544053568)
+  call void @increment_cond_branch()
   br i1 %129, label %130, label %133
 
 130:                                              ; preds = %107
   %131 = load ptr, ptr %3, align 8
-  call void @__cflat_call_enter(i64 106883544036128, i64 106883544058352)
+  call void @increment_direct_call()
   %132 = call i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %131)
   store i32 %132, ptr %8, align 4
-  call void @__cflat_record_node(i64 106883544058352)
+  call void @increment_uncond_branch()
   br label %133
 
 133:                                              ; preds = %130, %107
-  call void @__cflat_record_node(i64 106883544058992)
+  call void @increment_uncond_branch()
   br label %134
 
 134:                                              ; preds = %133, %106
-  call void @__cflat_record_node(i64 106883544059104)
+  call void @increment_uncond_branch()
   br label %135
 
 135:                                              ; preds = %134, %63
-  call void @__cflat_record_node(i64 106883544059216)
+  call void @increment_uncond_branch()
   br label %136
 
 136:                                              ; preds = %135, %42
-  call void @__cflat_record_node(i64 106883544059328)
+  call void @increment_uncond_branch()
   br label %137
 
 137:                                              ; preds = %136, %14
   %138 = load i32, ptr %8, align 4
-  call void @__cflat_call_return(i64 106883544028688)
+  call void @increment_return()
   ret i32 %138
 }
 
@@ -4392,7 +4438,7 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   store ptr %23, ptr %6, align 8
   %24 = load ptr, ptr %6, align 8
   %25 = icmp eq ptr %24, null
-  call void @__cflat_record_node(i64 106883544036128)
+  call void @increment_cond_branch()
   br i1 %25, label %26, label %29
 
 26:                                               ; preds = %1
@@ -4400,7 +4446,7 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   %28 = getelementptr inbounds %struct.rbtree, ptr %27, i32 0, i32 1
   store i8 0, ptr %28, align 4
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544060288)
+  call void @increment_uncond_branch()
   br label %321
 
 29:                                               ; preds = %1
@@ -4417,13 +4463,13 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   %38 = load i8, ptr %37, align 4
   %39 = zext i8 %38 to i32
   %40 = icmp eq i32 %39, 1
-  call void @__cflat_record_node(i64 106883544061120)
+  call void @increment_cond_branch()
   br i1 %40, label %41, label %194
 
 41:                                               ; preds = %29
   %42 = load ptr, ptr %11, align 8
   %43 = icmp eq ptr %42, null
-  call void @__cflat_record_node(i64 106883544063376)
+  call void @increment_cond_branch()
   br i1 %43, label %44, label %55
 
 44:                                               ; preds = %41
@@ -4442,7 +4488,7 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   %54 = getelementptr inbounds %struct.rbtree, ptr %53, i32 0, i32 3
   store ptr %52, ptr %54, align 8
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544063984)
+  call void @increment_uncond_branch()
   br label %193
 
 55:                                               ; preds = %41
@@ -4458,7 +4504,7 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   store ptr %62, ptr %13, align 8
   %63 = load ptr, ptr %12, align 8
   %64 = icmp eq ptr %63, null
-  call void @__cflat_record_node(i64 106883544068512)
+  call void @increment_cond_branch()
   br i1 %64, label %71, label %65
 
 65:                                               ; preds = %55
@@ -4467,13 +4513,13 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   %68 = load i8, ptr %67, align 4
   %69 = zext i8 %68 to i32
   %70 = icmp eq i32 %69, 0
-  call void @__cflat_record_node(i64 106883544070624)
+  call void @increment_cond_branch()
   br i1 %70, label %71, label %93
 
 71:                                               ; preds = %65, %55
   %72 = load ptr, ptr %13, align 8
   %73 = icmp eq ptr %72, null
-  call void @__cflat_record_node(i64 106883544071584)
+  call void @increment_cond_branch()
   br i1 %73, label %80, label %74
 
 74:                                               ; preds = %71
@@ -4482,7 +4528,7 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   %77 = load i8, ptr %76, align 4
   %78 = zext i8 %77 to i32
   %79 = icmp eq i32 %78, 0
-  call void @__cflat_record_node(i64 106883544072192)
+  call void @increment_cond_branch()
   br i1 %79, label %80, label %93
 
 80:                                               ; preds = %74, %71
@@ -4504,13 +4550,13 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   %92 = getelementptr inbounds %struct.rbtree, ptr %91, i32 0, i32 1
   store i8 1, ptr %92, align 4
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544073072)
+  call void @increment_uncond_branch()
   br label %192
 
 93:                                               ; preds = %74, %65
   %94 = load ptr, ptr %12, align 8
   %95 = icmp ne ptr %94, null
-  call void @__cflat_record_node(i64 106883544076016)
+  call void @increment_cond_branch()
   br i1 %95, label %96, label %156
 
 96:                                               ; preds = %93
@@ -4519,13 +4565,13 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   %99 = load i8, ptr %98, align 4
   %100 = zext i8 %99 to i32
   %101 = icmp eq i32 %100, 1
-  call void @__cflat_record_node(i64 106883544064864)
+  call void @increment_cond_branch()
   br i1 %101, label %102, label %156
 
 102:                                              ; preds = %96
   %103 = load ptr, ptr %13, align 8
   %104 = icmp ne ptr %103, null
-  call void @__cflat_record_node(i64 106883544065824)
+  call void @increment_cond_branch()
   br i1 %104, label %105, label %135
 
 105:                                              ; preds = %102
@@ -4534,7 +4580,7 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   %108 = load i8, ptr %107, align 4
   %109 = zext i8 %108 to i32
   %110 = icmp eq i32 %109, 1
-  call void @__cflat_record_node(i64 106883544066432)
+  call void @increment_cond_branch()
   br i1 %110, label %111, label %135
 
 111:                                              ; preds = %105
@@ -4571,7 +4617,7 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   %134 = getelementptr inbounds %struct.rbtree, ptr %133, i32 0, i32 3
   store ptr %132, ptr %134, align 8
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544081232)
+  call void @increment_uncond_branch()
   br label %155
 
 135:                                              ; preds = %105, %102
@@ -4602,17 +4648,17 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   %154 = getelementptr inbounds %struct.rbtree, ptr %153, i32 0, i32 1
   store i8 0, ptr %154, align 4
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544086416)
+  call void @increment_uncond_branch()
   br label %155
 
 155:                                              ; preds = %135, %111
-  call void @__cflat_record_node(i64 106883544090704)
+  call void @increment_uncond_branch()
   br label %191
 
 156:                                              ; preds = %96, %93
   %157 = load ptr, ptr %13, align 8
   %158 = icmp ne ptr %157, null
-  call void @__cflat_record_node(i64 106883544090816)
+  call void @increment_cond_branch()
   br i1 %158, label %159, label %189
 
 159:                                              ; preds = %156
@@ -4621,7 +4667,7 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   %162 = load i8, ptr %161, align 4
   %163 = zext i8 %162 to i32
   %164 = icmp eq i32 %163, 1
-  call void @__cflat_record_node(i64 106883544091424)
+  call void @increment_cond_branch()
   br i1 %164, label %165, label %189
 
 165:                                              ; preds = %159
@@ -4658,34 +4704,34 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   %188 = getelementptr inbounds %struct.rbtree, ptr %187, i32 0, i32 3
   store ptr %186, ptr %188, align 8
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544092384)
+  call void @increment_uncond_branch()
   br label %190
 
 189:                                              ; preds = %159, %156
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544097600)
+  call void @increment_uncond_branch()
   br label %190
 
 190:                                              ; preds = %189, %165
-  call void @__cflat_record_node(i64 106883544097840)
+  call void @increment_uncond_branch()
   br label %191
 
 191:                                              ; preds = %190, %155
-  call void @__cflat_record_node(i64 106883544076288)
+  call void @increment_uncond_branch()
   br label %192
 
 192:                                              ; preds = %191, %80
-  call void @__cflat_record_node(i64 106883544076400)
+  call void @increment_uncond_branch()
   br label %193
 
 193:                                              ; preds = %192, %44
-  call void @__cflat_record_node(i64 106883544076592)
+  call void @increment_uncond_branch()
   br label %320
 
 194:                                              ; preds = %29
   %195 = load ptr, ptr %10, align 8
   %196 = icmp eq ptr %195, null
-  call void @__cflat_record_node(i64 106883544076704)
+  call void @increment_cond_branch()
   br i1 %196, label %203, label %197
 
 197:                                              ; preds = %194
@@ -4694,13 +4740,13 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   %200 = load i8, ptr %199, align 4
   %201 = zext i8 %200 to i32
   %202 = icmp eq i32 %201, 0
-  call void @__cflat_record_node(i64 106883544077312)
+  call void @increment_cond_branch()
   br i1 %202, label %203, label %223
 
 203:                                              ; preds = %197, %194
   %204 = load ptr, ptr %11, align 8
   %205 = icmp eq ptr %204, null
-  call void @__cflat_record_node(i64 106883544078272)
+  call void @increment_cond_branch()
   br i1 %205, label %212, label %206
 
 206:                                              ; preds = %203
@@ -4709,7 +4755,7 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   %209 = load i8, ptr %208, align 4
   %210 = zext i8 %209 to i32
   %211 = icmp eq i32 %210, 0
-  call void @__cflat_record_node(i64 106883544078880)
+  call void @increment_cond_branch()
   br i1 %211, label %212, label %223
 
 212:                                              ; preds = %206, %203
@@ -4726,13 +4772,13 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   %221 = load ptr, ptr %6, align 8
   %222 = getelementptr inbounds %struct.rbtree, ptr %221, i32 0, i32 1
   store i8 1, ptr %222, align 4
-  call void @__cflat_record_node(i64 106883544079760)
+  call void @increment_uncond_branch()
   br label %319
 
 223:                                              ; preds = %206, %197
   %224 = load ptr, ptr %10, align 8
   %225 = icmp ne ptr %224, null
-  call void @__cflat_record_node(i64 106883544107648)
+  call void @increment_cond_branch()
   br i1 %225, label %226, label %289
 
 226:                                              ; preds = %223
@@ -4741,13 +4787,13 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   %229 = load i8, ptr %228, align 4
   %230 = zext i8 %229 to i32
   %231 = icmp eq i32 %230, 1
-  call void @__cflat_record_node(i64 106883544108256)
+  call void @increment_cond_branch()
   br i1 %231, label %232, label %289
 
 232:                                              ; preds = %226
   %233 = load ptr, ptr %11, align 8
   %234 = icmp eq ptr %233, null
-  call void @__cflat_record_node(i64 106883544109216)
+  call void @increment_cond_branch()
   br i1 %234, label %241, label %235
 
 235:                                              ; preds = %232
@@ -4756,7 +4802,7 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   %238 = load i8, ptr %237, align 4
   %239 = zext i8 %238 to i32
   %240 = icmp eq i32 %239, 0
-  call void @__cflat_record_node(i64 106883544109824)
+  call void @increment_cond_branch()
   br i1 %240, label %241, label %259
 
 241:                                              ; preds = %235, %232
@@ -4784,7 +4830,7 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   %258 = getelementptr inbounds %struct.rbtree, ptr %257, i32 0, i32 1
   store i8 0, ptr %258, align 4
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544110784)
+  call void @increment_uncond_branch()
   br label %288
 
 259:                                              ; preds = %235
@@ -4827,11 +4873,11 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   %287 = getelementptr inbounds %struct.rbtree, ptr %286, i32 0, i32 3
   store ptr %285, ptr %287, align 8
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544114656)
+  call void @increment_uncond_branch()
   br label %288
 
 288:                                              ; preds = %259, %241
-  call void @__cflat_record_node(i64 106883544120768)
+  call void @increment_uncond_branch()
   br label %318
 
 289:                                              ; preds = %226, %223
@@ -4874,24 +4920,24 @@ define internal i32 @sglib___rbtree_fix_left_deletion_discrepancy(ptr noundef %0
   %317 = getelementptr inbounds %struct.rbtree, ptr %316, i32 0, i32 3
   store ptr %315, ptr %317, align 8
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544120880)
+  call void @increment_uncond_branch()
   br label %318
 
 318:                                              ; preds = %289, %288
-  call void @__cflat_record_node(i64 106883544126912)
+  call void @increment_uncond_branch()
   br label %319
 
 319:                                              ; preds = %318, %212
-  call void @__cflat_record_node(i64 106883544127024)
+  call void @increment_uncond_branch()
   br label %320
 
 320:                                              ; preds = %319, %193
-  call void @__cflat_record_node(i64 106883544127136)
+  call void @increment_uncond_branch()
   br label %321
 
 321:                                              ; preds = %320, %26
   %322 = load i32, ptr %3, align 4
-  call void @__cflat_call_return(i64 106883544036128)
+  call void @increment_return()
   ret i32 %322
 }
 
@@ -4926,7 +4972,7 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   store ptr %23, ptr %6, align 8
   %24 = load ptr, ptr %6, align 8
   %25 = icmp eq ptr %24, null
-  call void @__cflat_record_node(i64 106883544042656)
+  call void @increment_cond_branch()
   br i1 %25, label %26, label %29
 
 26:                                               ; preds = %1
@@ -4934,7 +4980,7 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   %28 = getelementptr inbounds %struct.rbtree, ptr %27, i32 0, i32 1
   store i8 0, ptr %28, align 4
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544102656)
+  call void @increment_uncond_branch()
   br label %321
 
 29:                                               ; preds = %1
@@ -4951,13 +4997,13 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   %38 = load i8, ptr %37, align 4
   %39 = zext i8 %38 to i32
   %40 = icmp eq i32 %39, 1
-  call void @__cflat_record_node(i64 106883544103488)
+  call void @increment_cond_branch()
   br i1 %40, label %41, label %194
 
 41:                                               ; preds = %29
   %42 = load ptr, ptr %11, align 8
   %43 = icmp eq ptr %42, null
-  call void @__cflat_record_node(i64 106883544105744)
+  call void @increment_cond_branch()
   br i1 %43, label %44, label %55
 
 44:                                               ; preds = %41
@@ -4976,7 +5022,7 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   %54 = getelementptr inbounds %struct.rbtree, ptr %53, i32 0, i32 2
   store ptr %52, ptr %54, align 8
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544127744)
+  call void @increment_uncond_branch()
   br label %193
 
 55:                                               ; preds = %41
@@ -4992,7 +5038,7 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   store ptr %62, ptr %13, align 8
   %63 = load ptr, ptr %12, align 8
   %64 = icmp eq ptr %63, null
-  call void @__cflat_record_node(i64 106883544132272)
+  call void @increment_cond_branch()
   br i1 %64, label %71, label %65
 
 65:                                               ; preds = %55
@@ -5001,13 +5047,13 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   %68 = load i8, ptr %67, align 4
   %69 = zext i8 %68 to i32
   %70 = icmp eq i32 %69, 0
-  call void @__cflat_record_node(i64 106883544134384)
+  call void @increment_cond_branch()
   br i1 %70, label %71, label %93
 
 71:                                               ; preds = %65, %55
   %72 = load ptr, ptr %13, align 8
   %73 = icmp eq ptr %72, null
-  call void @__cflat_record_node(i64 106883544135344)
+  call void @increment_cond_branch()
   br i1 %73, label %80, label %74
 
 74:                                               ; preds = %71
@@ -5016,7 +5062,7 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   %77 = load i8, ptr %76, align 4
   %78 = zext i8 %77 to i32
   %79 = icmp eq i32 %78, 0
-  call void @__cflat_record_node(i64 106883544135952)
+  call void @increment_cond_branch()
   br i1 %79, label %80, label %93
 
 80:                                               ; preds = %74, %71
@@ -5038,13 +5084,13 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   %92 = getelementptr inbounds %struct.rbtree, ptr %91, i32 0, i32 1
   store i8 1, ptr %92, align 4
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544136832)
+  call void @increment_uncond_branch()
   br label %192
 
 93:                                               ; preds = %74, %65
   %94 = load ptr, ptr %12, align 8
   %95 = icmp ne ptr %94, null
-  call void @__cflat_record_node(i64 106883544139776)
+  call void @increment_cond_branch()
   br i1 %95, label %96, label %156
 
 96:                                               ; preds = %93
@@ -5053,13 +5099,13 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   %99 = load i8, ptr %98, align 4
   %100 = zext i8 %99 to i32
   %101 = icmp eq i32 %100, 1
-  call void @__cflat_record_node(i64 106883544128624)
+  call void @increment_cond_branch()
   br i1 %101, label %102, label %156
 
 102:                                              ; preds = %96
   %103 = load ptr, ptr %13, align 8
   %104 = icmp ne ptr %103, null
-  call void @__cflat_record_node(i64 106883544129584)
+  call void @increment_cond_branch()
   br i1 %104, label %105, label %135
 
 105:                                              ; preds = %102
@@ -5068,7 +5114,7 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   %108 = load i8, ptr %107, align 4
   %109 = zext i8 %108 to i32
   %110 = icmp eq i32 %109, 1
-  call void @__cflat_record_node(i64 106883544130192)
+  call void @increment_cond_branch()
   br i1 %110, label %111, label %135
 
 111:                                              ; preds = %105
@@ -5105,7 +5151,7 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   %134 = getelementptr inbounds %struct.rbtree, ptr %133, i32 0, i32 2
   store ptr %132, ptr %134, align 8
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544144992)
+  call void @increment_uncond_branch()
   br label %155
 
 135:                                              ; preds = %105, %102
@@ -5136,17 +5182,17 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   %154 = getelementptr inbounds %struct.rbtree, ptr %153, i32 0, i32 1
   store i8 0, ptr %154, align 4
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544150176)
+  call void @increment_uncond_branch()
   br label %155
 
 155:                                              ; preds = %135, %111
-  call void @__cflat_record_node(i64 106883544154464)
+  call void @increment_uncond_branch()
   br label %191
 
 156:                                              ; preds = %96, %93
   %157 = load ptr, ptr %13, align 8
   %158 = icmp ne ptr %157, null
-  call void @__cflat_record_node(i64 106883544154576)
+  call void @increment_cond_branch()
   br i1 %158, label %159, label %189
 
 159:                                              ; preds = %156
@@ -5155,7 +5201,7 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   %162 = load i8, ptr %161, align 4
   %163 = zext i8 %162 to i32
   %164 = icmp eq i32 %163, 1
-  call void @__cflat_record_node(i64 106883544155184)
+  call void @increment_cond_branch()
   br i1 %164, label %165, label %189
 
 165:                                              ; preds = %159
@@ -5192,34 +5238,34 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   %188 = getelementptr inbounds %struct.rbtree, ptr %187, i32 0, i32 2
   store ptr %186, ptr %188, align 8
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544156144)
+  call void @increment_uncond_branch()
   br label %190
 
 189:                                              ; preds = %159, %156
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544161360)
+  call void @increment_uncond_branch()
   br label %190
 
 190:                                              ; preds = %189, %165
-  call void @__cflat_record_node(i64 106883544161600)
+  call void @increment_uncond_branch()
   br label %191
 
 191:                                              ; preds = %190, %155
-  call void @__cflat_record_node(i64 106883544140048)
+  call void @increment_uncond_branch()
   br label %192
 
 192:                                              ; preds = %191, %80
-  call void @__cflat_record_node(i64 106883544140160)
+  call void @increment_uncond_branch()
   br label %193
 
 193:                                              ; preds = %192, %44
-  call void @__cflat_record_node(i64 106883544140352)
+  call void @increment_uncond_branch()
   br label %320
 
 194:                                              ; preds = %29
   %195 = load ptr, ptr %10, align 8
   %196 = icmp eq ptr %195, null
-  call void @__cflat_record_node(i64 106883544140464)
+  call void @increment_cond_branch()
   br i1 %196, label %203, label %197
 
 197:                                              ; preds = %194
@@ -5228,13 +5274,13 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   %200 = load i8, ptr %199, align 4
   %201 = zext i8 %200 to i32
   %202 = icmp eq i32 %201, 0
-  call void @__cflat_record_node(i64 106883544141072)
+  call void @increment_cond_branch()
   br i1 %202, label %203, label %223
 
 203:                                              ; preds = %197, %194
   %204 = load ptr, ptr %11, align 8
   %205 = icmp eq ptr %204, null
-  call void @__cflat_record_node(i64 106883544142032)
+  call void @increment_cond_branch()
   br i1 %205, label %212, label %206
 
 206:                                              ; preds = %203
@@ -5243,7 +5289,7 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   %209 = load i8, ptr %208, align 4
   %210 = zext i8 %209 to i32
   %211 = icmp eq i32 %210, 0
-  call void @__cflat_record_node(i64 106883544142640)
+  call void @increment_cond_branch()
   br i1 %211, label %212, label %223
 
 212:                                              ; preds = %206, %203
@@ -5260,13 +5306,13 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   %221 = load ptr, ptr %6, align 8
   %222 = getelementptr inbounds %struct.rbtree, ptr %221, i32 0, i32 1
   store i8 1, ptr %222, align 4
-  call void @__cflat_record_node(i64 106883544143520)
+  call void @increment_uncond_branch()
   br label %319
 
 223:                                              ; preds = %206, %197
   %224 = load ptr, ptr %10, align 8
   %225 = icmp ne ptr %224, null
-  call void @__cflat_record_node(i64 106883544171408)
+  call void @increment_cond_branch()
   br i1 %225, label %226, label %289
 
 226:                                              ; preds = %223
@@ -5275,13 +5321,13 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   %229 = load i8, ptr %228, align 4
   %230 = zext i8 %229 to i32
   %231 = icmp eq i32 %230, 1
-  call void @__cflat_record_node(i64 106883544172016)
+  call void @increment_cond_branch()
   br i1 %231, label %232, label %289
 
 232:                                              ; preds = %226
   %233 = load ptr, ptr %11, align 8
   %234 = icmp eq ptr %233, null
-  call void @__cflat_record_node(i64 106883544172976)
+  call void @increment_cond_branch()
   br i1 %234, label %241, label %235
 
 235:                                              ; preds = %232
@@ -5290,7 +5336,7 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   %238 = load i8, ptr %237, align 4
   %239 = zext i8 %238 to i32
   %240 = icmp eq i32 %239, 0
-  call void @__cflat_record_node(i64 106883544173584)
+  call void @increment_cond_branch()
   br i1 %240, label %241, label %259
 
 241:                                              ; preds = %235, %232
@@ -5318,7 +5364,7 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   %258 = getelementptr inbounds %struct.rbtree, ptr %257, i32 0, i32 1
   store i8 0, ptr %258, align 4
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544174544)
+  call void @increment_uncond_branch()
   br label %288
 
 259:                                              ; preds = %235
@@ -5361,11 +5407,11 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   %287 = getelementptr inbounds %struct.rbtree, ptr %286, i32 0, i32 2
   store ptr %285, ptr %287, align 8
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544178416)
+  call void @increment_uncond_branch()
   br label %288
 
 288:                                              ; preds = %259, %241
-  call void @__cflat_record_node(i64 106883544184528)
+  call void @increment_uncond_branch()
   br label %318
 
 289:                                              ; preds = %226, %223
@@ -5408,24 +5454,24 @@ define internal i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %
   %317 = getelementptr inbounds %struct.rbtree, ptr %316, i32 0, i32 2
   store ptr %315, ptr %317, align 8
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544184640)
+  call void @increment_uncond_branch()
   br label %318
 
 318:                                              ; preds = %289, %288
-  call void @__cflat_record_node(i64 106883544190672)
+  call void @increment_uncond_branch()
   br label %319
 
 319:                                              ; preds = %318, %212
-  call void @__cflat_record_node(i64 106883544190784)
+  call void @increment_uncond_branch()
   br label %320
 
 320:                                              ; preds = %319, %193
-  call void @__cflat_record_node(i64 106883544190896)
+  call void @increment_uncond_branch()
   br label %321
 
 321:                                              ; preds = %320, %26
   %322 = load i32, ptr %3, align 4
-  call void @__cflat_call_return(i64 106883544042656)
+  call void @increment_return()
   ret i32 %322
 }
 
@@ -5446,7 +5492,7 @@ define internal i32 @sglib___rbtree_delete_rightmost_leaf(ptr noundef %0, ptr no
   %11 = getelementptr inbounds %struct.rbtree, ptr %10, i32 0, i32 3
   %12 = load ptr, ptr %11, align 8
   %13 = icmp eq ptr %12, null
-  call void @__cflat_record_node(i64 106883544053888)
+  call void @increment_cond_branch()
   br i1 %13, label %14, label %54
 
 14:                                               ; preds = %2
@@ -5457,7 +5503,7 @@ define internal i32 @sglib___rbtree_delete_rightmost_leaf(ptr noundef %0, ptr no
   %18 = getelementptr inbounds %struct.rbtree, ptr %17, i32 0, i32 2
   %19 = load ptr, ptr %18, align 8
   %20 = icmp ne ptr %19, null
-  call void @__cflat_record_node(i64 106883544164400)
+  call void @increment_cond_branch()
   br i1 %20, label %21, label %45
 
 21:                                               ; preds = %14
@@ -5466,7 +5512,7 @@ define internal i32 @sglib___rbtree_delete_rightmost_leaf(ptr noundef %0, ptr no
   %24 = load i8, ptr %23, align 4
   %25 = zext i8 %24 to i32
   %26 = icmp eq i32 %25, 0
-  call void @__cflat_record_node(i64 106883544165744)
+  call void @increment_cond_branch()
   br i1 %26, label %27, label %36
 
 27:                                               ; preds = %21
@@ -5477,12 +5523,12 @@ define internal i32 @sglib___rbtree_delete_rightmost_leaf(ptr noundef %0, ptr no
   %32 = load i8, ptr %31, align 4
   %33 = zext i8 %32 to i32
   %34 = icmp eq i32 %33, 0
-  call void @__cflat_record_node(i64 106883544166784)
+  call void @increment_cond_branch()
   br i1 %34, label %35, label %36
 
 35:                                               ; preds = %27
   store i32 1, ptr %6, align 4
-  call void @__cflat_record_node(i64 106883544168096)
+  call void @increment_uncond_branch()
   br label %36
 
 36:                                               ; preds = %35, %27, %21
@@ -5496,7 +5542,7 @@ define internal i32 @sglib___rbtree_delete_rightmost_leaf(ptr noundef %0, ptr no
   %43 = load ptr, ptr %42, align 8
   %44 = load ptr, ptr %3, align 8
   store ptr %43, ptr %44, align 8
-  call void @__cflat_record_node(i64 106883544168336)
+  call void @increment_uncond_branch()
   br label %53
 
 45:                                               ; preds = %14
@@ -5509,40 +5555,40 @@ define internal i32 @sglib___rbtree_delete_rightmost_leaf(ptr noundef %0, ptr no
   %51 = icmp eq i32 %50, 0
   %52 = zext i1 %51 to i32
   store i32 %52, ptr %6, align 4
-  call void @__cflat_record_node(i64 106883544191440)
+  call void @increment_uncond_branch()
   br label %53
 
 53:                                               ; preds = %45, %36
-  call void @__cflat_record_node(i64 106883544194960)
+  call void @increment_uncond_branch()
   br label %65
 
 54:                                               ; preds = %2
   %55 = load ptr, ptr %5, align 8
   %56 = getelementptr inbounds %struct.rbtree, ptr %55, i32 0, i32 3
   %57 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883544053888, i64 106883544195072)
+  call void @increment_direct_call()
   %58 = call i32 @sglib___rbtree_delete_rightmost_leaf(ptr noundef %56, ptr noundef %57)
   store i32 %58, ptr %7, align 4
   %59 = load i32, ptr %7, align 4
   %60 = icmp ne i32 %59, 0
-  call void @__cflat_record_node(i64 106883544195072)
+  call void @increment_cond_branch()
   br i1 %60, label %61, label %64
 
 61:                                               ; preds = %54
   %62 = load ptr, ptr %3, align 8
-  call void @__cflat_call_enter(i64 106883544042656, i64 106883544196560)
+  call void @increment_direct_call()
   %63 = call i32 @sglib___rbtree_fix_right_deletion_discrepancy(ptr noundef %62)
   store i32 %63, ptr %6, align 4
-  call void @__cflat_record_node(i64 106883544196560)
+  call void @increment_uncond_branch()
   br label %64
 
 64:                                               ; preds = %61, %54
-  call void @__cflat_record_node(i64 106883544197200)
+  call void @increment_uncond_branch()
   br label %65
 
 65:                                               ; preds = %64, %53
   %66 = load i32, ptr %6, align 4
-  call void @__cflat_call_return(i64 106883544053888)
+  call void @increment_return()
   ret i32 %66
 }
 
@@ -5560,13 +5606,13 @@ define dso_local void @sglib_rbtree_add(ptr noundef %0, ptr noundef %1) #0 {
   store ptr null, ptr %8, align 8
   %9 = load ptr, ptr %3, align 8
   %10 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883544197680, i64 106883544192208)
+  call void @increment_direct_call()
   call void @sglib___rbtree_add_recursive(ptr noundef %9, ptr noundef %10)
   %11 = load ptr, ptr %3, align 8
   %12 = load ptr, ptr %11, align 8
   %13 = getelementptr inbounds %struct.rbtree, ptr %12, i32 0, i32 1
   store i8 0, ptr %13, align 4
-  call void @__cflat_call_return(i64 106883544192208)
+  call void @increment_return()
   ret void
 }
 
@@ -5583,7 +5629,7 @@ define internal void @sglib___rbtree_add_recursive(ptr noundef %0, ptr noundef %
   store ptr %8, ptr %6, align 8
   %9 = load ptr, ptr %6, align 8
   %10 = icmp eq ptr %9, null
-  call void @__cflat_record_node(i64 106883544197680)
+  call void @increment_cond_branch()
   br i1 %10, label %11, label %16
 
 11:                                               ; preds = %2
@@ -5593,7 +5639,7 @@ define internal void @sglib___rbtree_add_recursive(ptr noundef %0, ptr noundef %
   %14 = load ptr, ptr %4, align 8
   %15 = load ptr, ptr %3, align 8
   store ptr %14, ptr %15, align 8
-  call void @__cflat_record_node(i64 106883544200800)
+  call void @increment_uncond_branch()
   br label %58
 
 16:                                               ; preds = %2
@@ -5607,78 +5653,78 @@ define internal void @sglib___rbtree_add_recursive(ptr noundef %0, ptr noundef %
   store i32 %23, ptr %5, align 4
   %24 = load i32, ptr %5, align 4
   %25 = icmp slt i32 %24, 0
-  call void @__cflat_record_node(i64 106883544201888)
+  call void @increment_cond_branch()
   br i1 %25, label %33, label %26
 
 26:                                               ; preds = %16
   %27 = load i32, ptr %5, align 4
   %28 = icmp eq i32 %27, 0
-  call void @__cflat_record_node(i64 106883544203696)
+  call void @increment_cond_branch()
   br i1 %28, label %29, label %45
 
 29:                                               ; preds = %26
   %30 = load ptr, ptr %4, align 8
   %31 = load ptr, ptr %6, align 8
   %32 = icmp ult ptr %30, %31
-  call void @__cflat_record_node(i64 106883544204304)
+  call void @increment_cond_branch()
   br i1 %32, label %33, label %45
 
 33:                                               ; preds = %29, %16
   %34 = load ptr, ptr %6, align 8
   %35 = getelementptr inbounds %struct.rbtree, ptr %34, i32 0, i32 2
   %36 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883544197680, i64 106883544204880)
+  call void @increment_direct_call()
   call void @sglib___rbtree_add_recursive(ptr noundef %35, ptr noundef %36)
   %37 = load ptr, ptr %6, align 8
   %38 = getelementptr inbounds %struct.rbtree, ptr %37, i32 0, i32 1
   %39 = load i8, ptr %38, align 4
   %40 = zext i8 %39 to i32
   %41 = icmp eq i32 %40, 0
-  call void @__cflat_record_node(i64 106883544204880)
+  call void @increment_cond_branch()
   br i1 %41, label %42, label %44
 
 42:                                               ; preds = %33
   %43 = load ptr, ptr %3, align 8
-  call void @__cflat_call_enter(i64 106883544206816, i64 106883544206688)
+  call void @increment_direct_call()
   call void @sglib___rbtree_fix_left_insertion_discrepancy(ptr noundef %43)
-  call void @__cflat_record_node(i64 106883544206688)
+  call void @increment_uncond_branch()
   br label %44
 
 44:                                               ; preds = %42, %33
-  call void @__cflat_record_node(i64 106883544207472)
+  call void @increment_uncond_branch()
   br label %57
 
 45:                                               ; preds = %29, %26
   %46 = load ptr, ptr %6, align 8
   %47 = getelementptr inbounds %struct.rbtree, ptr %46, i32 0, i32 3
   %48 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883544197680, i64 106883544207584)
+  call void @increment_direct_call()
   call void @sglib___rbtree_add_recursive(ptr noundef %47, ptr noundef %48)
   %49 = load ptr, ptr %6, align 8
   %50 = getelementptr inbounds %struct.rbtree, ptr %49, i32 0, i32 1
   %51 = load i8, ptr %50, align 4
   %52 = zext i8 %51 to i32
   %53 = icmp eq i32 %52, 0
-  call void @__cflat_record_node(i64 106883544207584)
+  call void @increment_cond_branch()
   br i1 %53, label %54, label %56
 
 54:                                               ; preds = %45
   %55 = load ptr, ptr %3, align 8
-  call void @__cflat_call_enter(i64 106883544211536, i64 106883544211408)
+  call void @increment_direct_call()
   call void @sglib___rbtree_fix_right_insertion_discrepancy(ptr noundef %55)
-  call void @__cflat_record_node(i64 106883544211408)
+  call void @increment_uncond_branch()
   br label %56
 
 56:                                               ; preds = %54, %45
-  call void @__cflat_record_node(i64 106883544212112)
+  call void @increment_uncond_branch()
   br label %57
 
 57:                                               ; preds = %56, %44
-  call void @__cflat_record_node(i64 106883544212224)
+  call void @increment_uncond_branch()
   br label %58
 
 58:                                               ; preds = %57, %11
-  call void @__cflat_call_return(i64 106883544197680)
+  call void @increment_return()
   ret void
 }
 
@@ -5690,12 +5736,12 @@ define dso_local void @sglib_rbtree_delete(ptr noundef %0, ptr noundef %1) #0 {
   store ptr %1, ptr %4, align 8
   %5 = load ptr, ptr %3, align 8
   %6 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883544028688, i64 106883544208352)
+  call void @increment_direct_call()
   %7 = call i32 @sglib___rbtree_delete_recursive(ptr noundef %5, ptr noundef %6)
   %8 = load ptr, ptr %3, align 8
   %9 = load ptr, ptr %8, align 8
   %10 = icmp ne ptr %9, null
-  call void @__cflat_record_node(i64 106883544208352)
+  call void @increment_cond_branch()
   br i1 %10, label %11, label %15
 
 11:                                               ; preds = %2
@@ -5703,11 +5749,11 @@ define dso_local void @sglib_rbtree_delete(ptr noundef %0, ptr noundef %1) #0 {
   %13 = load ptr, ptr %12, align 8
   %14 = getelementptr inbounds %struct.rbtree, ptr %13, i32 0, i32 1
   store i8 0, ptr %14, align 4
-  call void @__cflat_record_node(i64 106883544212752)
+  call void @increment_uncond_branch()
   br label %15
 
 15:                                               ; preds = %11, %2
-  call void @__cflat_call_return(i64 106883544208352)
+  call void @increment_return()
   ret void
 }
 
@@ -5722,13 +5768,13 @@ define dso_local ptr @sglib_rbtree_find_member(ptr noundef %0, ptr noundef %1) #
   store ptr %1, ptr %4, align 8
   %8 = load ptr, ptr %3, align 8
   store ptr %8, ptr %6, align 8
-  call void @__cflat_record_node(i64 106883544213952)
+  call void @increment_uncond_branch()
   br label %9
 
 9:                                                ; preds = %35, %2
   %10 = load ptr, ptr %6, align 8
   %11 = icmp ne ptr %10, null
-  call void @__cflat_record_node(i64 106883544215392)
+  call void @increment_cond_branch()
   br i1 %11, label %12, label %36
 
 12:                                               ; preds = %9
@@ -5742,7 +5788,7 @@ define dso_local ptr @sglib_rbtree_find_member(ptr noundef %0, ptr noundef %1) #
   store i32 %19, ptr %7, align 4
   %20 = load i32, ptr %7, align 4
   %21 = icmp slt i32 %20, 0
-  call void @__cflat_record_node(i64 106883544216000)
+  call void @increment_cond_branch()
   br i1 %21, label %22, label %26
 
 22:                                               ; preds = %12
@@ -5750,13 +5796,13 @@ define dso_local ptr @sglib_rbtree_find_member(ptr noundef %0, ptr noundef %1) #
   %24 = getelementptr inbounds %struct.rbtree, ptr %23, i32 0, i32 2
   %25 = load ptr, ptr %24, align 8
   store ptr %25, ptr %6, align 8
-  call void @__cflat_record_node(i64 106883544217808)
+  call void @increment_uncond_branch()
   br label %35
 
 26:                                               ; preds = %12
   %27 = load i32, ptr %7, align 4
   %28 = icmp sgt i32 %27, 0
-  call void @__cflat_record_node(i64 106883544218608)
+  call void @increment_cond_branch()
   br i1 %28, label %29, label %33
 
 29:                                               ; preds = %26
@@ -5764,26 +5810,27 @@ define dso_local ptr @sglib_rbtree_find_member(ptr noundef %0, ptr noundef %1) #
   %31 = getelementptr inbounds %struct.rbtree, ptr %30, i32 0, i32 3
   %32 = load ptr, ptr %31, align 8
   store ptr %32, ptr %6, align 8
-  call void @__cflat_record_node(i64 106883544219280)
+  call void @increment_uncond_branch()
   br label %34
 
 33:                                               ; preds = %26
-  call void @__cflat_record_node(i64 106883544220080)
+  call void @increment_uncond_branch()
   br label %36
 
 34:                                               ; preds = %29
-  call void @__cflat_record_node(i64 106883544220192)
+  call void @increment_uncond_branch()
   br label %35
 
 35:                                               ; preds = %34, %22
-  call void @__cflat_record_node(i64 106883544220304)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %9, !llvm.loop !54
 
 36:                                               ; preds = %33, %9
   %37 = load ptr, ptr %6, align 8
   store ptr %37, ptr %5, align 8
   %38 = load ptr, ptr %5, align 8
-  call void @__cflat_call_return(i64 106883544213952)
+  call void @increment_return()
   ret ptr %38
 }
 
@@ -5795,13 +5842,13 @@ define dso_local i32 @sglib_rbtree_is_member(ptr noundef %0, ptr noundef %1) #0 
   %6 = alloca i32, align 4
   store ptr %0, ptr %4, align 8
   store ptr %1, ptr %5, align 8
-  call void @__cflat_record_node(i64 106883543595744)
+  call void @increment_uncond_branch()
   br label %7
 
 7:                                                ; preds = %47, %2
   %8 = load ptr, ptr %4, align 8
   %9 = icmp ne ptr %8, null
-  call void @__cflat_record_node(i64 106883543596768)
+  call void @increment_cond_branch()
   br i1 %9, label %10, label %48
 
 10:                                               ; preds = %7
@@ -5815,20 +5862,20 @@ define dso_local i32 @sglib_rbtree_is_member(ptr noundef %0, ptr noundef %1) #0 
   store i32 %17, ptr %6, align 4
   %18 = load i32, ptr %6, align 4
   %19 = icmp slt i32 %18, 0
-  call void @__cflat_record_node(i64 106883544225856)
+  call void @increment_cond_branch()
   br i1 %19, label %27, label %20
 
 20:                                               ; preds = %10
   %21 = load i32, ptr %6, align 4
   %22 = icmp eq i32 %21, 0
-  call void @__cflat_record_node(i64 106883544227728)
+  call void @increment_cond_branch()
   br i1 %22, label %23, label %31
 
 23:                                               ; preds = %20
   %24 = load ptr, ptr %5, align 8
   %25 = load ptr, ptr %4, align 8
   %26 = icmp ult ptr %24, %25
-  call void @__cflat_record_node(i64 106883544228400)
+  call void @increment_cond_branch()
   br i1 %26, label %27, label %31
 
 27:                                               ; preds = %23, %10
@@ -5836,26 +5883,26 @@ define dso_local i32 @sglib_rbtree_is_member(ptr noundef %0, ptr noundef %1) #0 
   %29 = getelementptr inbounds %struct.rbtree, ptr %28, i32 0, i32 2
   %30 = load ptr, ptr %29, align 8
   store ptr %30, ptr %4, align 8
-  call void @__cflat_record_node(i64 106883544228976)
+  call void @increment_uncond_branch()
   br label %47
 
 31:                                               ; preds = %23, %20
   %32 = load i32, ptr %6, align 4
   %33 = icmp sgt i32 %32, 0
-  call void @__cflat_record_node(i64 106883544229776)
+  call void @increment_cond_branch()
   br i1 %33, label %41, label %34
 
 34:                                               ; preds = %31
   %35 = load i32, ptr %6, align 4
   %36 = icmp eq i32 %35, 0
-  call void @__cflat_record_node(i64 106883544230384)
+  call void @increment_cond_branch()
   br i1 %36, label %37, label %45
 
 37:                                               ; preds = %34
   %38 = load ptr, ptr %5, align 8
   %39 = load ptr, ptr %4, align 8
   %40 = icmp ugt ptr %38, %39
-  call void @__cflat_record_node(i64 106883544231056)
+  call void @increment_cond_branch()
   br i1 %40, label %41, label %45
 
 41:                                               ; preds = %37, %31
@@ -5863,30 +5910,31 @@ define dso_local i32 @sglib_rbtree_is_member(ptr noundef %0, ptr noundef %1) #0 
   %43 = getelementptr inbounds %struct.rbtree, ptr %42, i32 0, i32 3
   %44 = load ptr, ptr %43, align 8
   store ptr %44, ptr %4, align 8
-  call void @__cflat_record_node(i64 106883544231632)
+  call void @increment_uncond_branch()
   br label %46
 
 45:                                               ; preds = %37, %34
   store i32 1, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544232464)
+  call void @increment_uncond_branch()
   br label %49
 
 46:                                               ; preds = %41
-  call void @__cflat_record_node(i64 106883544232784)
+  call void @increment_uncond_branch()
   br label %47
 
 47:                                               ; preds = %46, %27
-  call void @__cflat_record_node(i64 106883544234960)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %7, !llvm.loop !55
 
 48:                                               ; preds = %7
   store i32 0, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544235232)
+  call void @increment_uncond_branch()
   br label %49
 
 49:                                               ; preds = %48, %45
   %50 = load i32, ptr %3, align 4
-  call void @__cflat_call_return(i64 106883543595744)
+  call void @increment_return()
   ret i32 %50
 }
 
@@ -5902,32 +5950,32 @@ define dso_local i32 @sglib_rbtree_delete_if_member(ptr noundef %0, ptr noundef 
   %8 = load ptr, ptr %5, align 8
   %9 = load ptr, ptr %8, align 8
   %10 = load ptr, ptr %6, align 8
-  call void @__cflat_call_enter(i64 106883544213952, i64 106883544233424)
+  call void @increment_direct_call()
   %11 = call ptr @sglib_rbtree_find_member(ptr noundef %9, ptr noundef %10)
   %12 = load ptr, ptr %7, align 8
   store ptr %11, ptr %12, align 8
   %13 = icmp ne ptr %11, null
-  call void @__cflat_record_node(i64 106883544233424)
+  call void @increment_cond_branch()
   br i1 %13, label %14, label %18
 
 14:                                               ; preds = %3
   %15 = load ptr, ptr %5, align 8
   %16 = load ptr, ptr %7, align 8
   %17 = load ptr, ptr %16, align 8
-  call void @__cflat_call_enter(i64 106883544208352, i64 106883544236656)
+  call void @increment_direct_call()
   call void @sglib_rbtree_delete(ptr noundef %15, ptr noundef %17)
   store i32 1, ptr %4, align 4
-  call void @__cflat_record_node(i64 106883544236656)
+  call void @increment_uncond_branch()
   br label %19
 
 18:                                               ; preds = %3
   store i32 0, ptr %4, align 4
-  call void @__cflat_record_node(i64 106883544237696)
+  call void @increment_uncond_branch()
   br label %19
 
 19:                                               ; preds = %18, %14
   %20 = load i32, ptr %4, align 4
-  call void @__cflat_call_return(i64 106883544233424)
+  call void @increment_return()
   ret i32 %20
 }
 
@@ -5943,31 +5991,31 @@ define dso_local i32 @sglib_rbtree_add_if_not_member(ptr noundef %0, ptr noundef
   %8 = load ptr, ptr %5, align 8
   %9 = load ptr, ptr %8, align 8
   %10 = load ptr, ptr %6, align 8
-  call void @__cflat_call_enter(i64 106883544213952, i64 106883544238688)
+  call void @increment_direct_call()
   %11 = call ptr @sglib_rbtree_find_member(ptr noundef %9, ptr noundef %10)
   %12 = load ptr, ptr %7, align 8
   store ptr %11, ptr %12, align 8
   %13 = icmp eq ptr %11, null
-  call void @__cflat_record_node(i64 106883544238688)
+  call void @increment_cond_branch()
   br i1 %13, label %14, label %17
 
 14:                                               ; preds = %3
   %15 = load ptr, ptr %5, align 8
   %16 = load ptr, ptr %6, align 8
-  call void @__cflat_call_enter(i64 106883544192208, i64 106883544241168)
+  call void @increment_direct_call()
   call void @sglib_rbtree_add(ptr noundef %15, ptr noundef %16)
   store i32 1, ptr %4, align 4
-  call void @__cflat_record_node(i64 106883544241168)
+  call void @increment_uncond_branch()
   br label %18
 
 17:                                               ; preds = %3
   store i32 0, ptr %4, align 4
-  call void @__cflat_record_node(i64 106883544242080)
+  call void @increment_uncond_branch()
   br label %18
 
 18:                                               ; preds = %17, %14
   %19 = load i32, ptr %4, align 4
-  call void @__cflat_call_return(i64 106883544238688)
+  call void @increment_return()
   ret i32 %19
 }
 
@@ -5987,23 +6035,23 @@ define dso_local i32 @sglib_rbtree_len(ptr noundef %0) #0 {
   %11 = load ptr, ptr %2, align 8
   store ptr %11, ptr %8, align 8
   store i32 0, ptr %9, align 4
-  call void @__cflat_record_node(i64 106883544242992)
+  call void @increment_uncond_branch()
   br label %12
 
 12:                                               ; preds = %76, %1
   %13 = load ptr, ptr %8, align 8
   %14 = icmp ne ptr %13, null
-  call void @__cflat_record_node(i64 106883544245104)
+  call void @increment_cond_branch()
   br i1 %14, label %15, label %86
 
 15:                                               ; preds = %12
-  call void @__cflat_record_node(i64 106883544245792)
+  call void @increment_uncond_branch()
   br label %16
 
 16:                                               ; preds = %41, %15
   %17 = load ptr, ptr %8, align 8
   %18 = icmp ne ptr %17, null
-  call void @__cflat_record_node(i64 106883544245904)
+  call void @increment_cond_branch()
   br i1 %18, label %19, label %42
 
 19:                                               ; preds = %16
@@ -6032,19 +6080,20 @@ define dso_local i32 @sglib_rbtree_len(ptr noundef %0) #0 {
   store i32 %37, ptr %9, align 4
   %38 = load i32, ptr %9, align 4
   %39 = icmp sge i32 %38, 128
-  call void @__cflat_record_node(i64 106883544246576)
+  call void @increment_cond_branch()
   br i1 %39, label %40, label %41
 
 40:                                               ; preds = %19
-  call void @__cflat_record_node(i64 106883544250640)
+  call void @increment_uncond_branch()
   br label %41
 
 41:                                               ; preds = %40, %19
-  call void @__cflat_record_node(i64 106883544250752)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %16, !llvm.loop !56
 
 42:                                               ; preds = %16
-  call void @__cflat_record_node(i64 106883544251136)
+  call void @increment_uncond_branch()
   br label %43
 
 43:                                               ; preds = %74, %42
@@ -6057,7 +6106,7 @@ define dso_local i32 @sglib_rbtree_len(ptr noundef %0) #0 {
   %49 = load i8, ptr %48, align 1
   %50 = zext i8 %49 to i32
   %51 = icmp eq i32 %50, 0
-  call void @__cflat_record_node(i64 106883544251248)
+  call void @increment_cond_branch()
   br i1 %51, label %52, label %59
 
 52:                                               ; preds = %43
@@ -6069,7 +6118,7 @@ define dso_local i32 @sglib_rbtree_len(ptr noundef %0) #0 {
   %57 = load i32, ptr %3, align 4
   %58 = add nsw i32 %57, 1
   store i32 %58, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544255008)
+  call void @increment_uncond_branch()
   br label %59
 
 59:                                               ; preds = %52, %43
@@ -6079,13 +6128,13 @@ define dso_local i32 @sglib_rbtree_len(ptr noundef %0) #0 {
   %63 = load i8, ptr %62, align 1
   %64 = add i8 %63, 1
   store i8 %64, ptr %62, align 1
-  call void @__cflat_record_node(i64 106883544256272)
+  call void @increment_uncond_branch()
   br label %65
 
 65:                                               ; preds = %59
   %66 = load i32, ptr %9, align 4
   %67 = icmp sgt i32 %66, 0
-  call void @__cflat_record_node(i64 106883544257328)
+  call void @increment_cond_branch()
   br i1 %67, label %68, label %74
 
 68:                                               ; preds = %65
@@ -6094,12 +6143,13 @@ define dso_local i32 @sglib_rbtree_len(ptr noundef %0) #0 {
   %71 = getelementptr inbounds [128 x ptr], ptr %6, i64 0, i64 %70
   %72 = load ptr, ptr %71, align 8
   %73 = icmp eq ptr %72, null
-  call void @__cflat_record_node(i64 106883544257936)
+  call void @increment_uncond_branch()
   br label %74
 
 74:                                               ; preds = %68, %65
   %75 = phi i1 [ false, %65 ], [ %73, %68 ]
-  call void @__cflat_record_node(i64 106883544258728)
+  call void @increment_cond_branch()
+  call void @increment_loop_header()
   br i1 %75, label %43, label %76, !llvm.loop !57
 
 76:                                               ; preds = %74
@@ -6115,12 +6165,13 @@ define dso_local i32 @sglib_rbtree_len(ptr noundef %0) #0 {
   %84 = load i32, ptr %9, align 4
   %85 = add nsw i32 %84, 1
   store i32 %85, ptr %9, align 4
-  call void @__cflat_record_node(i64 106883544259456)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %12, !llvm.loop !58
 
 86:                                               ; preds = %12
   %87 = load i32, ptr %3, align 4
-  call void @__cflat_call_return(i64 106883544242992)
+  call void @increment_return()
   ret i32 %87
 }
 
@@ -6149,7 +6200,7 @@ define dso_local void @sglib__rbtree_it_compute_current_elem(ptr noundef %0) #0 
   %19 = load ptr, ptr %2, align 8
   %20 = getelementptr inbounds %struct.sglib_rbtree_iterator, ptr %19, i32 0, i32 0
   store ptr null, ptr %20, align 8
-  call void @__cflat_record_node(i64 106883544252512)
+  call void @increment_uncond_branch()
   br label %21
 
 21:                                               ; preds = %215, %1
@@ -6158,7 +6209,7 @@ define dso_local void @sglib__rbtree_it_compute_current_elem(ptr noundef %0) #0 
   %24 = load i16, ptr %23, align 8
   %25 = sext i16 %24 to i32
   %26 = icmp sgt i32 %25, 0
-  call void @__cflat_record_node(i64 106883544263776)
+  call void @increment_cond_branch()
   br i1 %26, label %27, label %32
 
 27:                                               ; preds = %21
@@ -6166,12 +6217,12 @@ define dso_local void @sglib__rbtree_it_compute_current_elem(ptr noundef %0) #0 
   %29 = getelementptr inbounds %struct.sglib_rbtree_iterator, ptr %28, i32 0, i32 0
   %30 = load ptr, ptr %29, align 8
   %31 = icmp eq ptr %30, null
-  call void @__cflat_record_node(i64 106883544264880)
+  call void @increment_uncond_branch()
   br label %32
 
 32:                                               ; preds = %27, %21
   %33 = phi i1 [ false, %21 ], [ %31, %27 ]
-  call void @__cflat_record_node(i64 106883544265560)
+  call void @increment_cond_branch()
   br i1 %33, label %34, label %216
 
 34:                                               ; preds = %32
@@ -6183,7 +6234,7 @@ define dso_local void @sglib__rbtree_it_compute_current_elem(ptr noundef %0) #0 
   store i32 %39, ptr %3, align 4
   %40 = load i32, ptr %3, align 4
   %41 = icmp sge i32 %40, 0
-  call void @__cflat_record_node(i64 106883544266112)
+  call void @increment_cond_branch()
   br i1 %41, label %42, label %179
 
 42:                                               ; preds = %34
@@ -6195,7 +6246,7 @@ define dso_local void @sglib__rbtree_it_compute_current_elem(ptr noundef %0) #0 
   %48 = load i8, ptr %47, align 1
   %49 = zext i8 %48 to i32
   %50 = icmp sge i32 %49, 2
-  call void @__cflat_record_node(i64 106883544267648)
+  call void @increment_cond_branch()
   br i1 %50, label %51, label %56
 
 51:                                               ; preds = %42
@@ -6204,7 +6255,7 @@ define dso_local void @sglib__rbtree_it_compute_current_elem(ptr noundef %0) #0 
   %54 = load i16, ptr %53, align 8
   %55 = add i16 %54, -1
   store i16 %55, ptr %53, align 8
-  call void @__cflat_record_node(i64 106883544271248)
+  call void @increment_uncond_branch()
   br label %178
 
 56:                                               ; preds = %42
@@ -6216,7 +6267,7 @@ define dso_local void @sglib__rbtree_it_compute_current_elem(ptr noundef %0) #0 
   %62 = load i8, ptr %61, align 1
   %63 = zext i8 %62 to i32
   %64 = icmp eq i32 %63, 0
-  call void @__cflat_record_node(i64 106883544272192)
+  call void @increment_cond_branch()
   br i1 %64, label %65, label %74
 
 65:                                               ; preds = %56
@@ -6229,7 +6280,7 @@ define dso_local void @sglib__rbtree_it_compute_current_elem(ptr noundef %0) #0 
   %72 = getelementptr inbounds %struct.rbtree, ptr %71, i32 0, i32 2
   %73 = load ptr, ptr %72, align 8
   store ptr %73, ptr %6, align 8
-  call void @__cflat_record_node(i64 106883544273728)
+  call void @increment_uncond_branch()
   br label %83
 
 74:                                               ; preds = %56
@@ -6242,31 +6293,31 @@ define dso_local void @sglib__rbtree_it_compute_current_elem(ptr noundef %0) #0 
   %81 = getelementptr inbounds %struct.rbtree, ptr %80, i32 0, i32 3
   %82 = load ptr, ptr %81, align 8
   store ptr %82, ptr %6, align 8
-  call void @__cflat_record_node(i64 106883544275280)
+  call void @increment_uncond_branch()
   br label %83
 
 83:                                               ; preds = %74, %65
   %84 = load ptr, ptr %7, align 8
   %85 = icmp ne ptr %84, null
-  call void @__cflat_record_node(i64 106883544276752)
+  call void @increment_cond_branch()
   br i1 %85, label %86, label %149
 
 86:                                               ; preds = %83
   %87 = load ptr, ptr %8, align 8
   %88 = icmp eq ptr %87, null
-  call void @__cflat_record_node(i64 106883544277360)
+  call void @increment_cond_branch()
   br i1 %88, label %89, label %120
 
 89:                                               ; preds = %86
   %90 = load ptr, ptr %6, align 8
   store ptr %90, ptr %9, align 8
-  call void @__cflat_record_node(i64 106883544278032)
+  call void @increment_uncond_branch()
   br label %91
 
 91:                                               ; preds = %117, %89
   %92 = load ptr, ptr %9, align 8
   %93 = icmp ne ptr %92, null
-  call void @__cflat_record_node(i64 106883544278512)
+  call void @increment_cond_branch()
   br i1 %93, label %94, label %118
 
 94:                                               ; preds = %91
@@ -6280,7 +6331,7 @@ define dso_local void @sglib__rbtree_it_compute_current_elem(ptr noundef %0) #0 
   store i32 %101, ptr %10, align 4
   %102 = load i32, ptr %10, align 4
   %103 = icmp slt i32 %102, 0
-  call void @__cflat_record_node(i64 106883544279184)
+  call void @increment_cond_branch()
   br i1 %103, label %104, label %108
 
 104:                                              ; preds = %94
@@ -6288,13 +6339,13 @@ define dso_local void @sglib__rbtree_it_compute_current_elem(ptr noundef %0) #0 
   %106 = getelementptr inbounds %struct.rbtree, ptr %105, i32 0, i32 2
   %107 = load ptr, ptr %106, align 8
   store ptr %107, ptr %9, align 8
-  call void @__cflat_record_node(i64 106883544270144)
+  call void @increment_uncond_branch()
   br label %117
 
 108:                                              ; preds = %94
   %109 = load i32, ptr %10, align 4
   %110 = icmp sgt i32 %109, 0
-  call void @__cflat_record_node(i64 106883544283904)
+  call void @increment_cond_branch()
   br i1 %110, label %111, label %115
 
 111:                                              ; preds = %108
@@ -6302,37 +6353,38 @@ define dso_local void @sglib__rbtree_it_compute_current_elem(ptr noundef %0) #0 
   %113 = getelementptr inbounds %struct.rbtree, ptr %112, i32 0, i32 3
   %114 = load ptr, ptr %113, align 8
   store ptr %114, ptr %9, align 8
-  call void @__cflat_record_node(i64 106883544284576)
+  call void @increment_uncond_branch()
   br label %116
 
 115:                                              ; preds = %108
-  call void @__cflat_record_node(i64 106883544285376)
+  call void @increment_uncond_branch()
   br label %118
 
 116:                                              ; preds = %111
-  call void @__cflat_record_node(i64 106883544285488)
+  call void @increment_uncond_branch()
   br label %117
 
 117:                                              ; preds = %116, %104
-  call void @__cflat_record_node(i64 106883544285600)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %91, !llvm.loop !59
 
 118:                                              ; preds = %115, %91
   %119 = load ptr, ptr %9, align 8
   store ptr %119, ptr %6, align 8
-  call void @__cflat_record_node(i64 106883544285840)
+  call void @increment_uncond_branch()
   br label %148
 
 120:                                              ; preds = %86
   %121 = load ptr, ptr %6, align 8
   store ptr %121, ptr %11, align 8
-  call void @__cflat_record_node(i64 106883544286320)
+  call void @increment_uncond_branch()
   br label %122
 
 122:                                              ; preds = %145, %120
   %123 = load ptr, ptr %11, align 8
   %124 = icmp ne ptr %123, null
-  call void @__cflat_record_node(i64 106883544286800)
+  call void @increment_cond_branch()
   br i1 %124, label %125, label %146
 
 125:                                              ; preds = %122
@@ -6343,7 +6395,7 @@ define dso_local void @sglib__rbtree_it_compute_current_elem(ptr noundef %0) #0 
   store i32 %129, ptr %12, align 4
   %130 = load i32, ptr %12, align 4
   %131 = icmp slt i32 %130, 0
-  call void @__cflat_record_node(i64 106883544287472)
+  call void @increment_cond_branch()
   br i1 %131, label %132, label %136
 
 132:                                              ; preds = %125
@@ -6351,13 +6403,13 @@ define dso_local void @sglib__rbtree_it_compute_current_elem(ptr noundef %0) #0 
   %134 = getelementptr inbounds %struct.rbtree, ptr %133, i32 0, i32 2
   %135 = load ptr, ptr %134, align 8
   store ptr %135, ptr %11, align 8
-  call void @__cflat_record_node(i64 106883544288960)
+  call void @increment_uncond_branch()
   br label %145
 
 136:                                              ; preds = %125
   %137 = load i32, ptr %12, align 4
   %138 = icmp sgt i32 %137, 0
-  call void @__cflat_record_node(i64 106883544289760)
+  call void @increment_cond_branch()
   br i1 %138, label %139, label %143
 
 139:                                              ; preds = %136
@@ -6365,35 +6417,36 @@ define dso_local void @sglib__rbtree_it_compute_current_elem(ptr noundef %0) #0 
   %141 = getelementptr inbounds %struct.rbtree, ptr %140, i32 0, i32 3
   %142 = load ptr, ptr %141, align 8
   store ptr %142, ptr %11, align 8
-  call void @__cflat_record_node(i64 106883544290432)
+  call void @increment_uncond_branch()
   br label %144
 
 143:                                              ; preds = %136
-  call void @__cflat_record_node(i64 106883544291232)
+  call void @increment_uncond_branch()
   br label %146
 
 144:                                              ; preds = %139
-  call void @__cflat_record_node(i64 106883544291344)
+  call void @increment_uncond_branch()
   br label %145
 
 145:                                              ; preds = %144, %132
-  call void @__cflat_record_node(i64 106883544291456)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %122, !llvm.loop !60
 
 146:                                              ; preds = %143, %122
   %147 = load ptr, ptr %11, align 8
   store ptr %147, ptr %6, align 8
-  call void @__cflat_record_node(i64 106883544291696)
+  call void @increment_uncond_branch()
   br label %148
 
 148:                                              ; preds = %146, %118
-  call void @__cflat_record_node(i64 106883544292096)
+  call void @increment_uncond_branch()
   br label %149
 
 149:                                              ; preds = %148, %83
   %150 = load ptr, ptr %6, align 8
   %151 = icmp ne ptr %150, null
-  call void @__cflat_record_node(i64 106883544292208)
+  call void @increment_cond_branch()
   br i1 %151, label %152, label %170
 
 152:                                              ; preds = %149
@@ -6418,7 +6471,7 @@ define dso_local void @sglib__rbtree_it_compute_current_elem(ptr noundef %0) #0 
   %168 = load i16, ptr %167, align 8
   %169 = add i16 %168, 1
   store i16 %169, ptr %167, align 8
-  call void @__cflat_record_node(i64 106883544292816)
+  call void @increment_uncond_branch()
   br label %170
 
 170:                                              ; preds = %152, %149
@@ -6430,11 +6483,11 @@ define dso_local void @sglib__rbtree_it_compute_current_elem(ptr noundef %0) #0 
   %176 = load i8, ptr %175, align 1
   %177 = add i8 %176, 1
   store i8 %177, ptr %175, align 1
-  call void @__cflat_record_node(i64 106883544296112)
+  call void @increment_uncond_branch()
   br label %178
 
 178:                                              ; preds = %170, %51
-  call void @__cflat_record_node(i64 106883544297408)
+  call void @increment_uncond_branch()
   br label %179
 
 179:                                              ; preds = %178, %34
@@ -6443,7 +6496,7 @@ define dso_local void @sglib__rbtree_it_compute_current_elem(ptr noundef %0) #0 
   %182 = load i16, ptr %181, align 8
   %183 = sext i16 %182 to i32
   %184 = icmp sgt i32 %183, 0
-  call void @__cflat_record_node(i64 106883544297520)
+  call void @increment_cond_branch()
   br i1 %184, label %185, label %215
 
 185:                                              ; preds = %179
@@ -6463,7 +6516,7 @@ define dso_local void @sglib__rbtree_it_compute_current_elem(ptr noundef %0) #0 
   %199 = load i8, ptr %198, align 1
   %200 = zext i8 %199 to i32
   %201 = icmp eq i32 %189, %200
-  call void @__cflat_record_node(i64 106883544298560)
+  call void @increment_cond_branch()
   br i1 %201, label %202, label %215
 
 202:                                              ; preds = %185
@@ -6480,15 +6533,16 @@ define dso_local void @sglib__rbtree_it_compute_current_elem(ptr noundef %0) #0 
   %213 = load ptr, ptr %2, align 8
   %214 = getelementptr inbounds %struct.sglib_rbtree_iterator, ptr %213, i32 0, i32 0
   store ptr %212, ptr %214, align 8
-  call void @__cflat_record_node(i64 106883544280960)
+  call void @increment_uncond_branch()
   br label %215
 
 215:                                              ; preds = %202, %185, %179
-  call void @__cflat_record_node(i64 106883544283008)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %21, !llvm.loop !61
 
 216:                                              ; preds = %32
-  call void @__cflat_call_return(i64 106883544252512)
+  call void @increment_return()
   ret void
 }
 
@@ -6524,31 +6578,31 @@ define dso_local ptr @sglib__rbtree_it_init(ptr noundef %0, ptr noundef %1, i32 
   store ptr %23, ptr %25, align 8
   %26 = load ptr, ptr %10, align 8
   %27 = icmp eq ptr %26, null
-  call void @__cflat_record_node(i64 106883544300000)
+  call void @increment_cond_branch()
   br i1 %27, label %28, label %30
 
 28:                                               ; preds = %5
   %29 = load ptr, ptr %7, align 8
   store ptr %29, ptr %11, align 8
-  call void @__cflat_record_node(i64 106883544304624)
+  call void @increment_uncond_branch()
   br label %93
 
 30:                                               ; preds = %5
   %31 = load ptr, ptr %9, align 8
   %32 = icmp eq ptr %31, null
-  call void @__cflat_record_node(i64 106883544305104)
+  call void @increment_cond_branch()
   br i1 %32, label %33, label %64
 
 33:                                               ; preds = %30
   %34 = load ptr, ptr %7, align 8
   store ptr %34, ptr %12, align 8
-  call void @__cflat_record_node(i64 106883544305712)
+  call void @increment_uncond_branch()
   br label %35
 
 35:                                               ; preds = %61, %33
   %36 = load ptr, ptr %12, align 8
   %37 = icmp ne ptr %36, null
-  call void @__cflat_record_node(i64 106883544306192)
+  call void @increment_cond_branch()
   br i1 %37, label %38, label %62
 
 38:                                               ; preds = %35
@@ -6562,7 +6616,7 @@ define dso_local ptr @sglib__rbtree_it_init(ptr noundef %0, ptr noundef %1, i32 
   store i32 %45, ptr %13, align 4
   %46 = load i32, ptr %13, align 4
   %47 = icmp slt i32 %46, 0
-  call void @__cflat_record_node(i64 106883544306864)
+  call void @increment_cond_branch()
   br i1 %47, label %48, label %52
 
 48:                                               ; preds = %38
@@ -6570,13 +6624,13 @@ define dso_local ptr @sglib__rbtree_it_init(ptr noundef %0, ptr noundef %1, i32 
   %50 = getelementptr inbounds %struct.rbtree, ptr %49, i32 0, i32 2
   %51 = load ptr, ptr %50, align 8
   store ptr %51, ptr %12, align 8
-  call void @__cflat_record_node(i64 106883544310800)
+  call void @increment_uncond_branch()
   br label %61
 
 52:                                               ; preds = %38
   %53 = load i32, ptr %13, align 4
   %54 = icmp sgt i32 %53, 0
-  call void @__cflat_record_node(i64 106883544311600)
+  call void @increment_cond_branch()
   br i1 %54, label %55, label %59
 
 55:                                               ; preds = %52
@@ -6584,37 +6638,38 @@ define dso_local ptr @sglib__rbtree_it_init(ptr noundef %0, ptr noundef %1, i32 
   %57 = getelementptr inbounds %struct.rbtree, ptr %56, i32 0, i32 3
   %58 = load ptr, ptr %57, align 8
   store ptr %58, ptr %12, align 8
-  call void @__cflat_record_node(i64 106883544312272)
+  call void @increment_uncond_branch()
   br label %60
 
 59:                                               ; preds = %52
-  call void @__cflat_record_node(i64 106883544313072)
+  call void @increment_uncond_branch()
   br label %62
 
 60:                                               ; preds = %55
-  call void @__cflat_record_node(i64 106883544313184)
+  call void @increment_uncond_branch()
   br label %61
 
 61:                                               ; preds = %60, %48
-  call void @__cflat_record_node(i64 106883544313296)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %35, !llvm.loop !62
 
 62:                                               ; preds = %59, %35
   %63 = load ptr, ptr %12, align 8
   store ptr %63, ptr %11, align 8
-  call void @__cflat_record_node(i64 106883544313536)
+  call void @increment_uncond_branch()
   br label %92
 
 64:                                               ; preds = %30
   %65 = load ptr, ptr %7, align 8
   store ptr %65, ptr %14, align 8
-  call void @__cflat_record_node(i64 106883544314016)
+  call void @increment_uncond_branch()
   br label %66
 
 66:                                               ; preds = %89, %64
   %67 = load ptr, ptr %14, align 8
   %68 = icmp ne ptr %67, null
-  call void @__cflat_record_node(i64 106883544314496)
+  call void @increment_cond_branch()
   br i1 %68, label %69, label %90
 
 69:                                               ; preds = %66
@@ -6625,7 +6680,7 @@ define dso_local ptr @sglib__rbtree_it_init(ptr noundef %0, ptr noundef %1, i32 
   store i32 %73, ptr %15, align 4
   %74 = load i32, ptr %15, align 4
   %75 = icmp slt i32 %74, 0
-  call void @__cflat_record_node(i64 106883544315168)
+  call void @increment_cond_branch()
   br i1 %75, label %76, label %80
 
 76:                                               ; preds = %69
@@ -6633,13 +6688,13 @@ define dso_local ptr @sglib__rbtree_it_init(ptr noundef %0, ptr noundef %1, i32 
   %78 = getelementptr inbounds %struct.rbtree, ptr %77, i32 0, i32 2
   %79 = load ptr, ptr %78, align 8
   store ptr %79, ptr %14, align 8
-  call void @__cflat_record_node(i64 106883544316656)
+  call void @increment_uncond_branch()
   br label %89
 
 80:                                               ; preds = %69
   %81 = load i32, ptr %15, align 4
   %82 = icmp sgt i32 %81, 0
-  call void @__cflat_record_node(i64 106883544317456)
+  call void @increment_cond_branch()
   br i1 %82, label %83, label %87
 
 83:                                               ; preds = %80
@@ -6647,35 +6702,36 @@ define dso_local ptr @sglib__rbtree_it_init(ptr noundef %0, ptr noundef %1, i32 
   %85 = getelementptr inbounds %struct.rbtree, ptr %84, i32 0, i32 3
   %86 = load ptr, ptr %85, align 8
   store ptr %86, ptr %14, align 8
-  call void @__cflat_record_node(i64 106883544318128)
+  call void @increment_uncond_branch()
   br label %88
 
 87:                                               ; preds = %80
-  call void @__cflat_record_node(i64 106883544318928)
+  call void @increment_uncond_branch()
   br label %90
 
 88:                                               ; preds = %83
-  call void @__cflat_record_node(i64 106883544319040)
+  call void @increment_uncond_branch()
   br label %89
 
 89:                                               ; preds = %88, %76
-  call void @__cflat_record_node(i64 106883544319152)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %66, !llvm.loop !63
 
 90:                                               ; preds = %87, %66
   %91 = load ptr, ptr %14, align 8
   store ptr %91, ptr %11, align 8
-  call void @__cflat_record_node(i64 106883544319392)
+  call void @increment_uncond_branch()
   br label %92
 
 92:                                               ; preds = %90, %62
-  call void @__cflat_record_node(i64 106883544319792)
+  call void @increment_uncond_branch()
   br label %93
 
 93:                                               ; preds = %92, %28
   %94 = load ptr, ptr %11, align 8
   %95 = icmp eq ptr %94, null
-  call void @__cflat_record_node(i64 106883544319904)
+  call void @increment_cond_branch()
   br i1 %95, label %96, label %101
 
 96:                                               ; preds = %93
@@ -6685,7 +6741,7 @@ define dso_local ptr @sglib__rbtree_it_init(ptr noundef %0, ptr noundef %1, i32 
   %99 = load ptr, ptr %6, align 8
   %100 = getelementptr inbounds %struct.sglib_rbtree_iterator, ptr %99, i32 0, i32 0
   store ptr null, ptr %100, align 8
-  call void @__cflat_record_node(i64 106883544308672)
+  call void @increment_uncond_branch()
   br label %120
 
 101:                                              ; preds = %93
@@ -6703,7 +6759,7 @@ define dso_local ptr @sglib__rbtree_it_init(ptr noundef %0, ptr noundef %1, i32 
   store ptr %107, ptr %110, align 8
   %111 = load i32, ptr %8, align 4
   %112 = icmp eq i32 %111, 0
-  call void @__cflat_record_node(i64 106883544309824)
+  call void @increment_cond_branch()
   br i1 %112, label %113, label %117
 
 113:                                              ; preds = %101
@@ -6711,25 +6767,25 @@ define dso_local ptr @sglib__rbtree_it_init(ptr noundef %0, ptr noundef %1, i32 
   %115 = load ptr, ptr %6, align 8
   %116 = getelementptr inbounds %struct.sglib_rbtree_iterator, ptr %115, i32 0, i32 0
   store ptr %114, ptr %116, align 8
-  call void @__cflat_record_node(i64 106883544326288)
+  call void @increment_uncond_branch()
   br label %119
 
 117:                                              ; preds = %101
   %118 = load ptr, ptr %6, align 8
-  call void @__cflat_call_enter(i64 106883544252512, i64 106883544327088)
+  call void @increment_direct_call()
   call void @sglib__rbtree_it_compute_current_elem(ptr noundef %118)
-  call void @__cflat_record_node(i64 106883544327088)
+  call void @increment_uncond_branch()
   br label %119
 
 119:                                              ; preds = %117, %113
-  call void @__cflat_record_node(i64 106883544327664)
+  call void @increment_uncond_branch()
   br label %120
 
 120:                                              ; preds = %119, %96
   %121 = load ptr, ptr %6, align 8
   %122 = getelementptr inbounds %struct.sglib_rbtree_iterator, ptr %121, i32 0, i32 0
   %123 = load ptr, ptr %122, align 8
-  call void @__cflat_call_return(i64 106883544300000)
+  call void @increment_return()
   ret ptr %123
 }
 
@@ -6741,9 +6797,9 @@ define dso_local ptr @sglib_rbtree_it_init(ptr noundef %0, ptr noundef %1) #0 {
   store ptr %1, ptr %4, align 8
   %5 = load ptr, ptr %3, align 8
   %6 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883544300000, i64 106883544320656)
+  call void @increment_direct_call()
   %7 = call ptr @sglib__rbtree_it_init(ptr noundef %5, ptr noundef %6, i32 noundef 2, ptr noundef null, ptr noundef null)
-  call void @__cflat_call_return(i64 106883544320656)
+  call void @increment_return()
   ret ptr %7
 }
 
@@ -6755,9 +6811,9 @@ define dso_local ptr @sglib_rbtree_it_init_preorder(ptr noundef %0, ptr noundef 
   store ptr %1, ptr %4, align 8
   %5 = load ptr, ptr %3, align 8
   %6 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883544300000, i64 106883544322448)
+  call void @increment_direct_call()
   %7 = call ptr @sglib__rbtree_it_init(ptr noundef %5, ptr noundef %6, i32 noundef 0, ptr noundef null, ptr noundef null)
-  call void @__cflat_call_return(i64 106883544322448)
+  call void @increment_return()
   ret ptr %7
 }
 
@@ -6769,9 +6825,9 @@ define dso_local ptr @sglib_rbtree_it_init_inorder(ptr noundef %0, ptr noundef %
   store ptr %1, ptr %4, align 8
   %5 = load ptr, ptr %3, align 8
   %6 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883544300000, i64 106883544328336)
+  call void @increment_direct_call()
   %7 = call ptr @sglib__rbtree_it_init(ptr noundef %5, ptr noundef %6, i32 noundef 1, ptr noundef null, ptr noundef null)
-  call void @__cflat_call_return(i64 106883544328336)
+  call void @increment_return()
   ret ptr %7
 }
 
@@ -6783,9 +6839,9 @@ define dso_local ptr @sglib_rbtree_it_init_postorder(ptr noundef %0, ptr noundef
   store ptr %1, ptr %4, align 8
   %5 = load ptr, ptr %3, align 8
   %6 = load ptr, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883544300000, i64 106883544330144)
+  call void @increment_direct_call()
   %7 = call ptr @sglib__rbtree_it_init(ptr noundef %5, ptr noundef %6, i32 noundef 2, ptr noundef null, ptr noundef null)
-  call void @__cflat_call_return(i64 106883544330144)
+  call void @increment_return()
   ret ptr %7
 }
 
@@ -6803,9 +6859,9 @@ define dso_local ptr @sglib_rbtree_it_init_on_equal(ptr noundef %0, ptr noundef 
   %10 = load ptr, ptr %6, align 8
   %11 = load ptr, ptr %7, align 8
   %12 = load ptr, ptr %8, align 8
-  call void @__cflat_call_enter(i64 106883544300000, i64 106883544332128)
+  call void @increment_direct_call()
   %13 = call ptr @sglib__rbtree_it_init(ptr noundef %9, ptr noundef %10, i32 noundef 1, ptr noundef %11, ptr noundef %12)
-  call void @__cflat_call_return(i64 106883544332128)
+  call void @increment_return()
   ret ptr %13
 }
 
@@ -6816,7 +6872,7 @@ define dso_local ptr @sglib_rbtree_it_current(ptr noundef %0) #0 {
   %3 = load ptr, ptr %2, align 8
   %4 = getelementptr inbounds %struct.sglib_rbtree_iterator, ptr %3, i32 0, i32 0
   %5 = load ptr, ptr %4, align 8
-  call void @__cflat_call_return(i64 106883543884432)
+  call void @increment_return()
   ret ptr %5
 }
 
@@ -6825,12 +6881,12 @@ define dso_local ptr @sglib_rbtree_it_next(ptr noundef %0) #0 {
   %2 = alloca ptr, align 8
   store ptr %0, ptr %2, align 8
   %3 = load ptr, ptr %2, align 8
-  call void @__cflat_call_enter(i64 106883544252512, i64 106883543885760)
+  call void @increment_direct_call()
   call void @sglib__rbtree_it_compute_current_elem(ptr noundef %3)
   %4 = load ptr, ptr %2, align 8
   %5 = getelementptr inbounds %struct.sglib_rbtree_iterator, ptr %4, i32 0, i32 0
   %6 = load ptr, ptr %5, align 8
-  call void @__cflat_call_return(i64 106883543885760)
+  call void @increment_return()
   ret ptr %6
 }
 
@@ -6841,9 +6897,9 @@ define dso_local void @sglib___rbtree_consistency_check(ptr noundef %0) #0 {
   store ptr %0, ptr %2, align 8
   store i32 -1, ptr %3, align 4
   %4 = load ptr, ptr %2, align 8
-  call void @__cflat_call_enter(i64 106883544342080, i64 106883543893248)
+  call void @increment_direct_call()
   call void @sglib___rbtree_consistency_check_recursive(ptr noundef %4, ptr noundef %3, i32 noundef 0)
-  call void @__cflat_call_return(i64 106883543893248)
+  call void @increment_return()
   ret void
 }
 
@@ -6857,29 +6913,29 @@ define internal void @sglib___rbtree_consistency_check_recursive(ptr noundef %0,
   store i32 %2, ptr %6, align 4
   %7 = load ptr, ptr %4, align 8
   %8 = icmp eq ptr %7, null
-  call void @__cflat_record_node(i64 106883544342080)
+  call void @increment_cond_branch()
   br i1 %8, label %9, label %18
 
 9:                                                ; preds = %3
   %10 = load ptr, ptr %5, align 8
   %11 = load i32, ptr %10, align 4
   %12 = icmp slt i32 %11, 0
-  call void @__cflat_record_node(i64 106883544344384)
+  call void @increment_cond_branch()
   br i1 %12, label %13, label %16
 
 13:                                               ; preds = %9
   %14 = load i32, ptr %6, align 4
   %15 = load ptr, ptr %5, align 8
   store i32 %14, ptr %15, align 4
-  call void @__cflat_record_node(i64 106883544345184)
+  call void @increment_uncond_branch()
   br label %17
 
 16:                                               ; preds = %9
-  call void @__cflat_record_node(i64 106883544345792)
+  call void @increment_uncond_branch()
   br label %17
 
 17:                                               ; preds = %16, %13
-  call void @__cflat_record_node(i64 106883544345984)
+  call void @increment_uncond_branch()
   br label %61
 
 18:                                               ; preds = %3
@@ -6887,11 +6943,11 @@ define internal void @sglib___rbtree_consistency_check_recursive(ptr noundef %0,
   %20 = getelementptr inbounds %struct.rbtree, ptr %19, i32 0, i32 2
   %21 = load ptr, ptr %20, align 8
   %22 = icmp ne ptr %21, null
-  call void @__cflat_record_node(i64 106883544346096)
+  call void @increment_cond_branch()
   br i1 %22, label %23, label %24
 
 23:                                               ; preds = %18
-  call void @__cflat_record_node(i64 106883544347024)
+  call void @increment_uncond_branch()
   br label %24
 
 24:                                               ; preds = %23, %18
@@ -6899,11 +6955,11 @@ define internal void @sglib___rbtree_consistency_check_recursive(ptr noundef %0,
   %26 = getelementptr inbounds %struct.rbtree, ptr %25, i32 0, i32 3
   %27 = load ptr, ptr %26, align 8
   %28 = icmp ne ptr %27, null
-  call void @__cflat_record_node(i64 106883544347136)
+  call void @increment_cond_branch()
   br i1 %28, label %29, label %30
 
 29:                                               ; preds = %24
-  call void @__cflat_record_node(i64 106883544348064)
+  call void @increment_uncond_branch()
   br label %30
 
 30:                                               ; preds = %29, %24
@@ -6912,7 +6968,7 @@ define internal void @sglib___rbtree_consistency_check_recursive(ptr noundef %0,
   %33 = load i8, ptr %32, align 4
   %34 = zext i8 %33 to i32
   %35 = icmp eq i32 %34, 1
-  call void @__cflat_record_node(i64 106883544348176)
+  call void @increment_cond_branch()
   br i1 %35, label %36, label %47
 
 36:                                               ; preds = %30
@@ -6921,16 +6977,16 @@ define internal void @sglib___rbtree_consistency_check_recursive(ptr noundef %0,
   %39 = load ptr, ptr %38, align 8
   %40 = load ptr, ptr %5, align 8
   %41 = load i32, ptr %6, align 4
-  call void @__cflat_call_enter(i64 106883544342080, i64 106883544349216)
+  call void @increment_direct_call()
   call void @sglib___rbtree_consistency_check_recursive(ptr noundef %39, ptr noundef %40, i32 noundef %41)
   %42 = load ptr, ptr %4, align 8
   %43 = getelementptr inbounds %struct.rbtree, ptr %42, i32 0, i32 3
   %44 = load ptr, ptr %43, align 8
   %45 = load ptr, ptr %5, align 8
   %46 = load i32, ptr %6, align 4
-  call void @__cflat_call_enter(i64 106883544342080, i64 106883544349216)
+  call void @increment_direct_call()
   call void @sglib___rbtree_consistency_check_recursive(ptr noundef %44, ptr noundef %45, i32 noundef %46)
-  call void @__cflat_record_node(i64 106883544349216)
+  call void @increment_uncond_branch()
   br label %60
 
 47:                                               ; preds = %30
@@ -6940,7 +6996,7 @@ define internal void @sglib___rbtree_consistency_check_recursive(ptr noundef %0,
   %51 = load ptr, ptr %5, align 8
   %52 = load i32, ptr %6, align 4
   %53 = add nsw i32 %52, 1
-  call void @__cflat_call_enter(i64 106883544342080, i64 106883544353584)
+  call void @increment_direct_call()
   call void @sglib___rbtree_consistency_check_recursive(ptr noundef %50, ptr noundef %51, i32 noundef %53)
   %54 = load ptr, ptr %4, align 8
   %55 = getelementptr inbounds %struct.rbtree, ptr %54, i32 0, i32 3
@@ -6948,17 +7004,17 @@ define internal void @sglib___rbtree_consistency_check_recursive(ptr noundef %0,
   %57 = load ptr, ptr %5, align 8
   %58 = load i32, ptr %6, align 4
   %59 = add nsw i32 %58, 1
-  call void @__cflat_call_enter(i64 106883544342080, i64 106883544353584)
+  call void @increment_direct_call()
   call void @sglib___rbtree_consistency_check_recursive(ptr noundef %56, ptr noundef %57, i32 noundef %59)
-  call void @__cflat_record_node(i64 106883544353584)
+  call void @increment_uncond_branch()
   br label %60
 
 60:                                               ; preds = %47, %36
-  call void @__cflat_record_node(i64 106883544356000)
+  call void @increment_uncond_branch()
   br label %61
 
 61:                                               ; preds = %60, %17
-  call void @__cflat_call_return(i64 106883544342080)
+  call void @increment_return()
   ret void
 }
 
@@ -6973,16 +7029,16 @@ define dso_local i32 @verify_benchmark(i32 noundef %0) #0 {
   store i32 %0, ptr %3, align 4
   store i32 0, ptr %4, align 4
   %8 = load ptr, ptr @the_list, align 8
-  call void @__cflat_call_enter(i64 106883543753296, i64 106883544352000)
+  call void @increment_direct_call()
   %9 = call ptr @sglib_dllist_get_first(ptr noundef %8)
   store ptr %9, ptr %5, align 8
-  call void @__cflat_record_node(i64 106883544352000)
+  call void @increment_uncond_branch()
   br label %10
 
 10:                                               ; preds = %23, %1
   %11 = load ptr, ptr %5, align 8
   %12 = icmp ne ptr %11, null
-  call void @__cflat_record_node(i64 106883544356464)
+  call void @increment_cond_branch()
   br i1 %12, label %13, label %27
 
 13:                                               ; preds = %10
@@ -6991,19 +7047,19 @@ define dso_local i32 @verify_benchmark(i32 noundef %0) #0 {
   %16 = load i32, ptr %15, align 8
   %17 = load i32, ptr %4, align 4
   %18 = icmp ne i32 %16, %17
-  call void @__cflat_record_node(i64 106883544357072)
+  call void @increment_cond_branch()
   br i1 %18, label %19, label %20
 
 19:                                               ; preds = %13
   store i32 0, ptr %2, align 4
-  call void @__cflat_record_node(i64 106883544358160)
+  call void @increment_uncond_branch()
   br label %66
 
 20:                                               ; preds = %13
   %21 = load i32, ptr %4, align 4
   %22 = add nsw i32 %21, 1
   store i32 %22, ptr %4, align 4
-  call void @__cflat_record_node(i64 106883544358480)
+  call void @increment_uncond_branch()
   br label %23
 
 23:                                               ; preds = %20
@@ -7011,18 +7067,19 @@ define dso_local i32 @verify_benchmark(i32 noundef %0) #0 {
   %25 = getelementptr inbounds %struct.dllist, ptr %24, i32 0, i32 1
   %26 = load ptr, ptr %25, align 8
   store ptr %26, ptr %5, align 8
-  call void @__cflat_record_node(i64 106883544359104)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %10, !llvm.loop !64
 
 27:                                               ; preds = %10
   store i32 0, ptr %4, align 4
-  call void @__cflat_record_node(i64 106883544360048)
+  call void @increment_uncond_branch()
   br label %28
 
 28:                                               ; preds = %51, %27
   %29 = load i32, ptr %4, align 4
   %30 = icmp slt i32 %29, 100
-  call void @__cflat_record_node(i64 106883544360368)
+  call void @increment_cond_branch()
   br i1 %30, label %31, label %54
 
 31:                                               ; preds = %28
@@ -7032,12 +7089,12 @@ define dso_local i32 @verify_benchmark(i32 noundef %0) #0 {
   %35 = load i32, ptr %34, align 4
   %36 = getelementptr inbounds %struct.ilist, ptr %6, i32 0, i32 0
   store i32 %35, ptr %36, align 8
-  call void @__cflat_call_enter(i64 106883543979552, i64 106883544361040)
+  call void @increment_direct_call()
   %37 = call ptr @sglib_hashed_ilist_find_member(ptr noundef @htab, ptr noundef %6)
   store ptr %37, ptr %7, align 8
   %38 = load ptr, ptr %7, align 8
   %39 = icmp eq ptr %38, null
-  call void @__cflat_record_node(i64 106883544361040)
+  call void @increment_cond_branch()
   br i1 %39, label %49, label %40
 
 40:                                               ; preds = %31
@@ -7049,54 +7106,56 @@ define dso_local i32 @verify_benchmark(i32 noundef %0) #0 {
   %46 = getelementptr inbounds [100 x i32], ptr @array, i64 0, i64 %45
   %47 = load i32, ptr %46, align 4
   %48 = icmp ne i32 %43, %47
-  call void @__cflat_record_node(i64 106883544363104)
+  call void @increment_cond_branch()
   br i1 %48, label %49, label %50
 
 49:                                               ; preds = %40, %31
   store i32 0, ptr %2, align 4
-  call void @__cflat_record_node(i64 106883544366608)
+  call void @increment_uncond_branch()
   br label %66
 
 50:                                               ; preds = %40
-  call void @__cflat_record_node(i64 106883544366928)
+  call void @increment_uncond_branch()
   br label %51
 
 51:                                               ; preds = %50
   %52 = load i32, ptr %4, align 4
   %53 = add nsw i32 %52, 1
   store i32 %53, ptr %4, align 4
-  call void @__cflat_record_node(i64 106883544367040)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %28, !llvm.loop !65
 
 54:                                               ; preds = %28
   %55 = load i32, ptr %3, align 4
   %56 = icmp eq i32 15050, %55
-  call void @__cflat_record_node(i64 106883544367776)
+  call void @increment_cond_branch()
   br i1 %56, label %57, label %63
 
 57:                                               ; preds = %54
-  call void @__cflat_call_enter(i64 106883543574928, i64 106883544368528)
+  call void @increment_direct_call()
   %58 = call i32 @check_heap_beebs(ptr noundef @heap)
   %59 = icmp ne i32 %58, 0
-  call void @__cflat_record_node(i64 106883544368528)
+  call void @increment_cond_branch()
   br i1 %59, label %60, label %63
 
 60:                                               ; preds = %57
+  call void @increment_direct_call()
   %61 = call i32 @memcmp(ptr noundef @array2, ptr noundef @verify_benchmark.array_exp, i64 noundef 400) #5
   %62 = icmp eq i32 0, %61
-  call void @__cflat_record_node(i64 106883544369392)
+  call void @increment_uncond_branch()
   br label %63
 
 63:                                               ; preds = %60, %57, %54
   %64 = phi i1 [ false, %57 ], [ false, %54 ], [ %62, %60 ]
   %65 = zext i1 %64 to i32
   store i32 %65, ptr %2, align 4
-  call void @__cflat_record_node(i64 106883544369832)
+  call void @increment_uncond_branch()
   br label %66
 
 66:                                               ; preds = %63, %49, %19
   %67 = load i32, ptr %2, align 4
-  call void @__cflat_call_return(i64 106883544352000)
+  call void @increment_return()
   ret i32 %67
 }
 
@@ -7105,7 +7164,7 @@ declare i32 @memcmp(ptr noundef, ptr noundef, i64 noundef) #2
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local void @initialise_benchmark() #0 {
-  call void @__cflat_call_return(i64 106883544364944)
+  call void @increment_return()
   ret void
 }
 
@@ -7115,10 +7174,10 @@ define dso_local void @warm_caches(i32 noundef %0) #0 {
   %3 = alloca i32, align 4
   store i32 %0, ptr %2, align 4
   %4 = load i32, ptr %2, align 4
-  call void @__cflat_call_enter(i64 106883544365936, i64 106883544369168)
+  call void @increment_direct_call()
   %5 = call i32 @benchmark_body(i32 noundef %4)
   store i32 %5, ptr %3, align 4
-  call void @__cflat_call_return(i64 106883544369168)
+  call void @increment_return()
   ret void
 }
 
@@ -7164,14 +7223,14 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %39 = alloca i32, align 4
   store i32 %0, ptr %2, align 4
   store i32 0, ptr %4, align 4
-  call void @__cflat_record_node(i64 106883544365936)
+  call void @increment_uncond_branch()
   br label %40
 
 40:                                               ; preds = %697, %1
   %41 = load i32, ptr %4, align 4
   %42 = load i32, ptr %2, align 4
   %43 = icmp slt i32 %41, %42
-  call void @__cflat_record_node(i64 106883544376800)
+  call void @increment_cond_branch()
   br i1 %43, label %44, label %700
 
 44:                                               ; preds = %40
@@ -7181,13 +7240,13 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %46 = getelementptr inbounds [64 x i32], ptr %27, i64 0, i64 0
   store i32 100, ptr %46, align 4
   store i32 1, ptr %23, align 4
-  call void @__cflat_record_node(i64 106883544377888)
+  call void @increment_uncond_branch()
   br label %47
 
 47:                                               ; preds = %344, %44
   %48 = load i32, ptr %23, align 4
   %49 = icmp sgt i32 %48, 0
-  call void @__cflat_record_node(i64 106883544381216)
+  call void @increment_cond_branch()
   br i1 %49, label %50, label %345
 
 50:                                               ; preds = %47
@@ -7204,7 +7263,7 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %59 = getelementptr inbounds [64 x i32], ptr %27, i64 0, i64 %58
   %60 = load i32, ptr %59, align 4
   store i32 %60, ptr %25, align 4
-  call void @__cflat_record_node(i64 106883544381888)
+  call void @increment_uncond_branch()
   br label %61
 
 61:                                               ; preds = %291, %50
@@ -7212,7 +7271,7 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %63 = load i32, ptr %24, align 4
   %64 = sub nsw i32 %62, %63
   %65 = icmp sgt i32 %64, 2
-  call void @__cflat_record_node(i64 106883544383952)
+  call void @increment_cond_branch()
   br i1 %65, label %66, label %292
 
 66:                                               ; preds = %61
@@ -7224,25 +7283,25 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %70 = load i32, ptr %25, align 4
   %71 = sub nsw i32 %70, 1
   store i32 %71, ptr %21, align 4
-  call void @__cflat_record_node(i64 106883544384896)
+  call void @increment_uncond_branch()
   br label %72
 
 72:                                               ; preds = %233, %66
   %73 = load i32, ptr %20, align 4
   %74 = load i32, ptr %21, align 4
   %75 = icmp slt i32 %73, %74
-  call void @__cflat_record_node(i64 106883544386240)
+  call void @increment_cond_branch()
   br i1 %75, label %76, label %234
 
 76:                                               ; preds = %72
-  call void @__cflat_record_node(i64 106883544387120)
+  call void @increment_uncond_branch()
   br label %77
 
 77:                                               ; preds = %110, %76
   %78 = load i32, ptr %20, align 4
   %79 = load i32, ptr %21, align 4
   %80 = icmp sle i32 %78, %79
-  call void @__cflat_record_node(i64 106883544387232)
+  call void @increment_cond_branch()
   br i1 %80, label %81, label %107
 
 81:                                               ; preds = %77
@@ -7255,11 +7314,11 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %88 = getelementptr inbounds [100 x i32], ptr @array2, i64 0, i64 %87
   %89 = load i32, ptr %88, align 4
   %90 = icmp sgt i32 %85, %89
-  call void @__cflat_record_node(i64 106883544388032)
+  call void @increment_cond_branch()
   br i1 %90, label %91, label %92
 
 91:                                               ; preds = %81
-  call void @__cflat_record_node(i64 106883544389776)
+  call void @increment_uncond_branch()
   br label %104
 
 92:                                               ; preds = %81
@@ -7274,36 +7333,37 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %101 = icmp slt i32 %96, %100
   %102 = zext i1 %101 to i64
   %103 = select i1 %101, i32 -1, i32 0
-  call void @__cflat_record_node(i64 106883544389888)
+  call void @increment_uncond_branch()
   br label %104
 
 104:                                              ; preds = %92, %91
   %105 = phi i32 [ 1, %91 ], [ %103, %92 ]
   %106 = icmp sle i32 %105, 0
-  call void @__cflat_record_node(i64 106883544380360)
+  call void @increment_uncond_branch()
   br label %107
 
 107:                                              ; preds = %104, %77
   %108 = phi i1 [ false, %77 ], [ %106, %104 ]
-  call void @__cflat_record_node(i64 106883544380808)
+  call void @increment_cond_branch()
   br i1 %108, label %109, label %113
 
 109:                                              ; preds = %107
-  call void @__cflat_record_node(i64 106883544394688)
+  call void @increment_uncond_branch()
   br label %110
 
 110:                                              ; preds = %109
   %111 = load i32, ptr %20, align 4
   %112 = add nsw i32 %111, 1
   store i32 %112, ptr %20, align 4
-  call void @__cflat_record_node(i64 106883544394800)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %77, !llvm.loop !66
 
 113:                                              ; preds = %107
   %114 = load i32, ptr %20, align 4
   %115 = load i32, ptr %21, align 4
   %116 = icmp sgt i32 %114, %115
-  call void @__cflat_record_node(i64 106883544395536)
+  call void @increment_cond_branch()
   br i1 %116, label %117, label %134
 
 117:                                              ; preds = %113
@@ -7327,18 +7387,18 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   store i32 %129, ptr %132, align 4
   %133 = load i32, ptr %21, align 4
   store i32 %133, ptr %20, align 4
-  call void @__cflat_record_node(i64 106883544396336)
+  call void @increment_uncond_branch()
   br label %233
 
 134:                                              ; preds = %113
-  call void @__cflat_record_node(i64 106883544399488)
+  call void @increment_uncond_branch()
   br label %135
 
 135:                                              ; preds = %168, %134
   %136 = load i32, ptr %20, align 4
   %137 = load i32, ptr %21, align 4
   %138 = icmp sle i32 %136, %137
-  call void @__cflat_record_node(i64 106883544399600)
+  call void @increment_cond_branch()
   br i1 %138, label %139, label %165
 
 139:                                              ; preds = %135
@@ -7351,11 +7411,11 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %146 = getelementptr inbounds [100 x i32], ptr @array2, i64 0, i64 %145
   %147 = load i32, ptr %146, align 4
   %148 = icmp sgt i32 %143, %147
-  call void @__cflat_record_node(i64 106883544400400)
+  call void @increment_cond_branch()
   br i1 %148, label %149, label %150
 
 149:                                              ; preds = %139
-  call void @__cflat_record_node(i64 106883544402144)
+  call void @increment_uncond_branch()
   br label %162
 
 150:                                              ; preds = %139
@@ -7370,36 +7430,37 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %159 = icmp slt i32 %154, %158
   %160 = zext i1 %159 to i64
   %161 = select i1 %159, i32 -1, i32 0
-  call void @__cflat_record_node(i64 106883544402256)
+  call void @increment_uncond_branch()
   br label %162
 
 162:                                              ; preds = %150, %149
   %163 = phi i32 [ 1, %149 ], [ %161, %150 ]
   %164 = icmp sge i32 %163, 0
-  call void @__cflat_record_node(i64 106883544403896)
+  call void @increment_uncond_branch()
   br label %165
 
 165:                                              ; preds = %162, %135
   %166 = phi i1 [ false, %135 ], [ %164, %162 ]
-  call void @__cflat_record_node(i64 106883544404344)
+  call void @increment_cond_branch()
   br i1 %166, label %167, label %171
 
 167:                                              ; preds = %165
-  call void @__cflat_record_node(i64 106883544404976)
+  call void @increment_uncond_branch()
   br label %168
 
 168:                                              ; preds = %167
   %169 = load i32, ptr %21, align 4
   %170 = add nsw i32 %169, -1
   store i32 %170, ptr %21, align 4
-  call void @__cflat_record_node(i64 106883544405088)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %135, !llvm.loop !67
 
 171:                                              ; preds = %165
   %172 = load i32, ptr %20, align 4
   %173 = load i32, ptr %21, align 4
   %174 = icmp sgt i32 %172, %173
-  call void @__cflat_record_node(i64 106883544405824)
+  call void @increment_cond_branch()
   br i1 %174, label %175, label %192
 
 175:                                              ; preds = %171
@@ -7423,14 +7484,14 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   store i32 %187, ptr %190, align 4
   %191 = load i32, ptr %21, align 4
   store i32 %191, ptr %20, align 4
-  call void @__cflat_record_node(i64 106883544406624)
+  call void @increment_uncond_branch()
   br label %232
 
 192:                                              ; preds = %171
   %193 = load i32, ptr %20, align 4
   %194 = load i32, ptr %21, align 4
   %195 = icmp slt i32 %193, %194
-  call void @__cflat_record_node(i64 106883544390672)
+  call void @increment_cond_branch()
   br i1 %195, label %196, label %231
 
 196:                                              ; preds = %192
@@ -7456,7 +7517,7 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %213 = add nsw i32 %212, 2
   %214 = load i32, ptr %21, align 4
   %215 = icmp slt i32 %213, %214
-  call void @__cflat_record_node(i64 106883544391472)
+  call void @increment_cond_branch()
   br i1 %215, label %216, label %221
 
 216:                                              ; preds = %196
@@ -7466,7 +7527,7 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %219 = load i32, ptr %21, align 4
   %220 = add nsw i32 %219, -1
   store i32 %220, ptr %21, align 4
-  call void @__cflat_record_node(i64 106883544418144)
+  call void @increment_uncond_branch()
   br label %230
 
 221:                                              ; preds = %196
@@ -7474,34 +7535,35 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %223 = add nsw i32 %222, 1
   %224 = load i32, ptr %21, align 4
   %225 = icmp slt i32 %223, %224
-  call void @__cflat_record_node(i64 106883544419200)
+  call void @increment_cond_branch()
   br i1 %225, label %226, label %229
 
 226:                                              ; preds = %221
   %227 = load i32, ptr %20, align 4
   %228 = add nsw i32 %227, 1
   store i32 %228, ptr %20, align 4
-  call void @__cflat_record_node(i64 106883544420144)
+  call void @increment_uncond_branch()
   br label %229
 
 229:                                              ; preds = %226, %221
-  call void @__cflat_record_node(i64 106883544420688)
+  call void @increment_uncond_branch()
   br label %230
 
 230:                                              ; preds = %229, %216
-  call void @__cflat_record_node(i64 106883544420800)
+  call void @increment_uncond_branch()
   br label %231
 
 231:                                              ; preds = %230, %192
-  call void @__cflat_record_node(i64 106883544420912)
+  call void @increment_uncond_branch()
   br label %232
 
 232:                                              ; preds = %231, %175
-  call void @__cflat_record_node(i64 106883544421024)
+  call void @increment_uncond_branch()
   br label %233
 
 233:                                              ; preds = %232, %117
-  call void @__cflat_record_node(i64 106883544421136)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %72, !llvm.loop !68
 
 234:                                              ; preds = %72
@@ -7509,7 +7571,7 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %236 = load i32, ptr %24, align 4
   %237 = sub nsw i32 %235, %236
   %238 = icmp sgt i32 %237, 1
-  call void @__cflat_record_node(i64 106883544421376)
+  call void @increment_cond_branch()
   br i1 %238, label %239, label %280
 
 239:                                              ; preds = %234
@@ -7517,7 +7579,7 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %241 = load i32, ptr %21, align 4
   %242 = sub nsw i32 %240, %241
   %243 = icmp sgt i32 %242, 1
-  call void @__cflat_record_node(i64 106883544422256)
+  call void @increment_cond_branch()
   br i1 %243, label %244, label %280
 
 244:                                              ; preds = %239
@@ -7529,7 +7591,7 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %250 = sub nsw i32 %248, %249
   %251 = sub nsw i32 %250, 1
   %252 = icmp slt i32 %247, %251
-  call void @__cflat_record_node(i64 106883544423056)
+  call void @increment_cond_branch()
   br i1 %252, label %253, label %266
 
 253:                                              ; preds = %244
@@ -7549,7 +7611,7 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   store i32 %264, ptr %23, align 4
   %265 = load i32, ptr %20, align 4
   store i32 %265, ptr %25, align 4
-  call void @__cflat_record_node(i64 106883544424480)
+  call void @increment_uncond_branch()
   br label %279
 
 266:                                              ; preds = %244
@@ -7569,11 +7631,11 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %277 = load i32, ptr %21, align 4
   %278 = add nsw i32 %277, 1
   store i32 %278, ptr %24, align 4
-  call void @__cflat_record_node(i64 106883544426976)
+  call void @increment_uncond_branch()
   br label %279
 
 279:                                              ; preds = %266, %253
-  call void @__cflat_record_node(i64 106883544429472)
+  call void @increment_uncond_branch()
   br label %291
 
 280:                                              ; preds = %239, %234
@@ -7581,28 +7643,29 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %282 = load i32, ptr %24, align 4
   %283 = sub nsw i32 %281, %282
   %284 = icmp sgt i32 %283, 1
-  call void @__cflat_record_node(i64 106883544429584)
+  call void @increment_cond_branch()
   br i1 %284, label %285, label %287
 
 285:                                              ; preds = %280
   %286 = load i32, ptr %20, align 4
   store i32 %286, ptr %25, align 4
-  call void @__cflat_record_node(i64 106883544430464)
+  call void @increment_uncond_branch()
   br label %290
 
 287:                                              ; preds = %280
   %288 = load i32, ptr %21, align 4
   %289 = add nsw i32 %288, 1
   store i32 %289, ptr %24, align 4
-  call void @__cflat_record_node(i64 106883544430944)
+  call void @increment_uncond_branch()
   br label %290
 
 290:                                              ; preds = %287, %285
-  call void @__cflat_record_node(i64 106883544431488)
+  call void @increment_uncond_branch()
   br label %291
 
 291:                                              ; preds = %290, %279
-  call void @__cflat_record_node(i64 106883544431600)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %61, !llvm.loop !69
 
 292:                                              ; preds = %61
@@ -7610,7 +7673,7 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %294 = load i32, ptr %24, align 4
   %295 = sub nsw i32 %293, %294
   %296 = icmp eq i32 %295, 2
-  call void @__cflat_record_node(i64 106883544431840)
+  call void @increment_cond_branch()
   br i1 %296, label %297, label %344
 
 297:                                              ; preds = %292
@@ -7624,11 +7687,11 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %305 = getelementptr inbounds [100 x i32], ptr @array2, i64 0, i64 %304
   %306 = load i32, ptr %305, align 4
   %307 = icmp sgt i32 %301, %306
-  call void @__cflat_record_node(i64 106883544432720)
+  call void @increment_cond_branch()
   br i1 %307, label %308, label %309
 
 308:                                              ; preds = %297
-  call void @__cflat_record_node(i64 106883544434608)
+  call void @increment_uncond_branch()
   br label %322
 
 309:                                              ; preds = %297
@@ -7644,13 +7707,13 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %319 = icmp slt i32 %313, %318
   %320 = zext i1 %319 to i64
   %321 = select i1 %319, i32 -1, i32 0
-  call void @__cflat_record_node(i64 106883544434720)
+  call void @increment_uncond_branch()
   br label %322
 
 322:                                              ; preds = %309, %308
   %323 = phi i32 [ 1, %308 ], [ %321, %309 ]
   %324 = icmp sgt i32 %323, 0
-  call void @__cflat_record_node(i64 106883544436504)
+  call void @increment_cond_branch()
   br i1 %324, label %325, label %343
 
 325:                                              ; preds = %322
@@ -7674,33 +7737,33 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %341 = sext i32 %340 to i64
   %342 = getelementptr inbounds [100 x i32], ptr @array2, i64 0, i64 %341
   store i32 %338, ptr %342, align 4
-  call void @__cflat_record_node(i64 106883544437200)
+  call void @increment_uncond_branch()
   br label %343
 
 343:                                              ; preds = %325, %322
-  call void @__cflat_record_node(i64 106883544440192)
+  call void @increment_uncond_branch()
   br label %344
 
 344:                                              ; preds = %343, %292
-  call void @__cflat_record_node(i64 106883544440304)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %47, !llvm.loop !70
 
 345:                                              ; preds = %47
-  call void @__cflat_call_enter(i64 106883543572720, i64 106883544440608)
   call void @init_heap_beebs(ptr noundef @heap, i64 noundef 8192)
   store ptr null, ptr @the_list, align 8
   store i32 0, ptr %5, align 4
-  call void @__cflat_record_node(i64 106883544440608)
+  call void @increment_uncond_branch()
   br label %346
 
 346:                                              ; preds = %358, %345
   %347 = load i32, ptr %5, align 4
   %348 = icmp slt i32 %347, 100
-  call void @__cflat_record_node(i64 106883544441328)
+  call void @increment_cond_branch()
   br i1 %348, label %349, label %361
 
 349:                                              ; preds = %346
-  call void @__cflat_call_enter(i64 106883543576560, i64 106883544442032)
+  call void @increment_direct_call()
   %350 = call ptr @malloc_beebs(i64 noundef 24)
   store ptr %350, ptr %6, align 8
   %351 = load i32, ptr %5, align 4
@@ -7711,40 +7774,41 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %356 = getelementptr inbounds %struct.dllist, ptr %355, i32 0, i32 0
   store i32 %354, ptr %356, align 8
   %357 = load ptr, ptr %6, align 8
-  call void @__cflat_call_enter(i64 106883543599360, i64 106883544442032)
+  call void @increment_direct_call()
   call void @sglib_dllist_add(ptr noundef @the_list, ptr noundef %357)
-  call void @__cflat_record_node(i64 106883544442032)
+  call void @increment_uncond_branch()
   br label %358
 
 358:                                              ; preds = %349
   %359 = load i32, ptr %5, align 4
   %360 = add nsw i32 %359, 1
   store i32 %360, ptr %5, align 4
-  call void @__cflat_record_node(i64 106883544444128)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %346, !llvm.loop !71
 
 361:                                              ; preds = %346
-  call void @__cflat_call_enter(i64 106883543766304, i64 106883544444960)
+  call void @increment_direct_call()
   call void @sglib_dllist_sort(ptr noundef @the_list)
   store volatile i32 0, ptr %3, align 4
   %362 = load ptr, ptr @the_list, align 8
-  call void @__cflat_call_enter(i64 106883543753296, i64 106883544444960)
+  call void @increment_direct_call()
   %363 = call ptr @sglib_dllist_get_first(ptr noundef %362)
   store ptr %363, ptr %6, align 8
-  call void @__cflat_record_node(i64 106883544444960)
+  call void @increment_uncond_branch()
   br label %364
 
 364:                                              ; preds = %370, %361
   %365 = load ptr, ptr %6, align 8
   %366 = icmp ne ptr %365, null
-  call void @__cflat_record_node(i64 106883544446048)
+  call void @increment_cond_branch()
   br i1 %366, label %367, label %374
 
 367:                                              ; preds = %364
   %368 = load volatile i32, ptr %3, align 4
   %369 = add nsw i32 %368, 1
   store volatile i32 %369, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544446720)
+  call void @increment_uncond_branch()
   br label %370
 
 370:                                              ; preds = %367
@@ -7752,20 +7816,21 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %372 = getelementptr inbounds %struct.dllist, ptr %371, i32 0, i32 1
   %373 = load ptr, ptr %372, align 8
   store ptr %373, ptr %6, align 8
-  call void @__cflat_record_node(i64 106883544447344)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %364, !llvm.loop !72
 
 374:                                              ; preds = %364
-  call void @__cflat_call_enter(i64 106883543960512, i64 106883544448352)
+  call void @increment_direct_call()
   call void @sglib_hashed_ilist_init(ptr noundef @htab)
   store i32 0, ptr %5, align 4
-  call void @__cflat_record_node(i64 106883544448352)
+  call void @increment_uncond_branch()
   br label %375
 
 375:                                              ; preds = %396, %374
   %376 = load i32, ptr %5, align 4
   %377 = icmp slt i32 %376, 100
-  call void @__cflat_record_node(i64 106883544448912)
+  call void @increment_cond_branch()
   br i1 %377, label %378, label %399
 
 378:                                              ; preds = %375
@@ -7775,14 +7840,14 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %382 = load i32, ptr %381, align 4
   %383 = getelementptr inbounds %struct.ilist, ptr %7, i32 0, i32 0
   store i32 %382, ptr %383, align 8
-  call void @__cflat_call_enter(i64 106883543979552, i64 106883544449584)
+  call void @increment_direct_call()
   %384 = call ptr @sglib_hashed_ilist_find_member(ptr noundef @htab, ptr noundef %7)
   %385 = icmp eq ptr %384, null
-  call void @__cflat_record_node(i64 106883544449584)
+  call void @increment_cond_branch()
   br i1 %385, label %386, label %395
 
 386:                                              ; preds = %378
-  call void @__cflat_call_enter(i64 106883543576560, i64 106883544410352)
+  call void @increment_direct_call()
   %387 = call ptr @malloc_beebs(i64 noundef 16)
   store ptr %387, ptr %8, align 8
   %388 = load i32, ptr %5, align 4
@@ -7793,60 +7858,62 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %393 = getelementptr inbounds %struct.ilist, ptr %392, i32 0, i32 0
   store i32 %391, ptr %393, align 8
   %394 = load ptr, ptr %8, align 8
-  call void @__cflat_call_enter(i64 106883543964176, i64 106883544410352)
+  call void @increment_direct_call()
   call void @sglib_hashed_ilist_add(ptr noundef @htab, ptr noundef %394)
-  call void @__cflat_record_node(i64 106883544410352)
+  call void @increment_uncond_branch()
   br label %395
 
 395:                                              ; preds = %386, %378
-  call void @__cflat_record_node(i64 106883544412352)
+  call void @increment_uncond_branch()
   br label %396
 
 396:                                              ; preds = %395
   %397 = load i32, ptr %5, align 4
   %398 = add nsw i32 %397, 1
   store i32 %398, ptr %5, align 4
-  call void @__cflat_record_node(i64 106883544412464)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %375, !llvm.loop !73
 
 399:                                              ; preds = %375
-  call void @__cflat_call_enter(i64 106883543998672, i64 106883544413264)
+  call void @increment_direct_call()
   %400 = call ptr @sglib_hashed_ilist_it_init(ptr noundef %10, ptr noundef @htab)
   store ptr %400, ptr %9, align 8
-  call void @__cflat_record_node(i64 106883544413264)
+  call void @increment_uncond_branch()
   br label %401
 
 401:                                              ; preds = %407, %399
   %402 = load ptr, ptr %9, align 8
   %403 = icmp ne ptr %402, null
-  call void @__cflat_record_node(i64 106883544413824)
+  call void @increment_cond_branch()
   br i1 %403, label %404, label %409
 
 404:                                              ; preds = %401
   %405 = load volatile i32, ptr %3, align 4
   %406 = add nsw i32 %405, 1
   store volatile i32 %406, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544414496)
+  call void @increment_uncond_branch()
   br label %407
 
 407:                                              ; preds = %404
-  call void @__cflat_call_enter(i64 106883543989840, i64 106883544415152)
+  call void @increment_direct_call()
   %408 = call ptr @sglib_hashed_ilist_it_next(ptr noundef %10)
   store ptr %408, ptr %9, align 8
-  call void @__cflat_record_node(i64 106883544415152)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %401, !llvm.loop !74
 
 409:                                              ; preds = %401
   store i32 0, ptr %12, align 4
   store i32 0, ptr %11, align 4
   store i32 0, ptr %5, align 4
-  call void @__cflat_record_node(i64 106883544415920)
+  call void @increment_uncond_branch()
   br label %410
 
 410:                                              ; preds = %432, %409
   %411 = load i32, ptr %5, align 4
   %412 = icmp slt i32 %411, 100
-  call void @__cflat_record_node(i64 106883544416560)
+  call void @increment_cond_branch()
   br i1 %412, label %413, label %435
 
 413:                                              ; preds = %410
@@ -7865,11 +7932,11 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %424 = add nsw i32 %423, 1
   %425 = srem i32 %424, 101
   %426 = icmp eq i32 %422, %425
-  call void @__cflat_record_node(i64 106883544417232)
+  call void @increment_cond_branch()
   br i1 %426, label %427, label %428
 
 427:                                              ; preds = %413
-  call void @__cflat_record_node(i64 106883544468944)
+  call void @increment_uncond_branch()
   br label %428
 
 428:                                              ; preds = %427, %413
@@ -7877,18 +7944,19 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %430 = add nsw i32 %429, 1
   %431 = srem i32 %430, 101
   store i32 %431, ptr %12, align 4
-  call void @__cflat_record_node(i64 106883544469056)
+  call void @increment_uncond_branch()
   br label %432
 
 432:                                              ; preds = %428
   %433 = load i32, ptr %5, align 4
   %434 = add nsw i32 %433, 1
   store i32 %434, ptr %5, align 4
-  call void @__cflat_record_node(i64 106883544469824)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %410, !llvm.loop !75
 
 435:                                              ; preds = %410
-  call void @__cflat_record_node(i64 106883544470640)
+  call void @increment_uncond_branch()
   br label %436
 
 436:                                              ; preds = %452, %435
@@ -7896,7 +7964,7 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %438 = load i32, ptr %12, align 4
   %439 = icmp eq i32 %437, %438
   %440 = xor i1 %439, true
-  call void @__cflat_record_node(i64 106883544470752)
+  call void @increment_cond_branch()
   br i1 %440, label %441, label %456
 
 441:                                              ; preds = %436
@@ -7910,11 +7978,11 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %448 = load i32, ptr %11, align 4
   %449 = load i32, ptr %12, align 4
   %450 = icmp eq i32 %448, %449
-  call void @__cflat_record_node(i64 106883544471696)
+  call void @increment_cond_branch()
   br i1 %450, label %451, label %452
 
 451:                                              ; preds = %441
-  call void @__cflat_record_node(i64 106883544473488)
+  call void @increment_uncond_branch()
   br label %452
 
 452:                                              ; preds = %451, %441
@@ -7922,19 +7990,20 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %454 = add nsw i32 %453, 1
   %455 = srem i32 %454, 101
   store i32 %455, ptr %11, align 4
-  call void @__cflat_record_node(i64 106883544473600)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %436, !llvm.loop !76
 
 456:                                              ; preds = %436
   store i32 0, ptr %11, align 4
   store i32 0, ptr %5, align 4
-  call void @__cflat_record_node(i64 106883544474512)
+  call void @increment_uncond_branch()
   br label %457
 
 457:                                              ; preds = %533, %456
   %458 = load i32, ptr %5, align 4
   %459 = icmp slt i32 %458, 100
-  call void @__cflat_record_node(i64 106883544474992)
+  call void @increment_cond_branch()
   br i1 %459, label %460, label %536
 
 460:                                              ; preds = %457
@@ -7945,11 +8014,11 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   store i32 %464, ptr %13, align 4
   %465 = load i32, ptr %11, align 4
   %466 = icmp eq i32 %465, 101
-  call void @__cflat_record_node(i64 106883544475664)
+  call void @increment_cond_branch()
   br i1 %466, label %467, label %468
 
 467:                                              ; preds = %460
-  call void @__cflat_record_node(i64 106883544477056)
+  call void @increment_uncond_branch()
   br label %468
 
 468:                                              ; preds = %467, %460
@@ -7960,11 +8029,11 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   store i32 %469, ptr %472, align 4
   %473 = load i32, ptr %11, align 4
   %474 = icmp eq i32 %473, 101
-  call void @__cflat_record_node(i64 106883544477168)
+  call void @increment_cond_branch()
   br i1 %474, label %475, label %476
 
 475:                                              ; preds = %468
-  call void @__cflat_record_node(i64 106883544478496)
+  call void @increment_uncond_branch()
   br label %476
 
 476:                                              ; preds = %475, %468
@@ -7972,13 +8041,13 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %478 = add nsw i32 %477, 1
   store i32 %478, ptr %11, align 4
   store i32 %477, ptr %33, align 4
-  call void @__cflat_record_node(i64 106883544478608)
+  call void @increment_uncond_branch()
   br label %479
 
 479:                                              ; preds = %512, %476
   %480 = load i32, ptr %33, align 4
   %481 = icmp sgt i32 %480, 0
-  call void @__cflat_record_node(i64 106883544479392)
+  call void @increment_cond_branch()
   br i1 %481, label %482, label %510
 
 482:                                              ; preds = %479
@@ -7992,11 +8061,11 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %490 = getelementptr inbounds [101 x i32], ptr %14, i64 0, i64 %489
   %491 = load i32, ptr %490, align 4
   %492 = icmp sgt i32 %487, %491
-  call void @__cflat_record_node(i64 106883544480000)
+  call void @increment_cond_branch()
   br i1 %492, label %493, label %494
 
 493:                                              ; preds = %482
-  call void @__cflat_record_node(i64 106883544481888)
+  call void @increment_uncond_branch()
   br label %507
 
 494:                                              ; preds = %482
@@ -8012,18 +8081,18 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %504 = icmp slt i32 %499, %503
   %505 = zext i1 %504 to i64
   %506 = select i1 %504, i32 -1, i32 0
-  call void @__cflat_record_node(i64 106883544482000)
+  call void @increment_uncond_branch()
   br label %507
 
 507:                                              ; preds = %494, %493
   %508 = phi i32 [ 1, %493 ], [ %506, %494 ]
   %509 = icmp slt i32 %508, 0
-  call void @__cflat_record_node(i64 106883544483784)
+  call void @increment_uncond_branch()
   br label %510
 
 510:                                              ; preds = %507, %479
   %511 = phi i1 [ false, %479 ], [ %509, %507 ]
-  call void @__cflat_record_node(i64 106883544484232)
+  call void @increment_cond_branch()
   br i1 %511, label %512, label %532
 
 512:                                              ; preds = %510
@@ -8050,29 +8119,31 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %530 = load i32, ptr %33, align 4
   %531 = sdiv i32 %530, 2
   store i32 %531, ptr %33, align 4
-  call void @__cflat_record_node(i64 106883544484784)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %479, !llvm.loop !77
 
 532:                                              ; preds = %510
-  call void @__cflat_record_node(i64 106883544488480)
+  call void @increment_uncond_branch()
   br label %533
 
 533:                                              ; preds = %532
   %534 = load i32, ptr %5, align 4
   %535 = add nsw i32 %534, 1
   store i32 %535, ptr %5, align 4
-  call void @__cflat_record_node(i64 106883544488592)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %457, !llvm.loop !78
 
 536:                                              ; preds = %457
-  call void @__cflat_record_node(i64 106883544489472)
+  call void @increment_uncond_branch()
   br label %537
 
 537:                                              ; preds = %655, %536
   %538 = load i32, ptr %11, align 4
   %539 = icmp eq i32 %538, 0
   %540 = xor i1 %539, true
-  call void @__cflat_record_node(i64 106883544489584)
+  call void @increment_cond_branch()
   br i1 %540, label %541, label %656
 
 541:                                              ; preds = %537
@@ -8083,11 +8154,11 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   store volatile i32 %545, ptr %3, align 4
   %546 = load i32, ptr %11, align 4
   %547 = icmp eq i32 %546, 0
-  call void @__cflat_record_node(i64 106883544490464)
+  call void @increment_cond_branch()
   br i1 %547, label %548, label %549
 
 548:                                              ; preds = %541
-  call void @__cflat_record_node(i64 106883544491824)
+  call void @increment_uncond_branch()
   br label %549
 
 549:                                              ; preds = %548, %541
@@ -8103,7 +8174,7 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   store i32 0, ptr %38, align 4
   %557 = load i32, ptr %38, align 4
   store i32 %557, ptr %35, align 4
-  call void @__cflat_record_node(i64 106883544491936)
+  call void @increment_uncond_branch()
   br label %558
 
 558:                                              ; preds = %651, %549
@@ -8119,7 +8190,7 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %565 = load i32, ptr %36, align 4
   %566 = load i32, ptr %11, align 4
   %567 = icmp slt i32 %565, %566
-  call void @__cflat_record_node(i64 106883544493920)
+  call void @increment_cond_branch()
   br i1 %567, label %568, label %630
 
 568:                                              ; preds = %558
@@ -8132,11 +8203,11 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %575 = getelementptr inbounds [101 x i32], ptr %14, i64 0, i64 %574
   %576 = load i32, ptr %575, align 4
   %577 = icmp sgt i32 %572, %576
-  call void @__cflat_record_node(i64 106883544495952)
+  call void @increment_cond_branch()
   br i1 %577, label %578, label %579
 
 578:                                              ; preds = %568
-  call void @__cflat_record_node(i64 106883544497696)
+  call void @increment_uncond_branch()
   br label %591
 
 579:                                              ; preds = %568
@@ -8151,26 +8222,26 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %588 = icmp slt i32 %583, %587
   %589 = zext i1 %588 to i64
   %590 = select i1 %588, i32 -1, i32 0
-  call void @__cflat_record_node(i64 106883544497808)
+  call void @increment_uncond_branch()
   br label %591
 
 591:                                              ; preds = %579, %578
   %592 = phi i32 [ 1, %578 ], [ %590, %579 ]
   %593 = icmp slt i32 %592, 0
-  call void @__cflat_record_node(i64 106883544499448)
+  call void @increment_cond_branch()
   br i1 %593, label %594, label %596
 
 594:                                              ; preds = %591
   %595 = load i32, ptr %36, align 4
   store i32 %595, ptr %35, align 4
-  call void @__cflat_record_node(i64 106883544500144)
+  call void @increment_uncond_branch()
   br label %596
 
 596:                                              ; preds = %594, %591
   %597 = load i32, ptr %37, align 4
   %598 = load i32, ptr %11, align 4
   %599 = icmp slt i32 %597, %598
-  call void @__cflat_record_node(i64 106883544500544)
+  call void @increment_cond_branch()
   br i1 %599, label %600, label %629
 
 600:                                              ; preds = %596
@@ -8183,11 +8254,11 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %607 = getelementptr inbounds [101 x i32], ptr %14, i64 0, i64 %606
   %608 = load i32, ptr %607, align 4
   %609 = icmp sgt i32 %604, %608
-  call void @__cflat_record_node(i64 106883544501280)
+  call void @increment_cond_branch()
   br i1 %609, label %610, label %611
 
 610:                                              ; preds = %600
-  call void @__cflat_record_node(i64 106883544503024)
+  call void @increment_uncond_branch()
   br label %623
 
 611:                                              ; preds = %600
@@ -8202,34 +8273,34 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %620 = icmp slt i32 %615, %619
   %621 = zext i1 %620 to i64
   %622 = select i1 %620, i32 -1, i32 0
-  call void @__cflat_record_node(i64 106883544503136)
+  call void @increment_uncond_branch()
   br label %623
 
 623:                                              ; preds = %611, %610
   %624 = phi i32 [ 1, %610 ], [ %622, %611 ]
   %625 = icmp slt i32 %624, 0
-  call void @__cflat_record_node(i64 106883544504776)
+  call void @increment_cond_branch()
   br i1 %625, label %626, label %628
 
 626:                                              ; preds = %623
   %627 = load i32, ptr %37, align 4
   store i32 %627, ptr %35, align 4
-  call void @__cflat_record_node(i64 106883544505472)
+  call void @increment_uncond_branch()
   br label %628
 
 628:                                              ; preds = %626, %623
-  call void @__cflat_record_node(i64 106883544505872)
+  call void @increment_uncond_branch()
   br label %629
 
 629:                                              ; preds = %628, %596
-  call void @__cflat_record_node(i64 106883544505984)
+  call void @increment_uncond_branch()
   br label %630
 
 630:                                              ; preds = %629, %558
   %631 = load i32, ptr %35, align 4
   %632 = load i32, ptr %38, align 4
   %633 = icmp ne i32 %631, %632
-  call void @__cflat_record_node(i64 106883544506096)
+  call void @increment_cond_branch()
   br i1 %633, label %634, label %650
 
 634:                                              ; preds = %630
@@ -8251,34 +8322,36 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %648 = sext i32 %647 to i64
   %649 = getelementptr inbounds [101 x i32], ptr %14, i64 0, i64 %648
   store i32 %646, ptr %649, align 4
-  call void @__cflat_record_node(i64 106883544506832)
+  call void @increment_uncond_branch()
   br label %650
 
 650:                                              ; preds = %634, %630
-  call void @__cflat_record_node(i64 106883544509616)
+  call void @increment_uncond_branch()
   br label %651
 
 651:                                              ; preds = %650
   %652 = load i32, ptr %35, align 4
   %653 = load i32, ptr %38, align 4
   %654 = icmp ne i32 %652, %653
-  call void @__cflat_record_node(i64 106883544509728)
+  call void @increment_cond_branch()
+  call void @increment_loop_header()
   br i1 %654, label %558, label %655, !llvm.loop !79
 
 655:                                              ; preds = %651
-  call void @__cflat_record_node(i64 106883544510512)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %537, !llvm.loop !80
 
 656:                                              ; preds = %537
   store ptr null, ptr %17, align 8
   store i32 0, ptr %5, align 4
-  call void @__cflat_record_node(i64 106883544510912)
+  call void @increment_uncond_branch()
   br label %657
 
 657:                                              ; preds = %679, %656
   %658 = load i32, ptr %5, align 4
   %659 = icmp slt i32 %658, 100
-  call void @__cflat_record_node(i64 106883544511392)
+  call void @increment_cond_branch()
   br i1 %659, label %660, label %682
 
 660:                                              ; preds = %657
@@ -8289,14 +8362,14 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %665 = getelementptr inbounds %struct.rbtree, ptr %15, i32 0, i32 0
   store i32 %664, ptr %665, align 8
   %666 = load ptr, ptr %17, align 8
-  call void @__cflat_call_enter(i64 106883544213952, i64 106883544512064)
+  call void @increment_direct_call()
   %667 = call ptr @sglib_rbtree_find_member(ptr noundef %666, ptr noundef %15)
   %668 = icmp eq ptr %667, null
-  call void @__cflat_record_node(i64 106883544512064)
+  call void @increment_cond_branch()
   br i1 %668, label %669, label %678
 
 669:                                              ; preds = %660
-  call void @__cflat_call_enter(i64 106883543576560, i64 106883544514000)
+  call void @increment_direct_call()
   %670 = call ptr @malloc_beebs(i64 noundef 24)
   store ptr %670, ptr %16, align 8
   %671 = load i32, ptr %5, align 4
@@ -8307,34 +8380,35 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %676 = getelementptr inbounds %struct.rbtree, ptr %675, i32 0, i32 0
   store i32 %674, ptr %676, align 8
   %677 = load ptr, ptr %16, align 8
-  call void @__cflat_call_enter(i64 106883544192208, i64 106883544514000)
+  call void @increment_direct_call()
   call void @sglib_rbtree_add(ptr noundef %17, ptr noundef %677)
-  call void @__cflat_record_node(i64 106883544514000)
+  call void @increment_uncond_branch()
   br label %678
 
 678:                                              ; preds = %669, %660
-  call void @__cflat_record_node(i64 106883544516000)
+  call void @increment_uncond_branch()
   br label %679
 
 679:                                              ; preds = %678
   %680 = load i32, ptr %5, align 4
   %681 = add nsw i32 %680, 1
   store i32 %681, ptr %5, align 4
-  call void @__cflat_record_node(i64 106883544516112)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %657, !llvm.loop !81
 
 682:                                              ; preds = %657
   %683 = load ptr, ptr %17, align 8
-  call void @__cflat_call_enter(i64 106883544328336, i64 106883544516848)
+  call void @increment_direct_call()
   %684 = call ptr @sglib_rbtree_it_init_inorder(ptr noundef %19, ptr noundef %683)
   store ptr %684, ptr %18, align 8
-  call void @__cflat_record_node(i64 106883544516848)
+  call void @increment_uncond_branch()
   br label %685
 
 685:                                              ; preds = %694, %682
   %686 = load ptr, ptr %18, align 8
   %687 = icmp ne ptr %686, null
-  call void @__cflat_record_node(i64 106883544517600)
+  call void @increment_cond_branch()
   br i1 %687, label %688, label %696
 
 688:                                              ; preds = %685
@@ -8344,38 +8418,40 @@ define internal i32 @benchmark_body(i32 noundef %0) #0 {
   %692 = load volatile i32, ptr %3, align 4
   %693 = add nsw i32 %692, %691
   store volatile i32 %693, ptr %3, align 4
-  call void @__cflat_record_node(i64 106883544518272)
+  call void @increment_uncond_branch()
   br label %694
 
 694:                                              ; preds = %688
-  call void @__cflat_call_enter(i64 106883543885760, i64 106883544519376)
+  call void @increment_direct_call()
   %695 = call ptr @sglib_rbtree_it_next(ptr noundef %19)
   store ptr %695, ptr %18, align 8
-  call void @__cflat_record_node(i64 106883544519376)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %685, !llvm.loop !82
 
 696:                                              ; preds = %685
-  call void @__cflat_record_node(i64 106883544520192)
+  call void @increment_uncond_branch()
   br label %697
 
 697:                                              ; preds = %696
   %698 = load i32, ptr %4, align 4
   %699 = add nsw i32 %698, 1
   store i32 %699, ptr %4, align 4
-  call void @__cflat_record_node(i64 106883544520304)
+  call void @increment_uncond_branch()
+  call void @increment_loop_header()
   br label %40, !llvm.loop !83
 
 700:                                              ; preds = %40
   %701 = load volatile i32, ptr %3, align 4
-  call void @__cflat_call_return(i64 106883544365936)
+  call void @increment_return()
   ret i32 %701
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @benchmark() #0 {
-  call void @__cflat_call_enter(i64 106883544365936, i64 106883544450720)
+  call void @increment_direct_call()
   %1 = call i32 @benchmark_body(i32 noundef 29000)
-  call void @__cflat_call_return(i64 106883544450720)
+  call void @increment_return()
   ret i32 %1
 }
 
@@ -8388,22 +8464,23 @@ define dso_local i32 @main(i32 noundef %0, ptr noundef %1) #0 {
   %7 = alloca i32, align 4
   store i32 %0, ptr %3, align 4
   store ptr %1, ptr %4, align 8
-  call void @__cflat_call_enter(i64 106883544677472, i64 106883543565056)
+  call void @increment_direct_call()
   call void @initialise_benchmark()
-  call void @__cflat_call_enter(i64 106883544369168, i64 106883543565056)
+  call void @increment_direct_call()
   call void @warm_caches(i32 noundef 0)
   call void @init_branch_stats()
-  call void @__cflat_call_enter(i64 106883544842560, i64 106883543565056)
+  call void @increment_direct_call()
   %8 = call i32 @benchmark()
   store volatile i32 %8, ptr %6, align 4
   call void @print_branch_stats()
   %9 = load volatile i32, ptr %6, align 4
-  call void @__cflat_call_enter(i64 106883544352000, i64 106883543565056)
+  call void @increment_direct_call()
   %10 = call i32 @verify_benchmark(i32 noundef %9)
   store i32 %10, ptr %7, align 4
   %11 = load i32, ptr %7, align 4
+  call void @increment_direct_call()
   %12 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %11)
-  call void @__cflat_call_return(i64 106883543565056)
+  call void @increment_return()
   ret i32 0
 }
 
@@ -8438,7 +8515,7 @@ define internal void @sglib___rbtree_fix_left_insertion_discrepancy(ptr noundef 
   %19 = getelementptr inbounds %struct.rbtree, ptr %18, i32 0, i32 3
   %20 = load ptr, ptr %19, align 8
   %21 = icmp ne ptr %20, null
-  call void @__cflat_record_node(i64 106883544206816)
+  call void @increment_cond_branch()
   br i1 %21, label %22, label %75
 
 22:                                               ; preds = %1
@@ -8449,7 +8526,7 @@ define internal void @sglib___rbtree_fix_left_insertion_discrepancy(ptr noundef 
   %27 = load i8, ptr %26, align 4
   %28 = zext i8 %27 to i32
   %29 = icmp eq i32 %28, 1
-  call void @__cflat_record_node(i64 106883544459872)
+  call void @increment_cond_branch()
   br i1 %29, label %30, label %75
 
 30:                                               ; preds = %22
@@ -8458,7 +8535,7 @@ define internal void @sglib___rbtree_fix_left_insertion_discrepancy(ptr noundef 
   %33 = load i8, ptr %32, align 4
   %34 = zext i8 %33 to i32
   %35 = icmp eq i32 %34, 1
-  call void @__cflat_record_node(i64 106883544461152)
+  call void @increment_cond_branch()
   br i1 %35, label %36, label %74
 
 36:                                               ; preds = %30
@@ -8466,7 +8543,7 @@ define internal void @sglib___rbtree_fix_left_insertion_discrepancy(ptr noundef 
   %38 = getelementptr inbounds %struct.rbtree, ptr %37, i32 0, i32 2
   %39 = load ptr, ptr %38, align 8
   %40 = icmp ne ptr %39, null
-  call void @__cflat_record_node(i64 106883544462256)
+  call void @increment_cond_branch()
   br i1 %40, label %41, label %49
 
 41:                                               ; preds = %36
@@ -8477,7 +8554,7 @@ define internal void @sglib___rbtree_fix_left_insertion_discrepancy(ptr noundef 
   %46 = load i8, ptr %45, align 4
   %47 = zext i8 %46 to i32
   %48 = icmp eq i32 %47, 1
-  call void @__cflat_record_node(i64 106883544463248)
+  call void @increment_cond_branch()
   br i1 %48, label %62, label %49
 
 49:                                               ; preds = %41, %36
@@ -8485,7 +8562,7 @@ define internal void @sglib___rbtree_fix_left_insertion_discrepancy(ptr noundef 
   %51 = getelementptr inbounds %struct.rbtree, ptr %50, i32 0, i32 3
   %52 = load ptr, ptr %51, align 8
   %53 = icmp ne ptr %52, null
-  call void @__cflat_record_node(i64 106883544466592)
+  call void @increment_cond_branch()
   br i1 %53, label %54, label %73
 
 54:                                               ; preds = %49
@@ -8496,7 +8573,7 @@ define internal void @sglib___rbtree_fix_left_insertion_discrepancy(ptr noundef 
   %59 = load i8, ptr %58, align 4
   %60 = zext i8 %59 to i32
   %61 = icmp eq i32 %60, 1
-  call void @__cflat_record_node(i64 106883544522208)
+  call void @increment_cond_branch()
   br i1 %61, label %62, label %73
 
 62:                                               ; preds = %54, %41
@@ -8513,15 +8590,15 @@ define internal void @sglib___rbtree_fix_left_insertion_discrepancy(ptr noundef 
   %71 = load ptr, ptr %3, align 8
   %72 = getelementptr inbounds %struct.rbtree, ptr %71, i32 0, i32 1
   store i8 1, ptr %72, align 4
-  call void @__cflat_record_node(i64 106883544523408)
+  call void @increment_uncond_branch()
   br label %73
 
 73:                                               ; preds = %62, %54, %49
-  call void @__cflat_record_node(i64 106883544525600)
+  call void @increment_uncond_branch()
   br label %74
 
 74:                                               ; preds = %73, %30
-  call void @__cflat_record_node(i64 106883544525792)
+  call void @increment_uncond_branch()
   br label %170
 
 75:                                               ; preds = %22, %1
@@ -8530,7 +8607,7 @@ define internal void @sglib___rbtree_fix_left_insertion_discrepancy(ptr noundef 
   %78 = load i8, ptr %77, align 4
   %79 = zext i8 %78 to i32
   %80 = icmp eq i32 %79, 1
-  call void @__cflat_record_node(i64 106883544525904)
+  call void @increment_cond_branch()
   br i1 %80, label %81, label %169
 
 81:                                               ; preds = %75
@@ -8538,7 +8615,7 @@ define internal void @sglib___rbtree_fix_left_insertion_discrepancy(ptr noundef 
   %83 = getelementptr inbounds %struct.rbtree, ptr %82, i32 0, i32 2
   %84 = load ptr, ptr %83, align 8
   %85 = icmp ne ptr %84, null
-  call void @__cflat_record_node(i64 106883544526944)
+  call void @increment_cond_branch()
   br i1 %85, label %86, label %118
 
 86:                                               ; preds = %81
@@ -8549,7 +8626,7 @@ define internal void @sglib___rbtree_fix_left_insertion_discrepancy(ptr noundef 
   %91 = load i8, ptr %90, align 4
   %92 = zext i8 %91 to i32
   %93 = icmp eq i32 %92, 1
-  call void @__cflat_record_node(i64 106883544527872)
+  call void @increment_cond_branch()
   br i1 %93, label %94, label %118
 
 94:                                               ; preds = %86
@@ -8586,7 +8663,7 @@ define internal void @sglib___rbtree_fix_left_insertion_discrepancy(ptr noundef 
   %116 = load ptr, ptr %6, align 8
   %117 = load ptr, ptr %2, align 8
   store ptr %116, ptr %117, align 8
-  call void @__cflat_record_node(i64 106883544529152)
+  call void @increment_uncond_branch()
   br label %168
 
 118:                                              ; preds = %86, %81
@@ -8594,7 +8671,7 @@ define internal void @sglib___rbtree_fix_left_insertion_discrepancy(ptr noundef 
   %120 = getelementptr inbounds %struct.rbtree, ptr %119, i32 0, i32 3
   %121 = load ptr, ptr %120, align 8
   %122 = icmp ne ptr %121, null
-  call void @__cflat_record_node(i64 106883544536400)
+  call void @increment_cond_branch()
   br i1 %122, label %123, label %167
 
 123:                                              ; preds = %118
@@ -8605,7 +8682,7 @@ define internal void @sglib___rbtree_fix_left_insertion_discrepancy(ptr noundef 
   %128 = load i8, ptr %127, align 4
   %129 = zext i8 %128 to i32
   %130 = icmp eq i32 %129, 1
-  call void @__cflat_record_node(i64 106883544537328)
+  call void @increment_cond_branch()
   br i1 %130, label %131, label %167
 
 131:                                              ; preds = %123
@@ -8658,23 +8735,23 @@ define internal void @sglib___rbtree_fix_left_insertion_discrepancy(ptr noundef 
   %165 = load ptr, ptr %7, align 8
   %166 = load ptr, ptr %2, align 8
   store ptr %165, ptr %166, align 8
-  call void @__cflat_record_node(i64 106883544538608)
+  call void @increment_uncond_branch()
   br label %167
 
 167:                                              ; preds = %131, %123, %118
-  call void @__cflat_record_node(i64 106883544546144)
+  call void @increment_uncond_branch()
   br label %168
 
 168:                                              ; preds = %167, %94
-  call void @__cflat_record_node(i64 106883544546256)
+  call void @increment_uncond_branch()
   br label %169
 
 169:                                              ; preds = %168, %75
-  call void @__cflat_record_node(i64 106883544546368)
+  call void @increment_uncond_branch()
   br label %170
 
 170:                                              ; preds = %169, %74
-  call void @__cflat_call_return(i64 106883544206816)
+  call void @increment_return()
   ret void
 }
 
@@ -8703,7 +8780,7 @@ define internal void @sglib___rbtree_fix_right_insertion_discrepancy(ptr noundef
   %19 = getelementptr inbounds %struct.rbtree, ptr %18, i32 0, i32 2
   %20 = load ptr, ptr %19, align 8
   %21 = icmp ne ptr %20, null
-  call void @__cflat_record_node(i64 106883544211536)
+  call void @increment_cond_branch()
   br i1 %21, label %22, label %75
 
 22:                                               ; preds = %1
@@ -8714,7 +8791,7 @@ define internal void @sglib___rbtree_fix_right_insertion_discrepancy(ptr noundef
   %27 = load i8, ptr %26, align 4
   %28 = zext i8 %27 to i32
   %29 = icmp eq i32 %28, 1
-  call void @__cflat_record_node(i64 106883544533184)
+  call void @increment_cond_branch()
   br i1 %29, label %30, label %75
 
 30:                                               ; preds = %22
@@ -8723,7 +8800,7 @@ define internal void @sglib___rbtree_fix_right_insertion_discrepancy(ptr noundef
   %33 = load i8, ptr %32, align 4
   %34 = zext i8 %33 to i32
   %35 = icmp eq i32 %34, 1
-  call void @__cflat_record_node(i64 106883544547632)
+  call void @increment_cond_branch()
   br i1 %35, label %36, label %74
 
 36:                                               ; preds = %30
@@ -8731,7 +8808,7 @@ define internal void @sglib___rbtree_fix_right_insertion_discrepancy(ptr noundef
   %38 = getelementptr inbounds %struct.rbtree, ptr %37, i32 0, i32 3
   %39 = load ptr, ptr %38, align 8
   %40 = icmp ne ptr %39, null
-  call void @__cflat_record_node(i64 106883544548672)
+  call void @increment_cond_branch()
   br i1 %40, label %41, label %49
 
 41:                                               ; preds = %36
@@ -8742,7 +8819,7 @@ define internal void @sglib___rbtree_fix_right_insertion_discrepancy(ptr noundef
   %46 = load i8, ptr %45, align 4
   %47 = zext i8 %46 to i32
   %48 = icmp eq i32 %47, 1
-  call void @__cflat_record_node(i64 106883544549600)
+  call void @increment_cond_branch()
   br i1 %48, label %62, label %49
 
 49:                                               ; preds = %41, %36
@@ -8750,7 +8827,7 @@ define internal void @sglib___rbtree_fix_right_insertion_discrepancy(ptr noundef
   %51 = getelementptr inbounds %struct.rbtree, ptr %50, i32 0, i32 2
   %52 = load ptr, ptr %51, align 8
   %53 = icmp ne ptr %52, null
-  call void @__cflat_record_node(i64 106883544552944)
+  call void @increment_cond_branch()
   br i1 %53, label %54, label %73
 
 54:                                               ; preds = %49
@@ -8761,7 +8838,7 @@ define internal void @sglib___rbtree_fix_right_insertion_discrepancy(ptr noundef
   %59 = load i8, ptr %58, align 4
   %60 = zext i8 %59 to i32
   %61 = icmp eq i32 %60, 1
-  call void @__cflat_record_node(i64 106883544553872)
+  call void @increment_cond_branch()
   br i1 %61, label %62, label %73
 
 62:                                               ; preds = %54, %41
@@ -8778,15 +8855,15 @@ define internal void @sglib___rbtree_fix_right_insertion_discrepancy(ptr noundef
   %71 = load ptr, ptr %3, align 8
   %72 = getelementptr inbounds %struct.rbtree, ptr %71, i32 0, i32 1
   store i8 1, ptr %72, align 4
-  call void @__cflat_record_node(i64 106883544555072)
+  call void @increment_uncond_branch()
   br label %73
 
 73:                                               ; preds = %62, %54, %49
-  call void @__cflat_record_node(i64 106883544557264)
+  call void @increment_uncond_branch()
   br label %74
 
 74:                                               ; preds = %73, %30
-  call void @__cflat_record_node(i64 106883544557456)
+  call void @increment_uncond_branch()
   br label %170
 
 75:                                               ; preds = %22, %1
@@ -8795,7 +8872,7 @@ define internal void @sglib___rbtree_fix_right_insertion_discrepancy(ptr noundef
   %78 = load i8, ptr %77, align 4
   %79 = zext i8 %78 to i32
   %80 = icmp eq i32 %79, 1
-  call void @__cflat_record_node(i64 106883544557568)
+  call void @increment_cond_branch()
   br i1 %80, label %81, label %169
 
 81:                                               ; preds = %75
@@ -8803,7 +8880,7 @@ define internal void @sglib___rbtree_fix_right_insertion_discrepancy(ptr noundef
   %83 = getelementptr inbounds %struct.rbtree, ptr %82, i32 0, i32 3
   %84 = load ptr, ptr %83, align 8
   %85 = icmp ne ptr %84, null
-  call void @__cflat_record_node(i64 106883544558608)
+  call void @increment_cond_branch()
   br i1 %85, label %86, label %118
 
 86:                                               ; preds = %81
@@ -8814,7 +8891,7 @@ define internal void @sglib___rbtree_fix_right_insertion_discrepancy(ptr noundef
   %91 = load i8, ptr %90, align 4
   %92 = zext i8 %91 to i32
   %93 = icmp eq i32 %92, 1
-  call void @__cflat_record_node(i64 106883544559536)
+  call void @increment_cond_branch()
   br i1 %93, label %94, label %118
 
 94:                                               ; preds = %86
@@ -8851,7 +8928,7 @@ define internal void @sglib___rbtree_fix_right_insertion_discrepancy(ptr noundef
   %116 = load ptr, ptr %6, align 8
   %117 = load ptr, ptr %2, align 8
   store ptr %116, ptr %117, align 8
-  call void @__cflat_record_node(i64 106883544560816)
+  call void @increment_uncond_branch()
   br label %168
 
 118:                                              ; preds = %86, %81
@@ -8859,7 +8936,7 @@ define internal void @sglib___rbtree_fix_right_insertion_discrepancy(ptr noundef
   %120 = getelementptr inbounds %struct.rbtree, ptr %119, i32 0, i32 2
   %121 = load ptr, ptr %120, align 8
   %122 = icmp ne ptr %121, null
-  call void @__cflat_record_node(i64 106883544568064)
+  call void @increment_cond_branch()
   br i1 %122, label %123, label %167
 
 123:                                              ; preds = %118
@@ -8870,7 +8947,7 @@ define internal void @sglib___rbtree_fix_right_insertion_discrepancy(ptr noundef
   %128 = load i8, ptr %127, align 4
   %129 = zext i8 %128 to i32
   %130 = icmp eq i32 %129, 1
-  call void @__cflat_record_node(i64 106883544568992)
+  call void @increment_cond_branch()
   br i1 %130, label %131, label %167
 
 131:                                              ; preds = %123
@@ -8923,34 +9000,38 @@ define internal void @sglib___rbtree_fix_right_insertion_discrepancy(ptr noundef
   %165 = load ptr, ptr %7, align 8
   %166 = load ptr, ptr %2, align 8
   store ptr %165, ptr %166, align 8
-  call void @__cflat_record_node(i64 106883544570272)
+  call void @increment_uncond_branch()
   br label %167
 
 167:                                              ; preds = %131, %123, %118
-  call void @__cflat_record_node(i64 106883544577808)
+  call void @increment_uncond_branch()
   br label %168
 
 168:                                              ; preds = %167, %94
-  call void @__cflat_record_node(i64 106883544577920)
+  call void @increment_uncond_branch()
   br label %169
 
 169:                                              ; preds = %168, %75
-  call void @__cflat_record_node(i64 106883544578032)
+  call void @increment_uncond_branch()
   br label %170
 
 170:                                              ; preds = %169, %74
-  call void @__cflat_call_return(i64 106883544211536)
+  call void @increment_return()
   ret void
 }
 
 ; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
 declare void @llvm.memcpy.p0.p0.i64(ptr noalias nocapture writeonly, ptr noalias nocapture readonly, i64, i1 immarg) #4
 
-declare void @__cflat_call_return(i64)
+declare void @increment_return()
 
-declare void @__cflat_record_node(i64)
+declare void @increment_cond_branch()
 
-declare void @__cflat_call_enter(i64, i64)
+declare void @increment_uncond_branch()
+
+declare void @increment_direct_call()
+
+declare void @increment_loop_header()
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="non-leaf" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="generic" "target-features"="+fp-armv8,+neon,+v8a,-fmv" }
 attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: write) }
