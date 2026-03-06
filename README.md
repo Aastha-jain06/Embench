@@ -1,6 +1,6 @@
 # Embench
 
-`v1_embench` is an Embench-IOT experimentation workspace for comparing instrumentation and world-switch behavior across:
+`Embench` is an Embench-IOT experimentation workspace for comparing instrumentation and world-switch behavior across:
 - Branch-counter instrumentation
 - OAT (count-only mode)
 - CFLAT (full OP-TEE mode and count-only mode)
