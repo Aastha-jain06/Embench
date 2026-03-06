@@ -1,4 +1,4 @@
-# v1_embench
+# Embench
 
 `v1_embench` is an Embench-IOT experimentation workspace for comparing instrumentation and world-switch behavior across:
 - Branch-counter instrumentation
