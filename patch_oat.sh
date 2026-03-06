@@ -8,8 +8,8 @@
 # Run from: ~/Videos/Aastha/v1_embench/
 # ============================================================
 
-BENCH_DIR="./embench-iot-benchmarks-backup-cflat-next"
-BACKUP_DIR="./embench-iot-benchmarks-backup-oat-next"
+BENCH_DIR="./embench-iot-benchmarks-oat-count"
+BACKUP_DIR="./embench-iot-benchmarks-backup"
 
 GREEN='\033[0;32m'
 RED='\033[0;31m'

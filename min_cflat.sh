@@ -16,7 +16,7 @@ SYSROOT=/home/dell/Videos/Aastha/optee/out-br/host/aarch64-buildroot-linux-gnu/s
 
 # ── Project paths ────────────────────────────────────────────
 COUNTER_DIR="./counter"
-BENCH_DIR="./embench-iot-benchmarks-backup-cflat"
+BENCH_DIR="./embench-iot-benchmarks-cflat-count"
 OUT_DIR="./output_cflat_countonly"
 PASS_SO="${COUNTER_DIR}/CFlatPass.so"
 CFLAT_SRC="${COUNTER_DIR}/min_libcflat.c"

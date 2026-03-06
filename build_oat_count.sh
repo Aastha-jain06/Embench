@@ -21,7 +21,7 @@ SYSROOT=/home/dell/Videos/Aastha/optee/out-br/host/aarch64-buildroot-linux-gnu/s
 
 # ── Project paths ────────────────────────────────────────────
 COUNTER_DIR="./counter"
-BENCH_DIR="./embench-iot-benchmarks-backup-cflat-next"
+BENCH_DIR="./embench-iot-benchmarks-oat-count"
 OUT_DIR="./output_oat_countonly"
 PASS_SO="${COUNTER_DIR}/OATPass.so"
 OAT_SRC="${COUNTER_DIR}/liboat_count_only.c"

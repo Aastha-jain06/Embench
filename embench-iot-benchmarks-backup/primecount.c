@@ -96,7 +96,6 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdint.h>
-#include "libcflat.h"
 
 /* We reduced the quantity of prime numbers to find in order to have an
  * execution time as close as possible to 4000 ms for the baseline */
@@ -191,7 +190,6 @@ main (int argc __attribute__ ((unused)),
 
   /* bmarks that use arrays will check a global array rather than int result */
 
-  cflat_finalize_and_print ();
   correct = verify_benchmark (result);
 
   printf("%d\n", correct);

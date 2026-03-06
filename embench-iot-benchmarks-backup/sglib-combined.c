@@ -15,7 +15,6 @@
 //#include "support.h"
 #include "sglib.h"
 #include <stdio.h> 
-#include "libcflat.h"
 
 /*************** beebsc.c ********************/
 
@@ -486,7 +485,6 @@ main (int argc __attribute__ ((unused)),
 
   /* bmarks that use arrays will check a global array rather than int result */
 
-  cflat_finalize_and_print ();
   correct = verify_benchmark (result);
 
   printf("%d\n", correct);

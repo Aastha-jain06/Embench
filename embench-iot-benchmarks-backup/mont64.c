@@ -29,7 +29,6 @@ some 128-bit arithmetic.
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
-#include "libcflat.h"
 
 typedef uint64_t uint64;
 typedef int64_t int64;
@@ -352,7 +351,6 @@ main (int argc __attribute__ ((unused)),
 
   /* bmarks that use arrays will check a global array rather than int result */
 
-  cflat_finalize_and_print ();
   correct = verify_benchmark (result);
 
   printf("%d\n", correct);

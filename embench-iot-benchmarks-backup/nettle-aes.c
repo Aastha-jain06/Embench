@@ -18,7 +18,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h> 
-#include "libcflat.h"
 
 /* BEEBS local library variants header
 
@@ -1258,7 +1257,6 @@ main (int argc __attribute__ ((unused)),
 
   /* bmarks that use arrays will check a global array rather than int result */
 
-  cflat_finalize_and_print ();
   correct = verify_benchmark (result);
 
   printf("%d\n", correct);

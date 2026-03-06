@@ -19,7 +19,7 @@ LIBTEEC_FLAG="-L${LIBTEEC_DIR} -lteec"
 
 # ── Project paths ────────────────────────────────────────────
 COUNTER_DIR="./counter"
-BENCH_DIR="./embench-iot-benchmarks-backup"
+BENCH_DIR="./embench-iot-benchmarks-cflat"
 OUT_DIR="./output_cflat_optee"
 PASS_SO="${COUNTER_DIR}/CFlatPass.so"
 CFLAT_OBJ="${OUT_DIR}/libcflat.o"
