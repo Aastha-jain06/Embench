@@ -33,7 +33,7 @@ PreservedAnalyses BranchCounterPass::run(Function &F, FunctionAnalysisManager &F
     Module *M = F.getParent();
 
     // Skip our instrumentation functions
-    StringRef FuncName = F.getName();
+
     if (FuncName.starts_with("increment_") ||
         FuncName.starts_with("print_")     ||
         FuncName.starts_with("reset_")     ||
